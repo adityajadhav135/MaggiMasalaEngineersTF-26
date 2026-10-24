@@ -1,146 +1,157 @@
-"""Simulation Orchestrator & Experiment Execution Pipeline.
+"""Constant-stress tapered arm design and safety-factor evaluation.
 
-Coordinates numerical orbit propagation, physical mechanism analysis,
-biosphere impact modeling, and automated benchmark validation.
-Generates tabular dataframes ready for CSV export and UI rendering.
+Design principle
+----------------
+Each of the N arms carries a tip load F_d (its share of the thrust needed to
+change Earth's orbit within the mission time) plus its own weight in Earth's
+gravity field. The arm is sized as a constant-stress (uniform-strength) taper:
+
+    A(x) = (F_d / sigma_a) * exp(rho * dPhi(x) / sigma_a),   sigma_a = sigma_y / SF_d
+    dPhi(x) = G*M_E * (1/r_base - 1/r(x))
+
+so that axial stress equals sigma_a everywhere and SF = sigma_y / sigma_a = SF_d.
+
+For an off-design tip load F, the section force is F + sigma_a*(A(x) - A_tip)
+(the self-weight term is unchanged), giving stress
+    sigma(x) = sigma_a + (F - F_d) / A(x)
+whose maximum is at the tip (F > F_d) or the root (F < F_d).
+
+Modeled failure mode: axial tension/compression yield only. Not modeled:
+buckling, bending, thermal and dynamic effects (see MISSING_MODES).
 """
 
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
-import numpy as np
-import pandas as pd
+from typing import Any, Dict
+import math
 
 from src.constants import (
-    MAX_SIMULATED_YEARS,
-    ORBIT_INITIAL_AU_DEFAULT,
-    ORBIT_TARGET_AU_DEFAULT,
-    SAFETY_FACTOR_REQUIRED,
+    DENSITY_CNT,
+    G,
+    M_EARTH,
+    OCTO_ARM_LENGTH_MAX,
+    OCTO_NUM_ARMS,
+    OCTO_RING_RADIUS,
+    SIGMA_YIELD_CNT,
 )
-from src.mechanism import (
-    compute_orbital_energy_delta,
-    compute_transfer_power_and_thrust,
-    evaluate_biosphere_consequences,
-    evaluate_electrodynamic_feasibility,
-    evaluate_structural_safety,
-)
-from src.orbit import (
-    benchmark_kepler_conservation,
-    simulate_orbit_scipy,
-)
-from src.validation import BenchmarkResult, ValidationSuite
+
+DESIGN_SAFETY_FACTOR = 1.85
+REQUIRED_SAFETY_FACTOR = 1.5
+
+MISSING_MODES = [
+    "Euler column buckling over the arm span under compressive reaction loads",
+    "Transverse Coriolis bending from planetary and orbital rotation",
+    "Aero-elastic / magnetohydrodynamic flutter",
+    "Terminator thermal-gradient shock",
+    "Stress concentration at articulation joints",
+]
 
 
-@dataclass
-class SimulationConfig:
-    """Configuration parameters for a simulation run."""
-    initial_r_au: float = ORBIT_INITIAL_AU_DEFAULT
-    target_r_au: float = ORBIT_TARGET_AU_DEFAULT
-    duration_years: float = 5000.0
-    thrust_accel_ms2: float = 4.0e-8
-    thrust_active: bool = True
-    integrator_method: str = "DOP853"
-    max_steps: int = 4000
-    rtol: float = 1e-9
-    atol: float = 1e-11
-    stop_at_target: bool = True
+@dataclass(frozen=True)
+class ArmDesign:
+    design_load_n: float      # tip load per arm, F_d
+    sigma_yield_pa: float
+    sigma_allow_pa: float     # sigma_y / SF_d
+    safety_factor_design: float
+    arm_length_m: float
+    density_kgm3: float
+    potential_drop_jkg: float  # G*M*(1/r_base - 1/r_tip)
+    area_tip_m2: float
+    area_root_m2: float
+    taper_ratio: float
+    mass_kg: float
 
 
-class OrbitalSimulationPipeline:
-    """End-to-end pipeline executing the orbital trajectory and physics evaluations."""
+def design_arm(
+    design_load_n: float,
+    arm_length_m: float = OCTO_ARM_LENGTH_MAX,
+    sigma_yield_pa: float = SIGMA_YIELD_CNT,
+    density: float = DENSITY_CNT,
+    safety_factor: float = DESIGN_SAFETY_FACTOR,
+    r_base_m: float = OCTO_RING_RADIUS,
+) -> ArmDesign:
+    if not (math.isfinite(design_load_n) and design_load_n > 0):
+        raise ValueError("design_load_n must be finite and positive")
+    r_tip = r_base_m + arm_length_m
+    dphi = G * M_EARTH * (1.0 / r_base_m - 1.0 / r_tip)
+    sigma_a = sigma_yield_pa / safety_factor
+    a_tip = design_load_n / sigma_a
+    taper = math.exp(density * dphi / sigma_a)
 
-    def __init__(self, config: SimulationConfig):
-        self.config = config
-        self._validate_config()
+    # Mass: integrate A(x)*rho dx numerically (fine trapezoid)
+    n = 2000
+    mass = 0.0
+    prev = None
+    for i in range(n + 1):
+        r = r_base_m + arm_length_m * i / n
+        a = a_tip * math.exp(density * G * M_EARTH * (1.0 / r_base_m - 1.0 / r) / sigma_a)
+        if prev is not None:
+            mass += 0.5 * (a + prev) * density * (arm_length_m / n)
+        prev = a
 
-    def _validate_config(self) -> None:
-        """Validate input parameters against physical constraints and rulebook bounds."""
-        cfg = self.config
-        if cfg.initial_r_au <= 0:
-            raise ValueError(f"Initial radius must be positive, got {cfg.initial_r_au} AU.")
-        if cfg.target_r_au <= 0:
-            raise ValueError(f"Target radius must be positive, got {cfg.target_r_au} AU.")
-        if cfg.target_r_au <= cfg.initial_r_au and cfg.thrust_accel_ms2 > 0:
-            raise ValueError(
-                f"Target radius ({cfg.target_r_au} AU) must be greater than initial radius ({cfg.initial_r_au} AU)."
-            )
-        if cfg.duration_years <= 0:
-            raise ValueError(f"Duration must be strictly positive, got {cfg.duration_years} years.")
-        if cfg.duration_years > MAX_SIMULATED_YEARS:
-            raise ValueError(
-                f"Duration exceeds challenge maximum rule of {MAX_SIMULATED_YEARS:,.0f} years, "
-                f"got {cfg.duration_years:,.0f} years."
-            )
-        if cfg.thrust_accel_ms2 < 0:
-            raise ValueError(f"Thrust acceleration cannot be negative, got {cfg.thrust_accel_ms2}")
+    return ArmDesign(
+        design_load_n=design_load_n,
+        sigma_yield_pa=sigma_yield_pa,
+        sigma_allow_pa=sigma_a,
+        safety_factor_design=safety_factor,
+        arm_length_m=arm_length_m,
+        density_kgm3=density,
+        potential_drop_jkg=dphi,
+        area_tip_m2=a_tip,
+        area_root_m2=a_tip * taper,
+        taper_ratio=taper,
+        mass_kg=mass,
+    )
 
-    def run(self) -> Dict[str, Any]:
-        """Execute simulation, run mechanism analysis, and produce benchmark matrix."""
-        cfg = self.config
 
-        # 1. Mechanism & Energy Accounting (Decoupled from ODE integrator)
-        energy_data = compute_orbital_energy_delta(cfg.initial_r_au, cfg.target_r_au)
-        transfer_data = compute_transfer_power_and_thrust(
-            cfg.initial_r_au, cfg.target_r_au, cfg.duration_years
-        )
-        electro_data = evaluate_electrodynamic_feasibility(transfer_data["total_thrust_N"])
-        struct_data = evaluate_structural_safety(transfer_data["thrust_per_arm_N"])
-        biosphere_data = evaluate_biosphere_consequences(cfg.target_r_au)
+def design_from_mission(total_thrust_n: float, num_arms: int = OCTO_NUM_ARMS, **kw) -> ArmDesign:
+    """Size one arm from the mission's total thrust requirement (constant a = dv/T)."""
+    return design_arm(total_thrust_n / num_arms, **kw)
 
-        mech_analysis = {
-            "energy": energy_data,
-            "transfer": transfer_data,
-            "electrodynamic_feasibility": electro_data,
-            "structural_safety": struct_data,
-            "biosphere": biosphere_data,
-        }
 
-        # 2. Orbital Trajectory Integration
-        effective_thrust = cfg.thrust_accel_ms2 if cfg.thrust_active else 0.0
-        orbit_raw = simulate_orbit_scipy(
-            r0_au=cfg.initial_r_au,
-            target_r_au=cfg.target_r_au,
-            duration_years=cfg.duration_years,
-            thrust_accel_ms2=effective_thrust,
-            max_steps=cfg.max_steps,
-            rtol=cfg.rtol,
-            atol=cfg.atol,
-            method=cfg.integrator_method,
-            stop_at_target=cfg.stop_at_target,
-        )
+def evaluate_at_load(design: ArmDesign, load_n: float) -> Dict[str, Any]:
+    """Safety factor of the fixed design under an actual tip load.
 
-        orbit_raw["thrust_active"] = bool(effective_thrust > 0)
-        orbit_raw["duration_years"] = cfg.duration_years
-        orbit_raw["target_r_au"] = cfg.target_r_au
-        orbit_raw["rtol"] = cfg.rtol
+    Invalid (NaN/inf/negative) loads are rejected, never turned into SF = 0.
+    Loads above the design envelope are reported as overload, not hidden.
+    """
+    if not (isinstance(load_n, (int, float)) and math.isfinite(load_n)) or load_n < 0:
+        return {"valid": False, "safety_factor": float("nan"), "status": "INVALID_LOAD"}
 
-        # 3. Automated Benchmark Verification
-        validator = ValidationSuite(sim_results=orbit_raw, mech_analysis=mech_analysis)
-        benchmarks = validator.run_all_benchmarks()
+    d = design
+    if load_n >= d.design_load_n:
+        sigma_max = d.sigma_allow_pa + (load_n - d.design_load_n) / d.area_tip_m2
+    else:
+        sigma_max = d.sigma_allow_pa - (d.design_load_n - load_n) / d.area_root_m2
 
-        # 4. Compile Time-Series DataFrame
-        df = pd.DataFrame(
-            {
-                "Time (Years)": orbit_raw["t_years"],
-                "Radius (AU)": orbit_raw["radius_au"],
-                "Heliocentric X (AU)": orbit_raw["pos_x_au"],
-                "Heliocentric Y (AU)": orbit_raw["pos_y_au"],
-                "Velocity (km/s)": orbit_raw["speed_ms"] / 1000.0,
-                "Specific Energy (MJ/kg)": orbit_raw["specific_energy_Jkg"] / 1.0e6,
-                "Energy Drift (|dE/E0|)": np.abs(orbit_raw["specific_energy_drift"]),
-                "Specific Angular Momentum (m^2/s)": orbit_raw["specific_ang_mom"],
-                "Angular Momentum Drift (|dh/h0|)": np.abs(orbit_raw["ang_mom_drift"]),
-            }
-        )
+    sf = d.sigma_yield_pa / sigma_max
+    return {
+        "valid": True,
+        "load_n": load_n,
+        "load_fraction_of_design": load_n / d.design_load_n,
+        "max_stress_pa": sigma_max,
+        "safety_factor": sf,
+        "passes": sf >= REQUIRED_SAFETY_FACTOR,
+        "status": "OK" if load_n <= d.design_load_n * (1 + 1e-9) else "OVERLOAD",
+    }
 
-        return {
-            "config": cfg,
-            "orbit": orbit_raw,
-            "mechanism": mech_analysis,
-            "benchmarks": benchmarks,
-            "dataframe": df,
-            "target_reached": orbit_raw["target_reached"],
-            "target_time_years": orbit_raw["target_time_years"],
-            "final_radius_au": orbit_raw["final_radius_au"],
-            "final_semi_major_axis_au": orbit_raw["final_semi_major_axis_au"],
-        }
 
+def proof_report(design: ArmDesign) -> Dict[str, Any]:
+    """Step-by-step derivation, intended for the report/presentation."""
+    d = design
+    at_design = evaluate_at_load(d, d.design_load_n)
+    return {
+        "steps": [
+            f"1. Design load per arm F_d = {d.design_load_n:.3e} N (mission thrust / number of arms).",
+            f"2. Allowable stress sigma_a = sigma_yield / SF_d = {d.sigma_yield_pa:.3e} / {d.safety_factor_design} = {d.sigma_allow_pa:.3e} Pa.",
+            f"3. Self-weight potential drop along the arm: dPhi = GM(1/r_base - 1/r_tip) = {d.potential_drop_jkg:.3e} J/kg.",
+            f"4. Tip area A_tip = F_d / sigma_a = {d.area_tip_m2:.3e} m^2.",
+            f"5. Root area A_root = A_tip * exp(rho*dPhi/sigma_a) = {d.area_root_m2:.3e} m^2 (taper {d.taper_ratio:.2f}x).",
+            "6. With this area profile the stress at every section equals sigma_a, so SF = sigma_yield / sigma_a.",
+            f"7. Result: SF = {at_design['safety_factor']:.3f} (required >= {REQUIRED_SAFETY_FACTOR}).",
+            "8. Thrust is constant (a = dv/T), so the load, and therefore SF, stays constant through the transfer.",
+        ],
+        "safety_factor": at_design["safety_factor"],
+        "arm_mass_kg": d.mass_kg,
+        "not_modeled": MISSING_MODES,
+        "scope_note": "SF applies to axial yield only; the electrodynamic thrust mechanism is assessed separately.",
+    }

@@ -10,7 +10,7 @@ import {
   pushRun,
   HORIZONS_BODIES_2026,
 } from '../src/core/nbody.js';
-import { cantilever } from '../src/core/structure.js';
+import { analyzeOctoArm, cantilever } from '../src/core/structure.js';
 import { equilibriumTemp, checkMoonBound } from '../src/core/habitability.js';
 import { PhysicsLedger } from '../src/core/ledger.js';
 import { checkConvergence, yoshida4Step } from '../src/core/integrators.js';
@@ -76,6 +76,15 @@ test('9. cantilever self-weight: root moment qL^2/2, tip deflection qL^4/(8EI) (
   const r = cantilever(p);
   close(r.rootMoment, (p.q * p.L ** 2) / 2, 0.01);
   close(r.tipDeflection, (p.q * p.L ** 4) / (8 * p.E * p.I), 0.01);
+});
+
+test('Octo arm uses thrust as axial load and clears the 1.5 safety factor requirement', () => {
+  const result = analyzeOctoArm({ axialThrustForce: 2.72e17 / 8 });
+
+  assert.ok(result.axialThrustStressPa > 0);
+  assert.equal(result.bendingStressPa, 0);
+  assert.ok(result.safetyFactor > 1.5, `Expected SF > 1.5, got ${result.safetyFactor}`);
+  assert.equal(result.passesRequirement, true);
 });
 
 test('10. Teq at 1 AU, albedo 0.306 -> about 254 K (2 K)', () => {

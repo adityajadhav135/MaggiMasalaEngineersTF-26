@@ -118,13 +118,16 @@ export class PlanetaryPropulsionSim {
     });
 
     // Initial structural evaluation
+    const initialArmThrust = this.concept === PROPULSION_CONCEPTS.OCTO_INTERNAL
+      ? 0.0
+      : (M_EARTH_MOON * this.thrustAccel) / 8.0;
     this.cachedStructural = analyzeOctoArm({
       armLength: 12.0e6,
       radiusRing: 7.0e6,
       density: 1300.0,
       yieldStrength: 100.0e9,
       youngsModulus: 1000.0e9,
-      lateralThrustForce: 60.0,
+      axialThrustForce: initialArmThrust,
     });
   }
 
@@ -305,7 +308,7 @@ export class PlanetaryPropulsionSim {
     this.cachedStructural = analyzeOctoArm({
       armLength: 12.0e6,
       radiusRing: 7.0e6,
-      lateralThrustForce: vec3.norm(thrustForce) / 8.0,
+      axialThrustForce: vec3.norm(thrustForce) / 8.0,
     });
 
     // Compute Earth-Moon Barycentre radius
