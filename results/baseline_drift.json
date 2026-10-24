@@ -1,0 +1,19 @@
+{
+  "generatedAt": "2026-10-24T13:28:13.185Z",
+  "keplerTwoBody": {
+    "periods": 100,
+    "initialEnergyJoulesPerKg": -443577347.0203544,
+    "finalEnergyJoulesPerKg": -443577347.02047235,
+    "relativeEnergyDrift": 2.659233903689075e-13,
+    "closurePositionErrorMeters": 57334.79180934674,
+    "relativePositionClosure": 3.8325941098670157e-7,
+    "status": "PASS (Hamiltonian Preserved)"
+  },
+  "solarSystemNBody": {
+    "durationYears": 10,
+    "initialEnergyJoules": -1.8364615307091857e+35,
+    "finalEnergyJoules": -1.8364615307091004e+35,
+    "relativeEnergyDrift": 4.640661195207679e-14,
+    "status": "PASS (Symplectic Multi-Body Validated)"
+  }
+}

@@ -1,0 +1,4762 @@
+{
+  "generatedAt": "2026-10-24T13:28:16.009Z",
+  "comparisonSummary": {
+    "canonicalOctoEarth": {
+      "concept": "Canonical Octo-Earth (Internal Closed Loops)",
+      "description": "Conductors close inside Earth ionosphere & liquid core. Symmetrical arms.",
+      "finalRadiusAU": 1.0000382933426952,
+      "targetReached": false,
+      "externalImpulseNewtonsSeconds": 0,
+      "internalImpulseNewtonsSeconds": 0.011138916015625,
+      "realThrustDelivered": "0.00 N (Physical zero: internal forces cancel by Newton's 3rd Law)",
+      "ruling": "PHYSICAL FAILURE AS STANDALONE THRUST (Honest simulation of prompt specification)"
+    },
+    "solarWindPlasmaCircuit": {
+      "concept": "Octo-Earth with External Solar Wind Return Circuit",
+      "description": "Conductors extend beyond magnetopause; momentum reaction partner is solar wind ion stream.",
+      "finalRadiusAU": 2.7000061599823755,
+      "targetReached": true,
+      "arrivalYear": 8572.073921971252,
+      "externalImpulseNewtonsSeconds": 2.281061906842906e+25,
+      "internalImpulseNewtonsSeconds": 0,
+      "totalEnergyDrawnJoules": 1.4472503280001132e+33,
+      "deltaOrbitalEnergyJoules": 1.6884800945911253e+33,
+      "wasteHeatRadiatedJoules": 2.1708754920004132e+32,
+      "structuralSafetyFactor": 2.3702611887552645e-14,
+      "structuralRuling": "FAIL (Excessive arm bending stress)",
+      "habitabilityStatus": "HABITABLE_NOMINAL",
+      "moonBound": true,
+      "ruling": "ORBITAL TARGET ACHIEVED UNDER DECLARED ENABLERS"
+    }
+  },
+  "rawSnapshots": {
+    "internalRun": {
+      "time": {
+        "simTimeSeconds": 315360000,
+        "elapsedYears": 9.99315537303217,
+        "maxYears": 100,
+        "stepCount": 365,
+        "timeStepDays": 10
+      },
+      "orbit": {
+        "currentRadiusAU": 1.0000382933426952,
+        "semiMajorAxisAU": 1.0008988845502418,
+        "initialRadiusAU": 1,
+        "targetRadiusAU": 2.7,
+        "targetReached": false,
+        "targetReachedYear": null,
+        "orbitalVelocityKmS": 29.79737380847028,
+        "specificEnergy": -443178980.28198683,
+        "specificAngularMomentum": 4457794344251214.5,
+        "progressPercent": 0.0022525495703075355
+      },
+      "moonCoupling": {
+        "distanceMeters": 385722672.4112564,
+        "distanceKm": 385722.67241125635,
+        "relativeVelocityMps": 1014.0710423822537,
+        "orbitalPeriodDays": 27.425565523951388,
+        "specificEnergy": -531925.6259114635,
+        "moonPullOnEarthMps2": 0.000032935917774464935,
+        "earthPullOnMoonMps2": 0.0026791049868245646,
+        "barycentreOffsetKm": 4684.343145688026,
+        "isBound": true
+      },
+      "positions": {
+        "earth": [
+          148382105536.591,
+          -19097067018.24835,
+          0
+        ],
+        "earthVel": [
+          3791.548880416296,
+          29561.6594528965,
+          0
+        ],
+        "moon": [
+          148145781677.28876,
+          -19401916183.470387,
+          0
+        ],
+        "moonVel": [
+          4581.082338680977,
+          28925.281422729804,
+          0
+        ],
+        "barycentre": [
+          148379235541.8262,
+          -19100769206.89246,
+          0
+        ],
+        "sun": [
+          0,
+          0,
+          0
+        ]
+      },
+      "propulsion": {
+        "concept": "octo_earth_internal",
+        "thrustAccelMps2": 4.5e-8,
+        "effectiveThrustNewtons": 0,
+        "partner": "earth_ionosphere_and_core",
+        "partnerInsideEarthSystem": true
+      },
+      "structure": {
+        "armLengthMeters": 12000000,
+        "armMassKg": 15600000000,
+        "gRootMps2": 8.134745808163265,
+        "gTipMps2": 1.1041621734072022,
+        "deltaGMps2": 7.030583634756063,
+        "axialStressPa": 46753381171.127815,
+        "bendingStressPa": 0,
+        "peakStressPa": 46753381171.127815,
+        "yieldStrengthPa": 100000000000,
+        "safetyFactor": 2.138882739495945,
+        "passesRequirement": true,
+        "criticalBucklingLoadNewtons": 0.0018701358059518805,
+        "firstFailingPart": "None (Structure Meets Safety Factor)",
+        "failureMode": "Nominal Safe",
+        "unmodeledPhenomena": [
+          "Multi-body dynamic joint vibration and resonance (frequencies < 1e-4 Hz)",
+          "Thermal gradient expansion across day/night terminator",
+          "Torsional flutter under non-symmetric magnetic drag",
+          "Joint friction, bearing fatigue, and micro-meteoroid degradation"
+        ]
+      },
+      "kinematics": {
+        "ringRadius": 7000000,
+        "ringThickness": 50,
+        "arms": [
+          {
+            "armIndex": 0,
+            "azimuthDeg": 1313999.9999999916,
+            "root": {
+              "0": 7000000,
+              "1": -0.0010251904390783419,
+              "2": 0
+            },
+            "nodes": [
+              {
+                "0": 7000000,
+                "1": -0.0010251904390783419,
+                "2": 0
+              },
+              {
+                "0": 12090822.753713928,
+                "1": 305816.4312810639,
+                "2": 0
+              },
+              {
+                "0": 15150478.510161873,
+                "1": 259918.1520653766,
+                "2": 0
+              },
+              {
+                "0": 17190249.014460504,
+                "1": 229319.2992549184,
+                "2": 0
+              }
+            ],
+            "tip": {
+              "0": 17190249.014460504,
+              "1": 229319.2992549184,
+              "2": 0
+            },
+            "effectiveLength": 10200000,
+            "com": {
+              "0": 12857887.569584075,
+              "1": 198763.4703940421,
+              "2": 0
+            }
+          },
+          {
+            "armIndex": 1,
+            "azimuthDeg": 1314044.9999999916,
+            "root": {
+              "0": 4949747.469037096,
+              "1": 4949747.467574569,
+              "2": 0
+            },
+            "nodes": [
+              {
+                "0": 4949747.469037096,
+                "1": 4949747.467574569,
+                "2": 0
+              },
+              {
+                "0": 8333257.88692985,
+                "1": 8765747.631622154,
+                "2": 0
+              },
+              {
+                "0": 10529216.204891585,
+                "1": 10896795.98062193,
+                "2": 0
+              },
+              {
+                "0": 11993188.416866073,
+                "1": 12317494.879955115,
+                "2": 0
+              }
+            ],
+            "tip": {
+              "0": 11993188.416866073,
+              "1": 12317494.879955115,
+              "2": 0
+            },
+            "effectiveLength": 10200000,
+            "com": {
+              "0": 8951352.494431151,
+              "1": 9232446.489943443,
+              "2": 0
+            }
+          },
+          {
+            "armIndex": 2,
+            "azimuthDeg": 1314089.9999999919,
+            "root": {
+              "0": 0.0010176679964898616,
+              "1": 7000000,
+              "2": 0
+            },
+            "nodes": [
+              {
+                "0": 0.0010176679964898616,
+                "1": 7000000,
+                "2": 0
+              },
+              {
+                "0": -305816.43129405717,
+                "1": 12090822.7537136,
+                "2": 0
+              },
+              {
+                "0": -259918.1520816579,
+                "1": 15150478.510161594,
+                "2": 0
+              },
+              {
+                "0": -229319.29927339172,
+                "1": 17190249.014460254,
+                "2": 0
+              }
+            ],
+            "tip": {
+              "0": -229319.29927339172,
+              "1": 17190249.014460254,
+              "2": 0
+            },
+            "effectiveLength": 10200000,
+            "com": {
+              "0": -198763.4704078597,
+              "1": 12857887.569583863,
+              "2": 0
+            }
+          },
+          {
+            "armIndex": 3,
+            "azimuthDeg": 1314134.9999999916,
+            "root": {
+              "0": -4949747.467579889,
+              "1": 4949747.469031777,
+              "2": 0
+            },
+            "nodes": [
+              {
+                "0": -4949747.467579889,
+                "1": 4949747.469031777,
+                "2": 0
+              },
+              {
+                "0": -8765747.63163111,
+                "1": 8333257.886920432,
+                "2": 0
+              },
+              {
+                "0": -10896795.980633246,
+                "1": 10529216.204879876,
+                "2": 0
+              },
+              {
+                "0": -12317494.879968002,
+                "1": 11993188.41685284,
+                "2": 0
+              }
+            ],
+            "tip": {
+              "0": -12317494.879968002,
+              "1": 11993188.41685284,
+              "2": 0
+            },
+            "effectiveLength": 10200000,
+            "com": {
+              "0": -9232446.489953062,
+              "1": 8951352.49442123,
+              "2": 0
+            }
+          },
+          {
+            "armIndex": 4,
+            "azimuthDeg": 1314179.9999999916,
+            "root": {
+              "0": -7000000,
+              "1": 0.001035611405551023,
+              "2": 0
+            },
+            "nodes": [
+              {
+                "0": -7000000,
+                "1": 0.001035611405551023,
+                "2": 0
+              },
+              {
+                "0": -12090822.753714385,
+                "1": -305816.4312630642,
+                "2": 0
+              },
+              {
+                "0": -15150478.51016226,
+                "1": -259918.152042822,
+                "2": 0
+              },
+              {
+                "0": -17190249.014460843,
+                "1": -229319.2992293272,
+                "2": 0
+              }
+            ],
+            "tip": {
+              "0": -17190249.014460843,
+              "1": -229319.2992293272,
+              "2": 0
+            },
+            "effectiveLength": 10200000,
+            "com": {
+              "0": -12857887.569584373,
+              "1": -198763.47037490053,
+              "2": 0
+            }
+          },
+          {
+            "armIndex": 5,
+            "azimuthDeg": 1314224.9999999916,
+            "root": {
+              "0": -4949747.4690264575,
+              "1": -4949747.467585208,
+              "2": 0
+            },
+            "nodes": [
+              {
+                "0": -4949747.4690264575,
+                "1": -4949747.467585208,
+                "2": 0
+              },
+              {
+                "0": -8333257.88691101,
+                "1": -8765747.631640065,
+                "2": 0
+              },
+              {
+                "0": -10529216.204868164,
+                "1": -10896795.980644561,
+                "2": 0
+              },
+              {
+                "0": -11993188.4168396,
+                "1": -12317494.879980892,
+                "2": 0
+              }
+            ],
+            "tip": {
+              "0": -11993188.4168396,
+              "1": -12317494.879980892,
+              "2": 0
+            },
+            "effectiveLength": 10200000,
+            "com": {
+              "0": -8951352.494411308,
+              "1": -9232446.489962682,
+              "2": 0
+            }
+          },
+          {
+            "armIndex": 6,
+            "azimuthDeg": 1314269.9999999916,
+            "root": {
+              "0": -0.0010280889629625427,
+              "1": -7000000,
+              "2": 0
+            },
+            "nodes": [
+              {
+                "0": -0.0010280889629625427,
+                "1": -7000000,
+                "2": 0
+              },
+              {
+                "0": 305816.43127605744,
+                "1": -12090822.753714055,
+                "2": 0
+              },
+              {
+                "0": 259918.15205910325,
+                "1": -15150478.51016198,
+                "2": 0
+              },
+              {
+                "0": 229319.29924780046,
+                "1": -17190249.014460597,
+                "2": 0
+              }
+            ],
+            "tip": {
+              "0": 229319.29924780046,
+              "1": -17190249.014460597,
+              "2": 0
+            },
+            "effectiveLength": 10200000,
+            "com": {
+              "0": 198763.47038871804,
+              "1": -12857887.569584157,
+              "2": 0
+            }
+          },
+          {
+            "armIndex": 7,
+            "azimuthDeg": 1314314.9999999916,
+            "root": {
+              "0": 4949747.4675725205,
+              "1": -4949747.469039145,
+              "2": 0
+            },
+            "nodes": [
+              {
+                "0": 4949747.4675725205,
+                "1": -4949747.469039145,
+                "2": 0
+              },
+              {
+                "0": 8765747.631618705,
+                "1": -8333257.886933479,
+                "2": 0
+              },
+              {
+                "0": 10896795.980617572,
+                "1": -10529216.204896096,
+                "2": 0
+              },
+              {
+                "0": 12317494.879950149,
+                "1": -11993188.416871173,
+                "2": 0
+              }
+            ],
+            "tip": {
+              "0": 12317494.879950149,
+              "1": -11993188.416871173,
+              "2": 0
+            },
+            "effectiveLength": 10200000,
+            "com": {
+              "0": 9232446.489939736,
+              "1": -8951352.494434973,
+              "2": 0
+            }
+          }
+        ],
+        "systemCom": {
+          "0": -0.0000016153790056705475,
+          "1": -0.0000017674174159765244,
+          "2": 0
+        },
+        "comOffsetMeters": 0.0000023944130082878977,
+        "isBalanced": true,
+        "totalSpanDiameterMeters": 34400000
+      },
+      "habitability": {
+        "rAU": 1.0000382933426952,
+        "solarFluxWm2": 1361.0622241683814,
+        "fluxDropPercent": -0.004571944774530689,
+        "equilibriumTempK": 254.0337567271664,
+        "surfaceTempK": 2597.063415277361,
+        "status": "HABITABLE_NOMINAL",
+        "oceanFreezing": false,
+        "deepGlobalGlaciation": false,
+        "co2AtmosphereCollapse": false,
+        "warnings": [],
+        "needsArtificialHeating": false
+      },
+      "moonStatus": {
+        "bound": true,
+        "specificEnergy": -519221.49568917963,
+        "separation": 385722672.4112564,
+        "hillSphere": 1496603388.0997858,
+        "fractionOfHillRadius": 0.2577320587928125
+      },
+      "ledger": {
+        "appliedImpulseNewtonsSeconds": [
+          0,
+          0,
+          -0.011138916015625
+        ],
+        "partnerImpulseNewtonsSeconds": [
+          0,
+          0,
+          0.011138916015625
+        ],
+        "internalImpulseNewtonsSeconds": [
+          0,
+          0,
+          -0.011138916015625
+        ],
+        "externalImpulseNewtonsSeconds": [
+          0,
+          0,
+          0
+        ],
+        "bodyMomentumChangeNewtonsSeconds": [
+          0,
+          0,
+          0
+        ],
+        "normAppliedImpulse": 0.011138916015625,
+        "normPartnerImpulse": 0.011138916015625,
+        "normExternalImpulse": 0,
+        "normInternalImpulse": 0.011138916015625,
+        "externalThrustFraction": 0,
+        "totalEnergyDrawnJoules": 2522880000000000000,
+        "totalWasteHeatJoules": 2522880000000000000,
+        "deltaOrbitalEnergyJoules": 1.0268732795500772e+29,
+        "partners": {
+          "earth_ionosphere_and_core": {
+            "name": "earth_ionosphere_and_core",
+            "insideEarthSystem": true,
+            "impulse": {
+              "0": 0,
+              "1": 0,
+              "2": 0.011138916015625
+            },
+            "count": 2920
+          }
+        },
+        "validations": {
+          "nothingCreatedFromNothing": true,
+          "sumJNorm": 0,
+          "relativeConservationResidual": 0,
+          "integratorHonest": true,
+          "relativeIntegratorResidual": 1
+        }
+      },
+      "enablers": [
+        {
+          "id": "ENABLER_1_POWER",
+          "name": "High-Density Fusion/Antimatter Reactor Array",
+          "bound": "Maximum sustained continuous power capacity P <= 1.0e22 Watts (10 Zettawatts)",
+          "maxValue": 1e+22,
+          "unit": "W",
+          "category": "Energy Source",
+          "rationale": "Provides the necessary ~5.4 ZW continuous power for planetary acceleration over 10,000 years. Requires full waste heat dissipation via high-temperature ring radiators.",
+          "status": "DECLARED_BOUNDED"
+        },
+        {
+          "id": "ENABLER_2_MATERIAL",
+          "name": "Theoretical Carbon Nanotube / Graphene Structural Arm Composite",
+          "bound": "Tensile yield strength sigma_yield <= 100.0 GPa, Density rho >= 1300.0 kg/m^3, E <= 1.0 TPa",
+          "maxValue": 100000000000,
+          "unit": "Pa",
+          "category": "Materials Science",
+          "rationale": "Enables articulated arm components up to 12,000 km in Earth's gravity field without immediate catastrophic self-weight tensile rupture.",
+          "status": "DECLARED_BOUNDED"
+        },
+        {
+          "id": "ENABLER_3_PLASMA_COUPLING",
+          "name": "Interplanetary Solar Wind Magnetized Plasma Return Circuit",
+          "bound": "Plasma momentum coupling efficiency eta <= 0.85; loop closure strictly beyond magnetopause (> 10 R_earth)",
+          "maxValue": 0.85,
+          "unit": "ratio",
+          "category": "Electrodynamics & Momentum Partner",
+          "rationale": "Allows electrodynamic arms to interact with external momentum partner (solar wind ions), preventing Newton's Third Law cancellation that occurs with internal Earth ionospheric loops.",
+          "status": "DECLARED_BOUNDED"
+        }
+      ],
+      "trajectoryHistory": [
+        {
+          "year": 0,
+          "rAU": 1,
+          "xAU": 1,
+          "yAU": 0,
+          "zAU": 0
+        },
+        {
+          "year": 0.5475701574264202,
+          "rAU": 1.0017292783464025,
+          "xAU": -0.9588219525693971,
+          "yAU": -0.2900379464266931,
+          "zAU": 0
+        },
+        {
+          "year": 1.0951403148528405,
+          "rAU": 1.0001773940610625,
+          "xAU": 0.8313914678098756,
+          "yAU": 0.5560063370535613,
+          "zAU": 0
+        },
+        {
+          "year": 1.6427104722792607,
+          "rAU": 1.0014502962083205,
+          "xAU": -0.6369950763950483,
+          "yAU": -0.772748321527908,
+          "zAU": 0
+        },
+        {
+          "year": 2.190280629705681,
+          "rAU": 1.0005665687647274,
+          "xAU": 0.3824499881045125,
+          "yAU": 0.9245893494565457,
+          "zAU": 0
+        },
+        {
+          "year": 2.737850787132101,
+          "rAU": 1.0009858470760273,
+          "xAU": -0.10121962701334687,
+          "yAU": -0.9958550362145038,
+          "zAU": 0
+        },
+        {
+          "year": 3.2854209445585214,
+          "rAU": 1.0010674275470084,
+          "xAU": -0.19532668999588962,
+          "yAU": 0.9818266031590479,
+          "zAU": 0
+        },
+        {
+          "year": 3.8329911019849416,
+          "rAU": 1.000491927041334,
+          "xAU": 0.4685533723779413,
+          "yAU": -0.8839919871289219,
+          "zAU": 0
+        },
+        {
+          "year": 4.380561259411362,
+          "rAU": 1.0015113857511722,
+          "xAU": -0.7074658352202213,
+          "yAU": 0.7088844389499518,
+          "zAU": 0
+        },
+        {
+          "year": 4.9281314168377826,
+          "rAU": 1.000134853129115,
+          "xAU": 0.8804654000234001,
+          "yAU": -0.474394776325826,
+          "zAU": 0
+        },
+        {
+          "year": 5.475701574264202,
+          "rAU": 1.0017493887596143,
+          "xAU": -0.9820204777433331,
+          "yAU": 0.19783230063115828,
+          "zAU": 0
+        },
+        {
+          "year": 6.023271731690623,
+          "rAU": 1.0000351332358026,
+          "xAU": 0.995499811741773,
+          "yAU": 0.09513355101142806,
+          "zAU": 0
+        },
+        {
+          "year": 6.570841889117043,
+          "rAU": 1.0017016739941846,
+          "xAU": -0.9269781516602463,
+          "yAU": -0.3796284368001232,
+          "zAU": 0
+        },
+        {
+          "year": 7.1184120465434635,
+          "rAU": 1.0002264640403629,
+          "xAU": 0.7747863347969614,
+          "yAU": 0.6325813108040564,
+          "zAU": 0
+        },
+        {
+          "year": 7.665982203969883,
+          "rAU": 1.0013842227384298,
+          "xAU": -0.5607760370974432,
+          "yAU": -0.8296388357392246,
+          "zAU": 0
+        },
+        {
+          "year": 8.213552361396303,
+          "rAU": 1.0006442106718028,
+          "xAU": 0.29288617169061815,
+          "yAU": 0.9568210526443327,
+          "zAU": 0
+        },
+        {
+          "year": 8.761122518822724,
+          "rAU": 1.0009034742453744,
+          "xAU": -0.006197913518340638,
+          "yAU": -1.0008842843328496,
+          "zAU": 0
+        },
+        {
+          "year": 9.308692676249144,
+          "rAU": 1.0011474772087288,
+          "xAU": -0.2876691207305028,
+          "yAU": 0.9589279160080499,
+          "zAU": 0
+        },
+        {
+          "year": 9.856262833675565,
+          "rAU": 1.0004209620276536,
+          "xAU": 0.5504163171722147,
+          "yAU": -0.8353945050423256,
+          "zAU": 0
+        }
+      ]
+    },
+    "externalRun": {
+      "time": {
+        "simTimeSeconds": 270514080000,
+        "elapsedYears": 8572.073921971252,
+        "maxYears": 10000,
+        "stepCount": 62619,
+        "timeStepDays": 25
+      },
+      "orbit": {
+        "currentRadiusAU": 2.7000061599823755,
+        "semiMajorAxisAU": 2.698707704132005,
+        "initialRadiusAU": 1,
+        "targetRadiusAU": 2.7,
+        "targetReached": true,
+        "targetReachedYear": 8572.073921971252,
+        "orbitalVelocityKmS": 18.122278344945443,
+        "specificEnergy": -164366576.76605392,
+        "specificAngularMomentum": 7319862838481676,
+        "progressPercent": 100
+      },
+      "moonCoupling": {
+        "distanceMeters": 378172845.82232547,
+        "distanceKm": 378172.84582232544,
+        "relativeVelocityMps": 1036.374045732034,
+        "orbitalPeriodDays": 26.624309528470665,
+        "specificEnergy": -529944.2933917681,
+        "moonPullOnEarthMps2": 0.00003426410722018058,
+        "earthPullOnMoonMps2": 0.00278714384555111,
+        "barycentreOffsetKm": 4592.655565562362,
+        "isBound": true
+      },
+      "positions": {
+        "earth": [
+          -366049855368.0625,
+          170741310879.55582,
+          0
+        ],
+        "earthVel": [
+          -7670.971675467288,
+          -16409.88772800784,
+          0
+        ],
+        "moon": [
+          -366392041897.5892,
+          170580304419.03995,
+          0
+        ],
+        "moonVel": [
+          -7221.85603601198,
+          -17343.893244620904,
+          0
+        ],
+        "barycentre": [
+          -366054010993.9533,
+          170739355564.08264,
+          0
+        ],
+        "sun": [
+          0,
+          0,
+          0
+        ]
+      },
+      "propulsion": {
+        "concept": "octo_earth_solar_wind",
+        "thrustAccelMps2": 4.5e-8,
+        "effectiveThrustNewtons": 272052900000000000,
+        "partner": "solar_wind_ions",
+        "partnerInsideEarthSystem": false
+      },
+      "structure": {
+        "armLengthMeters": 12000000,
+        "armMassKg": 15600000000,
+        "gRootMps2": 8.134745808163265,
+        "gTipMps2": 1.1041621734072022,
+        "deltaGMps2": 7.030583634756063,
+        "axialStressPa": 46753381171.127815,
+        "bendingStressPa": 4.2189443287688304e+24,
+        "peakStressPa": 4.218944328768877e+24,
+        "yieldStrengthPa": 100000000000,
+        "safetyFactor": 2.3702611887552645e-14,
+        "passesRequirement": false,
+        "criticalBucklingLoadNewtons": 0.0018701358059518805,
+        "firstFailingPart": "Joint 1 Cantilever Shoulder",
+        "failureMode": "Bending Overstress from Transverse Reaction Loads",
+        "unmodeledPhenomena": [
+          "Multi-body dynamic joint vibration and resonance (frequencies < 1e-4 Hz)",
+          "Thermal gradient expansion across day/night terminator",
+          "Torsional flutter under non-symmetric magnetic drag",
+          "Joint friction, bearing fatigue, and micro-meteoroid degradation"
+        ]
+      },
+      "kinematics": {
+        "ringRadius": 7000000,
+        "ringThickness": 50,
+        "arms": [
+          {
+            "armIndex": 0,
+            "azimuthDeg": 1127142000.0007696,
+            "root": {
+              "0": 6999999.999368371,
+              "1": 94.03619496875118,
+              "2": 0
+            },
+            "nodes": [
+              {
+                "0": 6999999.999368371,
+                "1": 94.03619496875118,
+                "2": 0
+              },
+              {
+                "0": 12090818.644729674,
+                "1": 305978.8511853668,
+                "2": 0
+              },
+              {
+                "0": 15150475.017466541,
+                "1": 260121.67322291152,
+                "2": 0
+              },
+              {
+                "0": 17190245.93262445,
+                "1": 229550.2212479413,
+                "2": 0
+              }
+            ],
+            "tip": {
+              "0": 17190245.93262445,
+              "1": 229550.2212479413,
+              "2": 0
+            },
+            "effectiveLength": 10200000,
+            "com": {
+              "0": 12857884.89854726,
+              "1": 198936.19546279707,
+              "2": 0
+            }
+          },
+          {
+            "armIndex": 1,
+            "azimuthDeg": 1127142045.0007696,
+            "root": {
+              "0": 4949680.976683403,
+              "1": 4949813.95903507,
+              "2": 0
+            },
+            "nodes": [
+              {
+                "0": 4949680.976683403,
+                "1": 4949813.95903507,
+                "2": 0
+              },
+              {
+                "0": 8333140.137560529,
+                "1": 8765859.57022431,
+                "2": 0
+              },
+              {
+                "0": 10529069.829383846,
+                "1": 10896937.416894568,
+                "2": 0
+              },
+              {
+                "0": 11993022.957266059,
+                "1": 12317655.981341407,
+                "2": 0
+              }
+            ],
+            "tip": {
+              "0": 11993022.957266059,
+              "1": 12317655.981341407,
+              "2": 0
+            },
+            "effectiveLength": 10200000,
+            "com": {
+              "0": 8951228.47522346,
+              "1": 9232566.731873838,
+              "2": 0
+            }
+          },
+          {
+            "armIndex": 2,
+            "azimuthDeg": 1127142090.0007696,
+            "root": {
+              "0": -94.02925031369404,
+              "1": 6999999.999368465,
+              "2": 0
+            },
+            "nodes": [
+              {
+                "0": -94.02925031369404,
+                "1": 6999999.999368465,
+                "2": 0
+              },
+              {
+                "0": -305978.8391901433,
+                "1": 12090818.645033233,
+                "2": 0
+              },
+              {
+                "0": -260121.65819222256,
+                "1": 15150475.017724605,
+                "2": 0
+              },
+              {
+                "0": -229550.20419360875,
+                "1": 17190245.932852186,
+                "2": 0
+              }
+            ],
+            "tip": {
+              "0": -229550.20419360875,
+              "1": 17190245.932852186,
+              "2": 0
+            },
+            "effectiveLength": 10200000,
+            "com": {
+              "0": -198936.18270657206,
+              "1": 12857884.898744622,
+              "2": 0
+            }
+          },
+          {
+            "armIndex": 3,
+            "azimuthDeg": 1127142135.0007696,
+            "root": {
+              "0": -4949813.954124522,
+              "1": 4949680.981594082,
+              "2": 0
+            },
+            "nodes": [
+              {
+                "0": -4949813.954124522,
+                "1": 4949680.981594082,
+                "2": 0
+              },
+              {
+                "0": -8765859.561957054,
+                "1": 8333140.146257082,
+                "2": 0
+              },
+              {
+                "0": -10896937.406448744,
+                "1": 10529069.840194628,
+                "2": 0
+              },
+              {
+                "0": -12317655.969443206,
+                "1": 11993022.969486326,
+                "2": 0
+              }
+            ],
+            "tip": {
+              "0": -12317655.969443206,
+              "1": 11993022.969486326,
+              "2": 0
+            },
+            "effectiveLength": 10200000,
+            "com": {
+              "0": -9232566.722993381,
+              "1": 8951228.48438303,
+              "2": 0
+            }
+          },
+          {
+            "armIndex": 4,
+            "azimuthDeg": 1127142180.0007699,
+            "root": {
+              "0": -6999999.999368207,
+              "1": -94.04838269072378,
+              "2": 0
+            },
+            "nodes": [
+              {
+                "0": -6999999.999368207,
+                "1": -94.04838269072378,
+                "2": 0
+              },
+              {
+                "0": -12090818.644196931,
+                "1": -305978.8722367291,
+                "2": 0
+              },
+              {
+                "0": -15150475.01701364,
+                "1": -260121.6996014511,
+                "2": 0
+              },
+              {
+                "0": -17190245.932224777,
+                "1": -229550.25117793246,
+                "2": 0
+              }
+            ],
+            "tip": {
+              "0": -17190245.932224777,
+              "1": -229550.25117793246,
+              "2": 0
+            },
+            "effectiveLength": 10200000,
+            "com": {
+              "0": -12857884.898200888,
+              "1": -198936.21784970086,
+              "2": 0
+            }
+          },
+          {
+            "armIndex": 5,
+            "azimuthDeg": 1127142225.0007699,
+            "root": {
+              "0": -4949680.9680652665,
+              "1": -4949813.967652975,
+              "2": 0
+            },
+            "nodes": [
+              {
+                "0": -4949680.9680652665,
+                "1": -4949813.967652975,
+                "2": 0
+              },
+              {
+                "0": -8333140.122298263,
+                "1": -8765859.584733166,
+                "2": 0
+              },
+              {
+                "0": -10529069.810411155,
+                "1": -10896937.435226765,
+                "2": 0
+              },
+              {
+                "0": -11993022.935819749,
+                "1": -12317656.002222497,
+                "2": 0
+              }
+            ],
+            "tip": {
+              "0": -11993022.935819749,
+              "1": -12317656.002222497,
+              "2": 0
+            },
+            "effectiveLength": 10200000,
+            "com": {
+              "0": -8951228.459148608,
+              "1": -9232566.74745885,
+              "2": 0
+            }
+          },
+          {
+            "armIndex": 6,
+            "azimuthDeg": 1127142270.0007699,
+            "root": {
+              "0": 94.04143803566664,
+              "1": -6999999.999368301,
+              "2": 0
+            },
+            "nodes": [
+              {
+                "0": 94.04143803566664,
+                "1": -6999999.999368301,
+                "2": 0
+              },
+              {
+                "0": 305978.86024150555,
+                "1": -12090818.644500494,
+                "2": 0
+              },
+              {
+                "0": 260121.68457076215,
+                "1": -15150475.017271709,
+                "2": 0
+              },
+              {
+                "0": 229550.2341235999,
+                "1": -17190245.93245252,
+                "2": 0
+              }
+            ],
+            "tip": {
+              "0": 229550.2341235999,
+              "1": -17190245.93245252,
+              "2": 0
+            },
+            "effectiveLength": 10200000,
+            "com": {
+              "0": 198936.20509347582,
+              "1": -12857884.898398254,
+              "2": 0
+            }
+          },
+          {
+            "armIndex": 7,
+            "azimuthDeg": 1127142315.0007699,
+            "root": {
+              "0": 4949813.962742428,
+              "1": -4949680.972975945,
+              "2": 0
+            },
+            "nodes": [
+              {
+                "0": 4949813.962742428,
+                "1": -4949680.972975945,
+                "2": 0
+              },
+              {
+                "0": 8765859.576465912,
+                "1": -8333140.130994815,
+                "2": 0
+              },
+              {
+                "0": 10896937.424780942,
+                "1": -10529069.821221936,
+                "2": 0
+              },
+              {
+                "0": 12317655.990324296,
+                "1": -11993022.948040016,
+                "2": 0
+              }
+            ],
+            "tip": {
+              "0": 12317655.990324296,
+              "1": -11993022.948040016,
+              "2": 0
+            },
+            "effectiveLength": 10200000,
+            "com": {
+              "0": 9232566.738578394,
+              "1": -8951228.468308179,
+              "2": 0
+            }
+          }
+        ],
+        "systemCom": {
+          "0": 0.006799142574891448,
+          "1": -0.0026938372757285833,
+          "2": 0
+        },
+        "comOffsetMeters": 0.007313350738328246,
+        "isBalanced": true,
+        "totalSpanDiameterMeters": 34400000
+      },
+      "habitability": {
+        "rAU": 2.7000061599823755,
+        "solarFluxWm2": 186.7160842929263,
+        "fluxDropPercent": 86.28096368163656,
+        "equilibriumTempK": 154.60280471661937,
+        "surfaceTempK": 2597.010124613696,
+        "status": "HABITABLE_NOMINAL",
+        "oceanFreezing": false,
+        "deepGlobalGlaciation": false,
+        "co2AtmosphereCollapse": false,
+        "warnings": [],
+        "needsArtificialHeating": true
+      },
+      "moonStatus": {
+        "bound": true,
+        "specificEnergy": -516986.53845475125,
+        "separation": 378172845.82232547,
+        "hillSphere": 4040683635.636733,
+        "fractionOfHillRadius": 0.09359130283970692
+      },
+      "ledger": {
+        "appliedImpulseNewtonsSeconds": [
+          -6.952252908700662e+24,
+          -2.1725342846050617e+25,
+          0
+        ],
+        "partnerImpulseNewtonsSeconds": [
+          6.952252908700662e+24,
+          2.1725342846050617e+25,
+          0
+        ],
+        "internalImpulseNewtonsSeconds": [
+          0,
+          0,
+          0
+        ],
+        "externalImpulseNewtonsSeconds": [
+          -6.952252908700662e+24,
+          -2.1725342846050617e+25,
+          0
+        ],
+        "bodyMomentumChangeNewtonsSeconds": [
+          -6.952252908700702e+24,
+          -2.1725342846050613e+25,
+          0
+        ],
+        "normAppliedImpulse": 2.281061906842906e+25,
+        "normPartnerImpulse": 2.281061906842906e+25,
+        "normExternalImpulse": 2.281061906842906e+25,
+        "normInternalImpulse": 0,
+        "externalThrustFraction": 1,
+        "totalEnergyDrawnJoules": 1.4472503280001132e+33,
+        "totalWasteHeatJoules": 2.1708754920004132e+32,
+        "deltaOrbitalEnergyJoules": 1.6884800945911253e+33,
+        "partners": {
+          "solar_wind_ions": {
+            "name": "solar_wind_ions",
+            "insideEarthSystem": false,
+            "impulse": {
+              "0": 6.952252908700662e+24,
+              "1": 2.1725342846050617e+25,
+              "2": 0
+            },
+            "count": 62619
+          }
+        },
+        "validations": {
+          "nothingCreatedFromNothing": true,
+          "sumJNorm": 0,
+          "relativeConservationResidual": 0,
+          "integratorHonest": true,
+          "relativeIntegratorResidual": 1.7518127571223633e-15
+        }
+      },
+      "enablers": [
+        {
+          "id": "ENABLER_1_POWER",
+          "name": "High-Density Fusion/Antimatter Reactor Array",
+          "bound": "Maximum sustained continuous power capacity P <= 1.0e22 Watts (10 Zettawatts)",
+          "maxValue": 1e+22,
+          "unit": "W",
+          "category": "Energy Source",
+          "rationale": "Provides the necessary ~5.4 ZW continuous power for planetary acceleration over 10,000 years. Requires full waste heat dissipation via high-temperature ring radiators.",
+          "status": "DECLARED_BOUNDED"
+        },
+        {
+          "id": "ENABLER_2_MATERIAL",
+          "name": "Theoretical Carbon Nanotube / Graphene Structural Arm Composite",
+          "bound": "Tensile yield strength sigma_yield <= 100.0 GPa, Density rho >= 1300.0 kg/m^3, E <= 1.0 TPa",
+          "maxValue": 100000000000,
+          "unit": "Pa",
+          "category": "Materials Science",
+          "rationale": "Enables articulated arm components up to 12,000 km in Earth's gravity field without immediate catastrophic self-weight tensile rupture.",
+          "status": "DECLARED_BOUNDED"
+        },
+        {
+          "id": "ENABLER_3_PLASMA_COUPLING",
+          "name": "Interplanetary Solar Wind Magnetized Plasma Return Circuit",
+          "bound": "Plasma momentum coupling efficiency eta <= 0.85; loop closure strictly beyond magnetopause (> 10 R_earth)",
+          "maxValue": 0.85,
+          "unit": "ratio",
+          "category": "Electrodynamics & Momentum Partner",
+          "rationale": "Allows electrodynamic arms to interact with external momentum partner (solar wind ions), preventing Newton's Third Law cancellation that occurs with internal Earth ionospheric loops.",
+          "status": "DECLARED_BOUNDED"
+        }
+      ],
+      "trajectoryHistory": [
+        {
+          "year": 0,
+          "rAU": 1,
+          "xAU": 1,
+          "yAU": 0,
+          "zAU": 0
+        },
+        {
+          "year": 7208.761122518823,
+          "rAU": 2.2080337165706347,
+          "xAU": -2.202803602200253,
+          "yAU": -0.1518854293417248,
+          "zAU": 0
+        },
+        {
+          "year": 7211.498973305955,
+          "rAU": 2.208383377674301,
+          "xAU": -1.2531721515772203,
+          "yAU": 1.8183829908188962,
+          "zAU": 0
+        },
+        {
+          "year": 7214.236824093087,
+          "rAU": 2.20798905485372,
+          "xAU": 0.9338995034098831,
+          "yAU": 2.000761700924075,
+          "zAU": 0
+        },
+        {
+          "year": 7216.974674880219,
+          "rAU": 2.2080757329399106,
+          "xAU": 2.199160414262042,
+          "yAU": 0.19822188259858176,
+          "zAU": 0
+        },
+        {
+          "year": 7219.712525667351,
+          "rAU": 2.2094064324012,
+          "xAU": 1.2717314395273023,
+          "yAU": -1.8067030550850394,
+          "zAU": 0
+        },
+        {
+          "year": 7222.450376454483,
+          "rAU": 2.2115055133882686,
+          "xAU": -0.9342055974545737,
+          "yAU": -2.004499073941231,
+          "zAU": 0
+        },
+        {
+          "year": 7225.188227241615,
+          "rAU": 2.21311833702008,
+          "xAU": -2.205452459055649,
+          "yAU": -0.1840440830342486,
+          "zAU": 0
+        },
+        {
+          "year": 7227.926078028748,
+          "rAU": 2.213468929064631,
+          "xAU": -1.2493962038710875,
+          "yAU": 1.8271436248108797,
+          "zAU": 0
+        },
+        {
+          "year": 7230.663928815879,
+          "rAU": 2.2130547790297874,
+          "xAU": 0.9794121484314235,
+          "yAU": 1.9845310021492544,
+          "zAU": 0
+        },
+        {
+          "year": 7233.401779603012,
+          "rAU": 2.2131631595358896,
+          "xAU": 2.21039179146491,
+          "yAU": 0.11072171851730717,
+          "zAU": 0
+        },
+        {
+          "year": 7236.139630390144,
+          "rAU": 2.2145619577930242,
+          "xAU": 1.167773489061963,
+          "yAU": -1.8816454881693634,
+          "zAU": 0
+        },
+        {
+          "year": 7238.8774811772755,
+          "rAU": 2.2166930577104482,
+          "xAU": -1.0860124004101293,
+          "yAU": -1.932435038560708,
+          "zAU": 0
+        },
+        {
+          "year": 7241.615331964408,
+          "rAU": 2.2182320489174687,
+          "xAU": -2.218107367336649,
+          "yAU": 0.023518711943283106,
+          "zAU": 0
+        },
+        {
+          "year": 7244.35318275154,
+          "rAU": 2.2184583840993346,
+          "xAU": -1.0398123493140878,
+          "yAU": 1.9596805556504733,
+          "zAU": 0
+        },
+        {
+          "year": 7247.0910335386725,
+          "rAU": 2.2180185464373467,
+          "xAU": 1.2313772863978598,
+          "yAU": 1.8448079170698188,
+          "zAU": 0
+        },
+        {
+          "year": 7249.828884325804,
+          "rAU": 2.2182711807111635,
+          "xAU": 2.2075857392732696,
+          "yAU": -0.21746777906391443,
+          "zAU": 0
+        },
+        {
+          "year": 7252.566735112936,
+          "rAU": 2.2198589063902308,
+          "xAU": 0.8424256715616066,
+          "yAU": -2.053799540406514,
+          "zAU": 0
+        },
+        {
+          "year": 7255.304585900069,
+          "rAU": 2.222008031777769,
+          "xAU": -1.424652377895304,
+          "yAU": -1.7051936240328172,
+          "zAU": 0
+        },
+        {
+          "year": 7258.0424366872,
+          "rAU": 2.223336598568101,
+          "xAU": -2.17332837280029,
+          "yAU": 0.46890235072306763,
+          "zAU": 0
+        },
+        {
+          "year": 7260.780287474333,
+          "rAU": 2.223330128439961,
+          "xAU": -0.5883269741686358,
+          "yAU": 2.144077477959794,
+          "zAU": 0
+        },
+        {
+          "year": 7263.518138261465,
+          "rAU": 2.2229098679971755,
+          "xAU": 1.6356297232723518,
+          "yAU": 1.505338397034776,
+          "zAU": 0
+        },
+        {
+          "year": 7266.255989048597,
+          "rAU": 2.2234600754305553,
+          "xAU": 2.0851387904690166,
+          "yAU": -0.7719915359089469,
+          "zAU": 0
+        },
+        {
+          "year": 7268.993839835729,
+          "rAU": 2.2253222273534012,
+          "xAU": 0.25550471969330507,
+          "yAU": -2.210605426974147,
+          "zAU": 0
+        },
+        {
+          "year": 7271.731690622861,
+          "rAU": 2.227400941131149,
+          "xAU": -1.8595111919396754,
+          "yAU": -1.2261863967615265,
+          "zAU": 0
+        },
+        {
+          "year": 7274.469541409993,
+          "rAU": 2.228352073860874,
+          "xAU": -1.931364649772662,
+          "yAU": 1.1114780945608334,
+          "zAU": 0
+        },
+        {
+          "year": 7277.207392197125,
+          "rAU": 2.2280648654633888,
+          "xAU": 0.13392079863278056,
+          "yAU": 2.224036480007904,
+          "zAU": 0
+        },
+        {
+          "year": 7279.945242984258,
+          "rAU": 2.2278050887574294,
+          "xAU": 2.053964573174318,
+          "yAU": 0.8627543367832701,
+          "zAU": 0
+        },
+        {
+          "year": 7282.683093771389,
+          "rAU": 2.2288254645406758,
+          "xAU": 1.6773312547988386,
+          "yAU": -1.467727090797166,
+          "zAU": 0
+        },
+        {
+          "year": 7285.420944558521,
+          "rAU": 2.2309532354111625,
+          "xAU": -0.5880933282099758,
+          "yAU": -2.152045207681857,
+          "zAU": 0
+        },
+        {
+          "year": 7288.158795345654,
+          "rAU": 2.232763063409183,
+          "xAU": -2.1952393866706497,
+          "yAU": -0.40762106488040056,
+          "zAU": 0
+        },
+        {
+          "year": 7290.8966461327855,
+          "rAU": 2.233176912119075,
+          "xAU": -1.3179104707157279,
+          "yAU": 1.802828641884618,
+          "zAU": 0
+        },
+        {
+          "year": 7293.634496919918,
+          "rAU": 2.2326944299992624,
+          "xAU": 1.0623544300301708,
+          "yAU": 1.9637534169912985,
+          "zAU": 0
+        },
+        {
+          "year": 7296.37234770705,
+          "rAU": 2.232848846824425,
+          "xAU": 2.229300625049743,
+          "yAU": -0.12582804106394058,
+          "zAU": 0
+        },
+        {
+          "year": 7299.110198494182,
+          "rAU": 2.2344597730012143,
+          "xAU": 0.8291499832596767,
+          "yAU": -2.0749266932643944,
+          "zAU": 0
+        },
+        {
+          "year": 7301.848049281314,
+          "rAU": 2.2366699292107803,
+          "xAU": -1.534179308232822,
+          "yAU": -1.627570650517518,
+          "zAU": 0
+        },
+        {
+          "year": 7304.585900068446,
+          "rAU": 2.237918598816983,
+          "xAU": -2.1221226318107442,
+          "yAU": 0.7105456990845915,
+          "zAU": 0
+        },
+        {
+          "year": 7307.3237508555785,
+          "rAU": 2.237750786825443,
+          "xAU": -0.23749771750877155,
+          "yAU": 2.225112001252075,
+          "zAU": 0
+        },
+        {
+          "year": 7310.06160164271,
+          "rAU": 2.2373657888765006,
+          "xAU": 1.9287490717075806,
+          "yAU": 1.1339015352410953,
+          "zAU": 0
+        },
+        {
+          "year": 7312.799452429843,
+          "rAU": 2.238235049475369,
+          "xAU": 1.8243978381972852,
+          "yAU": -1.2966374453489617,
+          "zAU": 0
+        },
+        {
+          "year": 7315.537303216975,
+          "rAU": 2.240361460369562,
+          "xAU": -0.4422131632162024,
+          "yAU": -2.196284815634702,
+          "zAU": 0
+        },
+        {
+          "year": 7318.275154004107,
+          "rAU": 2.242252996520994,
+          "xAU": -2.1887661332172113,
+          "yAU": -0.48682780784251906,
+          "zAU": 0
+        },
+        {
+          "year": 7321.013004791239,
+          "rAU": 2.2426849177080643,
+          "xAU": -1.3281052547315197,
+          "yAU": 1.8071447292537894,
+          "zAU": 0
+        },
+        {
+          "year": 7323.750855578371,
+          "rAU": 2.2421686189838543,
+          "xAU": 1.1259886933102752,
+          "yAU": 1.9389351661397505,
+          "zAU": 0
+        },
+        {
+          "year": 7326.488706365503,
+          "rAU": 2.2423649836837423,
+          "xAU": 2.226397020954788,
+          "yAU": -0.26712735751815725,
+          "zAU": 0
+        },
+        {
+          "year": 7329.226557152635,
+          "rAU": 2.244092138522365,
+          "xAU": 0.6297413754974276,
+          "yAU": -2.1539209191993307,
+          "zAU": 0
+        },
+        {
+          "year": 7331.964407939768,
+          "rAU": 2.2463135071007496,
+          "xAU": -1.737272211420069,
+          "yAU": -1.424011810207658,
+          "zAU": 0
+        },
+        {
+          "year": 7334.702258726899,
+          "rAU": 2.2473804883661965,
+          "xAU": -1.9892124708642278,
+          "yAU": 1.0458263743314742,
+          "zAU": 0
+        },
+        {
+          "year": 7337.440109514031,
+          "rAU": 2.2470436373593476,
+          "xAU": 0.19627492152791623,
+          "yAU": 2.2384551064018097,
+          "zAU": 0
+        },
+        {
+          "year": 7340.177960301164,
+          "rAU": 2.2467799704953575,
+          "xAU": 2.1432459823577963,
+          "yAU": 0.6741786817500868,
+          "zAU": 0
+        },
+        {
+          "year": 7342.915811088295,
+          "rAU": 2.247994812307899,
+          "xAU": 1.4370647063783646,
+          "yAU": -1.728677444130307,
+          "zAU": 0
+        },
+        {
+          "year": 7345.653661875428,
+          "rAU": 2.2502684611686603,
+          "xAU": -1.0598154411076972,
+          "yAU": -1.985069111673462,
+          "zAU": 0
+        },
+        {
+          "year": 7348.39151266256,
+          "rAU": 2.2518554228864,
+          "xAU": -2.239399946755381,
+          "yAU": 0.23651791487091275,
+          "zAU": 0
+        },
+        {
+          "year": 7351.129363449692,
+          "rAU": 2.2518556664940808,
+          "xAU": -0.6155755289649767,
+          "yAU": 2.1660841883133237,
+          "zAU": 0
+        },
+        {
+          "year": 7353.867214236824,
+          "rAU": 2.251356826029383,
+          "xAU": 1.7858534360458216,
+          "yAU": 1.370888421087737,
+          "zAU": 0
+        },
+        {
+          "year": 7356.605065023956,
+          "rAU": 2.252092179622682,
+          "xAU": 1.929122323718307,
+          "yAU": -1.1620698110050531,
+          "zAU": 0
+        },
+        {
+          "year": 7359.3429158110885,
+          "rAU": 2.254244525511728,
+          "xAU": -0.38250145742028707,
+          "yAU": -2.22155598981231,
+          "zAU": 0
+        },
+        {
+          "year": 7362.08076659822,
+          "rAU": 2.2561891266836485,
+          "xAU": -2.211382134614048,
+          "yAU": -0.4474130419146706,
+          "zAU": 0
+        },
+        {
+          "year": 7364.818617385353,
+          "rAU": 2.2565542644134875,
+          "xAU": -1.2122890115457228,
+          "yAU": 1.903258390426321,
+          "zAU": 0
+        },
+        {
+          "year": 7367.5564681724845,
+          "rAU": 2.2559858611134502,
+          "xAU": 1.3477513298036183,
+          "yAU": 1.809154100279016,
+          "zAU": 0
+        },
+        {
+          "year": 7370.294318959616,
+          "rAU": 2.2563450291027327,
+          "xAU": 2.167818447844309,
+          "yAU": -0.6258243104438347,
+          "zAU": 0
+        },
+        {
+          "year": 7373.032169746749,
+          "rAU": 2.2583089546849875,
+          "xAU": 0.17049965044706966,
+          "yAU": -2.2518634958646646,
+          "zAU": 0
+        },
+        {
+          "year": 7375.770020533881,
+          "rAU": 2.260467307745989,
+          "xAU": -2.054031151189651,
+          "yAU": -0.9437523400399679,
+          "zAU": 0
+        },
+        {
+          "year": 7378.507871321013,
+          "rAU": 2.2611444311597864,
+          "xAU": -1.5958968593559428,
+          "yAU": 1.6018387412167154,
+          "zAU": 0
+        },
+        {
+          "year": 7381.245722108145,
+          "rAU": 2.2605948277302645,
+          "xAU": 0.9595316867984849,
+          "yAU": 2.046848288757738,
+          "zAU": 0
+        },
+        {
+          "year": 7383.983572895278,
+          "rAU": 2.260696000887297,
+          "xAU": 2.2507596928597167,
+          "yAU": -0.2117243808016729,
+          "zAU": 0
+        },
+        {
+          "year": 7386.721423682409,
+          "rAU": 2.26248369792856,
+          "xAU": 0.5551732233896859,
+          "yAU": -2.1933114633867206,
+          "zAU": 0
+        },
+        {
+          "year": 7389.459274469541,
+          "rAU": 2.264755882435772,
+          "xAU": -1.8842554150683415,
+          "yAU": -1.256463583958192,
+          "zAU": 0
+        },
+        {
+          "year": 7392.197125256674,
+          "rAU": 2.2656539378573495,
+          "xAU": -1.8110963865876408,
+          "yAU": 1.3612926373920138,
+          "zAU": 0
+        },
+        {
+          "year": 7394.934976043805,
+          "rAU": 2.265146014914461,
+          "xAU": 0.691463214404497,
+          "yAU": 2.157026910357927,
+          "zAU": 0
+        },
+        {
+          "year": 7397.672826830938,
+          "rAU": 2.265095371691227,
+          "xAU": 2.2646549867178343,
+          "yAU": 0.04466356446886746,
+          "zAU": 0
+        },
+        {
+          "year": 7400.41067761807,
+          "rAU": 2.2667673944561626,
+          "xAU": 0.7700670391279063,
+          "yAU": -2.131954778089432,
+          "zAU": 0
+        },
+        {
+          "year": 7403.148528405202,
+          "rAU": 2.269095689682591,
+          "xAU": -1.775752579449982,
+          "yAU": -1.4126209773017142,
+          "zAU": 0
+        },
+        {
+          "year": 7405.886379192334,
+          "rAU": 2.2701105729207036,
+          "xAU": -1.9046101474887283,
+          "yAU": 1.2352579485149364,
+          "zAU": 0
+        },
+        {
+          "year": 7408.624229979466,
+          "rAU": 2.269623905624884,
+          "xAU": 0.5739229609759684,
+          "yAU": 2.195860903574844,
+          "zAU": 0
+        },
+        {
+          "year": 7411.362080766598,
+          "rAU": 2.269511463243836,
+          "xAU": 2.265478676060071,
+          "yAU": 0.13523553568602614,
+          "zAU": 0
+        },
+        {
+          "year": 7414.09993155373,
+          "rAU": 2.271153139035107,
+          "xAU": 0.8250992955007724,
+          "yAU": -2.1159744170270938,
+          "zAU": 0
+        },
+        {
+          "year": 7416.837782340863,
+          "rAU": 2.2735062608890906,
+          "xAU": -1.7642739675921237,
+          "yAU": -1.4339344774356464,
+          "zAU": 0
+        },
+        {
+          "year": 7419.5756331279945,
+          "rAU": 2.2745300699945963,
+          "xAU": -1.9031207574762314,
+          "yAU": 1.245639764046057,
+          "zAU": 0
+        },
+        {
+          "year": 7422.313483915126,
+          "rAU": 2.274024020514908,
+          "xAU": 0.616439874075631,
+          "yAU": 2.188878052228677,
+          "zAU": 0
+        },
+        {
+          "year": 7425.051334702259,
+          "rAU": 2.2739331008096224,
+          "xAU": 2.273161088507499,
+          "yAU": 0.05924873545542454,
+          "zAU": 0
+        },
+        {
+          "year": 7427.789185489391,
+          "rAU": 2.2756385873421556,
+          "xAU": 0.7236012273630015,
+          "yAU": -2.157529198865999,
+          "zAU": 0
+        },
+        {
+          "year": 7430.527036276523,
+          "rAU": 2.2779900110255995,
+          "xAU": -1.854422192964054,
+          "yAU": -1.323010514158825,
+          "zAU": 0
+        },
+        {
+          "year": 7433.264887063655,
+          "rAU": 2.2789114463929843,
+          "xAU": -1.8045477695879986,
+          "yAU": 1.3917775424887209,
+          "zAU": 0
+        },
+        {
+          "year": 7436.0027378507875,
+          "rAU": 2.2783476980438384,
+          "xAU": 0.8168288557699593,
+          "yAU": 2.1268894784551446,
+          "zAU": 0
+        },
+        {
+          "year": 7438.740588637919,
+          "rAU": 2.278369735903004,
+          "xAU": 2.27092977213837,
+          "yAU": -0.18397451860053599,
+          "zAU": 0
+        },
+        {
+          "year": 7441.478439425051,
+          "rAU": 2.2802283822629024,
+          "xAU": 0.4578093636979802,
+          "yAU": -2.2337976770038384,
+          "zAU": 0
+        },
+        {
+          "year": 7444.216290212184,
+          "rAU": 2.282532895829582,
+          "xAU": -2.0205990534915257,
+          "yAU": -1.061666560447925,
+          "zAU": 0
+        },
+        {
+          "year": 7446.954140999315,
+          "rAU": 2.283237335013522,
+          "xAU": -1.5784204546682479,
+          "yAU": 1.649776226124177,
+          "zAU": 0
+        },
+        {
+          "year": 7449.691991786448,
+          "rAU": 2.282603890590256,
+          "xAU": 1.157925357484503,
+          "yAU": 1.967101773633525,
+          "zAU": 0
+        },
+        {
+          "year": 7452.42984257358,
+          "rAU": 2.28285127757709,
+          "xAU": 2.205583228498056,
+          "yAU": -0.5889079535066963,
+          "zAU": 0
+        },
+        {
+          "year": 7455.167693360712,
+          "rAU": 2.2849294268732683,
+          "xAU": 0.01742582443434539,
+          "yAU": -2.2848629776059184,
+          "zAU": 0
+        },
+        {
+          "year": 7457.905544147844,
+          "rAU": 2.2871010767221254,
+          "xAU": -2.201225187710857,
+          "yAU": -0.6208373443429517,
+          "zAU": 0
+        },
+        {
+          "year": 7460.643394934976,
+          "rAU": 2.287479222861998,
+          "xAU": -1.1756275730442638,
+          "yAU": 1.9622591583487095,
+          "zAU": 0
+        },
+        {
+          "year": 7463.381245722108,
+          "rAU": 2.2868176170728476,
+          "xAU": 1.592682381585287,
+          "yAU": 1.6410050716382794,
+          "zAU": 0
+        },
+        {
+          "year": 7466.11909650924,
+          "rAU": 2.2874260788072975,
+          "xAU": 1.9918076673127405,
+          "yAU": -1.1247312045292905,
+          "zAU": 0
+        },
+        {
+          "year": 7468.856947296373,
+          "rAU": 2.2897384687118345,
+          "xAU": -0.5881639792032751,
+          "yAU": -2.2129088071284335,
+          "zAU": 0
+        },
+        {
+          "year": 7471.594798083504,
+          "rAU": 2.2916364158196467,
+          "xAU": -2.2915834934108297,
+          "yAU": 0.01557417855723941,
+          "zAU": 0
+        },
+        {
+          "year": 7474.332648870636,
+          "rAU": 2.291610470027724,
+          "xAU": -0.5521433727342436,
+          "yAU": 2.2240989731318925,
+          "zAU": 0
+        },
+        {
+          "year": 7477.070499657769,
+          "rAU": 2.2910424671205254,
+          "xAU": 2.022607574051291,
+          "yAU": 1.0760735047105534,
+          "zAU": 0
+        },
+        {
+          "year": 7479.8083504449005,
+          "rAU": 2.2921515477632513,
+          "xAU": 1.5298839255813261,
+          "yAU": -1.7068725471344777,
+          "zAU": 0
+        },
+        {
+          "year": 7482.546201232033,
+          "rAU": 2.294622610092555,
+          "xAU": -1.2954101051979086,
+          "yAU": -1.893991969914105,
+          "zAU": 0
+        },
+        {
+          "year": 7485.284052019165,
+          "rAU": 2.296058054484999,
+          "xAU": -2.147908159645554,
+          "yAU": 0.8114019517437029,
+          "zAU": 0
+        },
+        {
+          "year": 7488.0219028062975,
+          "rAU": 2.295629952128005,
+          "xAU": 0.2883699046878479,
+          "yAU": 2.27744586657456,
+          "zAU": 0
+        },
+        {
+          "year": 7490.759753593429,
+          "rAU": 2.2953697386351384,
+          "xAU": 2.2828061112301055,
+          "yAU": 0.23983013899931047,
+          "zAU": 0
+        },
+        {
+          "year": 7493.497604380561,
+          "rAU": 2.297070556793284,
+          "xAU": 0.7490127633068373,
+          "yAU": -2.1715232034887544,
+          "zAU": 0
+        },
+        {
+          "year": 7496.2354551676935,
+          "rAU": 2.2994983512958,
+          "xAU": -1.9503022499814395,
+          "yAU": -1.2182010512757884,
+          "zAU": 0
+        },
+        {
+          "year": 7498.973305954825,
+          "rAU": 2.300280667194934,
+          "xAU": -1.6219628052720942,
+          "yAU": 1.6311124443718303,
+          "zAU": 0
+        },
+        {
+          "year": 7501.711156741958,
+          "rAU": 2.299594535261455,
+          "xAU": 1.2371305668919461,
+          "yAU": 1.938464079385006,
+          "zAU": 0
+        },
+        {
+          "year": 7504.44900752909,
+          "rAU": 2.29992053589254,
+          "xAU": 2.1586850879817137,
+          "yAU": -0.793544682009531,
+          "zAU": 0
+        },
+        {
+          "year": 7507.186858316221,
+          "rAU": 2.302170159672916,
+          "xAU": -0.31867217276453574,
+          "yAU": -2.2800077829678456,
+          "zAU": 0
+        },
+        {
+          "year": 7509.924709103354,
+          "rAU": 2.304224197393002,
+          "xAU": -2.2980215490121405,
+          "yAU": -0.1689559472977145,
+          "zAU": 0
+        },
+        {
+          "year": 7512.662559890486,
+          "rAU": 2.304259750388794,
+          "xAU": -0.6433357707953774,
+          "yAU": 2.212630127987266,
+          "zAU": 0
+        },
+        {
+          "year": 7515.400410677618,
+          "rAU": 2.3036460197817648,
+          "xAU": 2.034806397803014,
+          "yAU": 1.0799758830253057,
+          "zAU": 0
+        },
+        {
+          "year": 7518.13826146475,
+          "rAU": 2.3048026900049483,
+          "xAU": 1.4655699127133557,
+          "yAU": -1.7788255312996308,
+          "zAU": 0
+        },
+        {
+          "year": 7520.876112251883,
+          "rAU": 2.3073336412230656,
+          "xAU": -1.4544499570193805,
+          "yAU": -1.7911906248208234,
+          "zAU": 0
+        },
+        {
+          "year": 7523.613963039014,
+          "rAU": 2.308632454600341,
+          "xAU": -2.043639523212829,
+          "yAU": 1.0739279815687994,
+          "zAU": 0
+        },
+        {
+          "year": 7526.351813826146,
+          "rAU": 2.308060335941016,
+          "xAU": 0.6584849719251467,
+          "yAU": 2.2121347282868866,
+          "zAU": 0
+        },
+        {
+          "year": 7529.089664613279,
+          "rAU": 2.3079998821861833,
+          "xAU": 2.296599625665849,
+          "yAU": -0.22911485234030177,
+          "zAU": 0
+        },
+        {
+          "year": 7531.82751540041,
+          "rAU": 2.3100254517138374,
+          "xAU": 0.20225518055312042,
+          "yAU": -2.301154151617215,
+          "zAU": 0
+        },
+        {
+          "year": 7534.565366187543,
+          "rAU": 2.31232245411342,
+          "xAU": -2.226263601614829,
+          "yAU": -0.6249684055390962,
+          "zAU": 0
+        },
+        {
+          "year": 7537.303216974675,
+          "rAU": 2.31262195373576,
+          "xAU": -1.0212343752728363,
+          "yAU": 2.0749218423019467,
+          "zAU": 0
+        },
+        {
+          "year": 7540.041067761807,
+          "rAU": 2.3119131678266887,
+          "xAU": 1.859094363961921,
+          "yAU": 1.3743036933136192,
+          "zAU": 0
+        },
+        {
+          "year": 7542.778918548939,
+          "rAU": 2.31285589774139,
+          "xAU": 1.6779514596441167,
+          "yAU": -1.5917855706078348,
+          "zAU": 0
+        },
+        {
+          "year": 7545.516769336071,
+          "rAU": 2.315402310053937,
+          "xAU": -1.2796340791490037,
+          "yAU": -1.9296695263395718,
+          "zAU": 0
+        },
+        {
+          "year": 7548.2546201232035,
+          "rAU": 2.3168459466895746,
+          "xAU": -2.1217106288098693,
+          "yAU": 0.9306552252510802,
+          "zAU": 0
+        },
+        {
+          "year": 7550.992470910335,
+          "rAU": 2.3162962120038766,
+          "xAU": 0.5612089067719,
+          "yAU": 2.247281180605444,
+          "zAU": 0
+        },
+        {
+          "year": 7553.730321697468,
+          "rAU": 2.316181700868773,
+          "xAU": 2.3086288537995108,
+          "yAU": -0.18689699527739534,
+          "zAU": 0
+        },
+        {
+          "year": 7556.4681724846,
+          "rAU": 2.3182245299234485,
+          "xAU": 0.18608987770836255,
+          "yAU": -2.310743501246575,
+          "zAU": 0
+        },
+        {
+          "year": 7559.206023271731,
+          "rAU": 2.3205322278190685,
+          "xAU": -2.2537590264955787,
+          "yAU": -0.5526663286619082,
+          "zAU": 0
+        },
+        {
+          "year": 7561.943874058864,
+          "rAU": 2.3207551498782983,
+          "xAU": -0.8999695229991378,
+          "yAU": 2.139149205492536,
+          "zAU": 0
+        },
+        {
+          "year": 7564.681724845996,
+          "rAU": 2.320051405669103,
+          "xAU": 1.9761777514564636,
+          "yAU": 1.2154669965061395,
+          "zAU": 0
+        },
+        {
+          "year": 7567.419575633128,
+          "rAU": 2.3211639589118493,
+          "xAU": 1.4965359796845574,
+          "yAU": -1.7743117498514491,
+          "zAU": 0
+        },
+        {
+          "year": 7570.15742642026,
+          "rAU": 2.3237625259775205,
+          "xAU": -1.5363369107272833,
+          "yAU": -1.7434279950357494,
+          "zAU": 0
+        },
+        {
+          "year": 7572.895277207393,
+          "rAU": 2.324975992120989,
+          "xAU": -1.9498893847183307,
+          "yAU": 1.2662719894642498,
+          "zAU": 0
+        },
+        {
+          "year": 7575.633127994524,
+          "rAU": 2.3242882932168643,
+          "xAU": 0.9761409351028152,
+          "yAU": 2.1093754869158703,
+          "zAU": 0
+        },
+        {
+          "year": 7578.370978781656,
+          "rAU": 2.3244496240303705,
+          "xAU": 2.2236941124444556,
+          "yAU": -0.6769420572950056,
+          "zAU": 0
+        },
+        {
+          "year": 7581.108829568789,
+          "rAU": 2.3267683135918444,
+          "xAU": -0.3706674214429604,
+          "yAU": -2.297053862628359,
+          "zAU": 0
+        },
+        {
+          "year": 7583.84668035592,
+          "rAU": 2.3288247591989846,
+          "xAU": -2.3280720555370236,
+          "yAU": 0.059205264004370824,
+          "zAU": 0
+        },
+        {
+          "year": 7586.584531143053,
+          "rAU": 2.328641109262478,
+          "xAU": -0.24706976386943633,
+          "yAU": 2.315496911578309,
+          "zAU": 0
+        },
+        {
+          "year": 7589.322381930185,
+          "rAU": 2.328127439326342,
+          "xAU": 2.265082532062177,
+          "yAU": 0.5381249824074577,
+          "zAU": 0
+        },
+        {
+          "year": 7592.0602327173165,
+          "rAU": 2.329788845917325,
+          "xAU": 0.8137648197877615,
+          "yAU": -2.183048988144007,
+          "zAU": 0
+        },
+        {
+          "year": 7594.798083504449,
+          "rAU": 2.3323310398004202,
+          "xAU": -2.0695189960695934,
+          "yAU": -1.0755738952408676,
+          "zAU": 0
+        },
+        {
+          "year": 7597.535934291581,
+          "rAU": 2.332903239919711,
+          "xAU": -1.3170604711531828,
+          "yAU": 1.9255620587645674,
+          "zAU": 0
+        },
+        {
+          "year": 7600.273785078713,
+          "rAU": 2.3321120087489984,
+          "xAU": 1.7593274686826945,
+          "yAU": 1.5308537746270316,
+          "zAU": 0
+        },
+        {
+          "year": 7603.011635865845,
+          "rAU": 2.3329853707096375,
+          "xAU": 1.7184790096415596,
+          "yAU": -1.5778626788686492,
+          "zAU": 0
+        },
+        {
+          "year": 7605.749486652978,
+          "rAU": 2.3356156767013885,
+          "xAU": -1.3805244796952851,
+          "yAU": -1.883946058202131,
+          "zAU": 0
+        },
+        {
+          "year": 7608.4873374401095,
+          "rAU": 2.3369641906878,
+          "xAU": -2.0242950462435587,
+          "yAU": 1.167746202867246,
+          "zAU": 0
+        },
+        {
+          "year": 7611.225188227241,
+          "rAU": 2.3362651755312656,
+          "xAU": 0.948054167299817,
+          "yAU": 2.135258360542252,
+          "zAU": 0
+        },
+        {
+          "year": 7613.963039014374,
+          "rAU": 2.336420249652038,
+          "xAU": 2.219881958761806,
+          "yAU": -0.7286862645528186,
+          "zAU": 0
+        },
+        {
+          "year": 7616.700889801506,
+          "rAU": 2.3388175200490293,
+          "xAU": -0.5076680384965164,
+          "yAU": -2.283055092365795,
+          "zAU": 0
+        },
+        {
+          "year": 7619.438740588638,
+          "rAU": 2.3408050151730118,
+          "xAU": -2.323599174545287,
+          "yAU": 0.2832931257753793,
+          "zAU": 0
+        },
+        {
+          "year": 7622.17659137577,
+          "rAU": 2.340458281687157,
+          "xAU": 0.06283569459220172,
+          "yAU": 2.3396146357473313,
+          "zAU": 0
+        },
+        {
+          "year": 7624.914442162903,
+          "rAU": 2.3400783265000715,
+          "xAU": 2.3354713163463554,
+          "yAU": 0.1467661564489435,
+          "zAU": 0
+        },
+        {
+          "year": 7627.652292950034,
+          "rAU": 2.3420467368581703,
+          "xAU": 0.3483959719221753,
+          "yAU": -2.315988593317421,
+          "zAU": 0
+        },
+        {
+          "year": 7630.390143737166,
+          "rAU": 2.3444663768364484,
+          "xAU": -2.2800277369040582,
+          "yAU": -0.5458902005575696,
+          "zAU": 0
+        },
+        {
+          "year": 7633.127994524299,
+          "rAU": 2.3446034619321487,
+          "xAU": -0.7339542458868598,
+          "yAU": 2.226763696185311,
+          "zAU": 0
+        },
+        {
+          "year": 7635.86584531143,
+          "rAU": 2.3439026828061325,
+          "xAU": 2.1615730331244767,
+          "yAU": 0.9063563366219909,
+          "zAU": 0
+        },
+        {
+          "year": 7638.603696098563,
+          "rAU": 2.345367911307591,
+          "xAU": 1.0663015269542184,
+          "yAU": -2.0889594761522865,
+          "zAU": 0
+        },
+        {
+          "year": 7641.341546885695,
+          "rAU": 2.3480135693708712,
+          "xAU": -2.006826830754393,
+          "yAU": -1.218939618403643,
+          "zAU": 0
+        },
+        {
+          "year": 7644.079397672826,
+          "rAU": 2.3486585882515922,
+          "xAU": -1.3608344543562791,
+          "yAU": 1.914243127715184,
+          "zAU": 0
+        },
+        {
+          "year": 7646.817248459959,
+          "rAU": 2.3478258682086444,
+          "xAU": 1.8171607444990345,
+          "yAU": 1.486678558425253,
+          "zAU": 0
+        },
+        {
+          "year": 7649.555099247091,
+          "rAU": 2.3488037879307506,
+          "xAU": 1.599633872800998,
+          "yAU": -1.7198984583938448,
+          "zAU": 0
+        },
+        {
+          "year": 7652.292950034223,
+          "rAU": 2.3515111578364802,
+          "xAU": -1.6191740374207575,
+          "yAU": -1.7052507621965831,
+          "zAU": 0
+        },
+        {
+          "year": 7655.030800821355,
+          "rAU": 2.3526173974964193,
+          "xAU": -1.8013662120648635,
+          "yAU": 1.513237717291606,
+          "zAU": 0
+        },
+        {
+          "year": 7657.768651608488,
+          "rAU": 2.351789158916451,
+          "xAU": 1.4081995906866227,
+          "yAU": 1.883583329929147,
+          "zAU": 0
+        },
+        {
+          "year": 7660.5065023956195,
+          "rAU": 2.352348287968286,
+          "xAU": 1.9549011668983047,
+          "yAU": -1.3083974532102147,
+          "zAU": 0
+        },
+        {
+          "year": 7663.244353182751,
+          "rAU": 2.3550099578684054,
+          "xAU": -1.2095923499343828,
+          "yAU": -2.0206331306398906,
+          "zAU": 0
+        },
+        {
+          "year": 7665.982203969884,
+          "rAU": 2.356495155005421,
+          "xAU": -2.0792307821492795,
+          "yAU": 1.1089944860669585,
+          "zAU": 0
+        },
+        {
+          "year": 7668.7200547570155,
+          "rAU": 2.355750275566003,
+          "xAU": 1.0125808490121488,
+          "yAU": 2.127025948370902,
+          "zAU": 0
+        },
+        {
+          "year": 7671.457905544148,
+          "rAU": 2.355980455795822,
+          "xAU": 2.1668647961528187,
+          "yAU": -0.9248463998337754,
+          "zAU": 0
+        },
+        {
+          "year": 7674.19575633128,
+          "rAU": 2.3585437657554134,
+          "xAU": -0.8409641867293876,
+          "yAU": -2.2035217111756142,
+          "zAU": 0
+        },
+        {
+          "year": 7676.933607118412,
+          "rAU": 2.3603160246285304,
+          "xAU": -2.235559877050739,
+          "yAU": 0.7572078791448972,
+          "zAU": 0
+        },
+        {
+          "year": 7679.671457905544,
+          "rAU": 2.3596832882837533,
+          "xAU": 0.6792939675094809,
+          "yAU": 2.2597931159092544,
+          "zAU": 0
+        },
+        {
+          "year": 7682.409308692676,
+          "rAU": 2.3596752465255633,
+          "xAU": 2.2789496256457715,
+          "yAU": -0.6119279964460482,
+          "zAU": 0
+        },
+        {
+          "year": 7685.147159479809,
+          "rAU": 2.36213176613534,
+          "xAU": -0.5500101967401834,
+          "yAU": -2.29720596901268,
+          "zAU": 0
+        },
+        {
+          "year": 7687.88501026694,
+          "rAU": 2.3641043574713825,
+          "xAU": -2.3129525128852846,
+          "yAU": 0.48912174982597756,
+          "zAU": 0
+        },
+        {
+          "year": 7690.622861054073,
+          "rAU": 2.36357473672111,
+          "xAU": 0.4347257876201826,
+          "yAU": 2.323251821401261,
+          "zAU": 0
+        },
+        {
+          "year": 7693.360711841205,
+          "rAU": 2.36341028934184,
+          "xAU": 2.330719769283103,
+          "yAU": -0.3917314805320048,
+          "zAU": 0
+        },
+        {
+          "year": 7696.098562628336,
+          "rAU": 2.3657830611843944,
+          "xAU": -0.35495576563864883,
+          "yAU": -2.3390031844841266,
+          "zAU": 0
+        },
+        {
+          "year": 7698.836413415469,
+          "rAU": 2.367879755902017,
+          "xAU": -2.3462194935693224,
+          "yAU": 0.3195444044352948,
+          "zAU": 0
+        },
+        {
+          "year": 7701.574264202601,
+          "rAU": 2.367418947090315,
+          "xAU": 0.2907944147196243,
+          "yAU": 2.3494916640435406,
+          "zAU": 0
+        },
+        {
+          "year": 7704.312114989733,
+          "rAU": 2.3671693320715423,
+          "xAU": 2.3512846560103284,
+          "yAU": -0.2737720093625777,
+          "zAU": 0
+        },
+        {
+          "year": 7707.049965776865,
+          "rAU": 2.3695010585085465,
+          "xAU": -0.2632730501545712,
+          "yAU": -2.3548296259677537,
+          "zAU": 0
+        },
+        {
+          "year": 7709.787816563998,
+          "rAU": 2.3716548615906823,
+          "xAU": -2.357990485646697,
+          "yAU": 0.2542196926014453,
+          "zAU": 0
+        },
+        {
+          "year": 7712.525667351129,
+          "rAU": 2.37121414346237,
+          "xAU": 0.2518582652334877,
+          "yAU": 2.357800654930259,
+          "zAU": 0
+        },
+        {
+          "year": 7715.263518138261,
+          "rAU": 2.370943578261075,
+          "xAU": 2.3564976632565577,
+          "yAU": -0.26132779102845766,
+          "zAU": 0
+        },
+        {
+          "year": 7718.001368925394,
+          "rAU": 2.373286676338186,
+          "xAU": -0.2773637611521367,
+          "yAU": -2.357023332952793,
+          "zAU": 0
+        },
+        {
+          "year": 7720.7392197125255,
+          "rAU": 2.3754346158261166,
+          "xAU": -2.3570678915578394,
+          "yAU": 0.29482294458208463,
+          "zAU": 0
+        },
+        {
+          "year": 7723.477070499658,
+          "rAU": 2.374960016709166,
+          "xAU": 0.3190029752333335,
+          "yAU": 2.353438374540426,
+          "zAU": 0
+        },
+        {
+          "year": 7726.21492128679,
+          "rAU": 2.3747320832737477,
+          "xAU": 2.34805085949989,
+          "yAU": -0.3549783493841595,
+          "zAU": 0
+        },
+        {
+          "year": 7728.952772073922,
+          "rAU": 2.377139907802396,
+          "xAU": -0.39731668136548015,
+          "yAU": -2.343700833292403,
+          "zAU": 0
+        },
+        {
+          "year": 7731.690622861054,
+          "rAU": 2.379216066250184,
+          "xAU": -2.3380008934348235,
+          "yAU": 0.4409318679807202,
+          "zAU": 0
+        },
+        {
+          "year": 7734.428473648186,
+          "rAU": 2.3786570708845365,
+          "xAU": 0.49122380843617947,
+          "yAU": 2.327382355973006,
+          "zAU": 0
+        },
+        {
+          "year": 7737.1663244353185,
+          "rAU": 2.3785418020778137,
+          "xAU": 2.313366542559011,
+          "yAU": -0.5529885568437551,
+          "zAU": 0
+        },
+        {
+          "year": 7739.90417522245,
+          "rAU": 2.381059560826593,
+          "xAU": -0.6204911877968595,
+          "yAU": -2.2987899682376747,
+          "zAU": 0
+        },
+        {
+          "year": 7742.642026009583,
+          "rAU": 2.3829884764575007,
+          "xAU": -2.281264883363087,
+          "yAU": 0.6888139159915719,
+          "zAU": 0
+        },
+        {
+          "year": 7745.379876796715,
+          "rAU": 2.3823077578310516,
+          "xAU": 0.7634153135491457,
+          "yAU": 2.2566761646414113,
+          "zAU": 0
+        },
+        {
+          "year": 7748.117727583846,
+          "rAU": 2.382387273169751,
+          "xAU": 2.22616293549152,
+          "yAU": -0.8485091066128765,
+          "zAU": 0
+        },
+        {
+          "year": 7750.855578370979,
+          "rAU": 2.385041303150737,
+          "xAU": -0.9379555881193788,
+          "yAU": -2.192866008777234,
+          "zAU": 0
+        },
+        {
+          "year": 7753.593429158111,
+          "rAU": 2.3867339250429853,
+          "xAU": -2.154420366524879,
+          "yAU": 1.0271181593438512,
+          "zAU": 0
+        },
+        {
+          "year": 7756.331279945243,
+          "rAU": 2.385919224739378,
+          "xAU": 1.1213244558661353,
+          "yAU": 2.1060014272686214,
+          "zAU": 0
+        },
+        {
+          "year": 7759.069130732375,
+          "rAU": 2.386289577241974,
+          "xAU": 2.0485592199109717,
+          "yAU": -1.2238394784331101,
+          "zAU": 0
+        },
+        {
+          "year": 7761.806981519507,
+          "rAU": 2.389074172274906,
+          "xAU": -1.3281352164822713,
+          "yAU": -1.9858832411223515,
+          "zAU": 0
+        },
+        {
+          "year": 7764.544832306639,
+          "rAU": 2.3904290187836597,
+          "xAU": -1.9155642783376903,
+          "yAU": 1.4299525829200121,
+          "zAU": 0
+        },
+        {
+          "year": 7767.282683093771,
+          "rAU": 2.389507471373855,
+          "xAU": 1.53411305010038,
+          "yAU": 1.8320052143111343,
+          "zAU": 0
+        },
+        {
+          "year": 7770.020533880904,
+          "rAU": 2.3902735912762085,
+          "xAU": 1.7364405892049477,
+          "yAU": -1.6426143556276491,
+          "zAU": 0
+        },
+        {
+          "year": 7772.758384668035,
+          "rAU": 2.3931360144272475,
+          "xAU": -1.7487746228771388,
+          "yAU": -1.6336729482762617,
+          "zAU": 0
+        },
+        {
+          "year": 7775.496235455168,
+          "rAU": 2.3940489764831323,
+          "xAU": -1.5210799745813954,
+          "yAU": 1.848725564470669,
+          "zAU": 0
+        },
+        {
+          "year": 7778.2340862423,
+          "rAU": 2.393101985112553,
+          "xAU": 1.9462511447047957,
+          "yAU": 1.39249545524749,
+          "zAU": 0
+        },
+        {
+          "year": 7780.9719370294315,
+          "rAU": 2.3943622227677297,
+          "xAU": 1.2502244485564495,
+          "yAU": -2.0420355731595237,
+          "zAU": 0
+        },
+        {
+          "year": 7783.709787816564,
+          "rAU": 2.397189341891769,
+          "xAU": -2.129749976359317,
+          "yAU": -1.100309855939218,
+          "zAU": 0
+        },
+        {
+          "year": 7786.447638603696,
+          "rAU": 2.3975751990395153,
+          "xAU": -0.9397120969699598,
+          "yAU": 2.20574432105303,
+          "zAU": 0
+        },
+        {
+          "year": 7789.1854893908285,
+          "rAU": 2.3967488641004624,
+          "xAU": 2.272270258489806,
+          "yAU": 0.7623601445180131,
+          "zAU": 0
+        },
+        {
+          "year": 7791.92334017796,
+          "rAU": 2.3985668680166325,
+          "xAU": 0.5725664081121122,
+          "yAU": -2.329225349477528,
+          "zAU": 0
+        },
+        {
+          "year": 7794.661190965093,
+          "rAU": 2.4011800194289554,
+          "xAU": -2.371322790142736,
+          "yAU": -0.37748339123001307,
+          "zAU": 0
+        },
+        {
+          "year": 7797.399041752225,
+          "rAU": 2.4010066839858735,
+          "xAU": -0.17361789577957457,
+          "yAU": 2.3947212620281957,
+          "zAU": 0
+        },
+        {
+          "year": 7800.136892539356,
+          "rAU": 2.4005094821668744,
+          "xAU": 2.4001094187013647,
+          "yAU": -0.043824105627761345,
+          "zAU": 0
+        },
+        {
+          "year": 7802.874743326489,
+          "rAU": 2.402874378016319,
+          "xAU": -0.26790046068832074,
+          "yAU": -2.3878933434494716,
+          "zAU": 0
+        },
+        {
+          "year": 7805.612594113621,
+          "rAU": 2.4050423021367426,
+          "xAU": -2.3543950502240367,
+          "yAU": 0.49097089786234704,
+          "zAU": 0
+        },
+        {
+          "year": 7808.350444900753,
+          "rAU": 2.4043739969052123,
+          "xAU": 0.7165541034235595,
+          "yAU": 2.2951175424933696,
+          "zAU": 0
+        },
+        {
+          "year": 7811.088295687885,
+          "rAU": 2.404450620489697,
+          "xAU": 2.2101781354123955,
+          "yAU": -0.9468344079712545,
+          "zAU": 0
+        },
+        {
+          "year": 7813.826146475017,
+          "rAU": 2.407233507913189,
+          "xAU": -1.1726186980685105,
+          "yAU": -2.1023174238349807,
+          "zAU": 0
+        },
+        {
+          "year": 7816.563997262149,
+          "rAU": 2.408714214830523,
+          "xAU": -1.9695080307525634,
+          "yAU": 1.3867019454546756,
+          "zAU": 0
+        },
+        {
+          "year": 7819.301848049281,
+          "rAU": 2.407750837541982,
+          "xAU": 1.5916356090492294,
+          "yAU": 1.8066433471193488,
+          "zAU": 0
+        },
+        {
+          "year": 7822.039698836414,
+          "rAU": 2.408622913275358,
+          "xAU": 1.6155112931526194,
+          "yAU": -1.7865014973549347,
+          "zAU": 0
+        },
+        {
+          "year": 7824.777549623545,
+          "rAU": 2.4115478679871805,
+          "xAU": -1.9616786949143963,
+          "yAU": -1.4026331728261912,
+          "zAU": 0
+        },
+        {
+          "year": 7827.515400410678,
+          "rAU": 2.412164706081072,
+          "xAU": -1.1670524021511017,
+          "yAU": 2.111048853034086,
+          "zAU": 0
+        },
+        {
+          "year": 7830.25325119781,
+          "rAU": 2.411254383637231,
+          "xAU": 2.2352505272173935,
+          "yAU": 0.9043244899836153,
+          "zAU": 0
+        },
+        {
+          "year": 7832.991101984941,
+          "rAU": 2.413028759998254,
+          "xAU": 0.6205631624211463,
+          "yAU": -2.3318681690920218,
+          "zAU": 0
+        },
+        {
+          "year": 7835.728952772074,
+          "rAU": 2.415685422594556,
+          "xAU": -2.393602830865181,
+          "yAU": -0.32588579135953405,
+          "zAU": 0
+        },
+        {
+          "year": 7838.466803559206,
+          "rAU": 2.415428213829182,
+          "xAU": -0.01981998773486876,
+          "yAU": 2.415346895219861,
+          "zAU": 0
+        },
+        {
+          "year": 7841.204654346338,
+          "rAU": 2.4150234420650794,
+          "xAU": 2.3964427532145955,
+          "yAU": -0.29899892355845126,
+          "zAU": 0
+        },
+        {
+          "year": 7843.94250513347,
+          "rAU": 2.4175888052485277,
+          "xAU": -0.6192243340196217,
+          "yAU": -2.336941774075888,
+          "zAU": 0
+        },
+        {
+          "year": 7846.680355920603,
+          "rAU": 2.419514626549145,
+          "xAU": -2.233889245478888,
+          "yAU": 0.9294029626695912,
+          "zAU": 0
+        },
+        {
+          "year": 7849.4182067077345,
+          "rAU": 2.418632310013952,
+          "xAU": 1.2292084614136918,
+          "yAU": 2.0829855519019835,
+          "zAU": 0
+        },
+        {
+          "year": 7852.156057494866,
+          "rAU": 2.4191669705647803,
+          "xAU": 1.8857400143845546,
+          "yAU": -1.5153723732536883,
+          "zAU": 0
+        },
+        {
+          "year": 7854.893908281999,
+          "rAU": 2.42212722428561,
+          "xAU": -1.774264492555786,
+          "yAU": -1.648843777039314,
+          "zAU": 0
+        },
+        {
+          "year": 7857.631759069131,
+          "rAU": 2.422968638012589,
+          "xAU": -1.3734991132768093,
+          "yAU": 1.996065431447676,
+          "zAU": 0
+        },
+        {
+          "year": 7860.369609856263,
+          "rAU": 2.421993663430278,
+          "xAU": 2.1789083131040123,
+          "yAU": 1.0575499367796521,
+          "zAU": 0
+        },
+        {
+          "year": 7863.107460643395,
+          "rAU": 2.4236904917624797,
+          "xAU": 0.7095111527145944,
+          "yAU": -2.3175136513154477,
+          "zAU": 0
+        },
+        {
+          "year": 7865.845311430527,
+          "rAU": 2.4264022154548375,
+          "xAU": -2.402005153144505,
+          "yAU": -0.3432185243127012,
+          "zAU": 0
+        },
+        {
+          "year": 7868.583162217659,
+          "rAU": 2.4261194191719175,
+          "xAU": 0.03767589357910002,
+          "yAU": 2.425826861737271,
+          "zAU": 0
+        },
+        {
+          "year": 7871.321013004791,
+          "rAU": 2.4257570329439435,
+          "xAU": 2.3873184157578593,
+          "yAU": -0.4301255219821173,
+          "zAU": 0
+        },
+        {
+          "year": 7874.058863791924,
+          "rAU": 2.4284321326642115,
+          "xAU": -0.8176210919872813,
+          "yAU": -2.286652219488914,
+          "zAU": 0
+        },
+        {
+          "year": 7876.796714579055,
+          "rAU": 2.4301991861474295,
+          "xAU": -2.1222843367633897,
+          "yAU": 1.183966755563858,
+          "zAU": 0
+        },
+        {
+          "year": 7879.534565366188,
+          "rAU": 2.4292180553361273,
+          "xAU": 1.5241312605784145,
+          "yAU": 1.8915930484379266,
+          "zAU": 0
+        },
+        {
+          "year": 7882.27241615332,
+          "rAU": 2.4300723870081105,
+          "xAU": 1.5994467180876855,
+          "yAU": -1.829486813862791,
+          "zAU": 0
+        },
+        {
+          "year": 7885.010266940451,
+          "rAU": 2.4330629782930835,
+          "xAU": -2.0826531234048367,
+          "yAU": -1.257915507461646,
+          "zAU": 0
+        },
+        {
+          "year": 7887.748117727584,
+          "rAU": 2.4334705454162178,
+          "xAU": -0.873077041281075,
+          "yAU": 2.2714566637724323,
+          "zAU": 0
+        },
+        {
+          "year": 7890.485968514716,
+          "rAU": 2.432642464820187,
+          "xAU": 2.3909201143139374,
+          "yAU": 0.4486093719657051,
+          "zAU": 0
+        },
+        {
+          "year": 7893.223819301848,
+          "rAU": 2.434853754395204,
+          "xAU": 0.0016232341427952516,
+          "yAU": -2.4348532133176604,
+          "zAU": 0
+        },
+        {
+          "year": 7895.96167008898,
+          "rAU": 2.437202495305594,
+          "xAU": -2.395919621043941,
+          "yAU": 0.44668240688488114,
+          "zAU": 0
+        },
+        {
+          "year": 7898.699520876112,
+          "rAU": 2.436451200579771,
+          "xAU": 0.8865310581453921,
+          "yAU": 2.269439828625165,
+          "zAU": 0
+        },
+        {
+          "year": 7901.437371663244,
+          "rAU": 2.4367201017087607,
+          "xAU": 2.0571360650903685,
+          "yAU": -1.3060612787216637,
+          "zAU": 0
+        },
+        {
+          "year": 7904.175222450376,
+          "rAU": 2.4397189051274517,
+          "xAU": -1.6814844844398071,
+          "yAU": -1.7677212067021448,
+          "zAU": 0
+        },
+        {
+          "year": 7906.913073237509,
+          "rAU": 2.4406436168108048,
+          "xAU": -1.4079220910605066,
+          "yAU": 1.9936139670917081,
+          "zAU": 0
+        },
+        {
+          "year": 7909.6509240246405,
+          "rAU": 2.4396370602259814,
+          "xAU": 2.232959879937048,
+          "yAU": 0.9827101099610162,
+          "zAU": 0
+        },
+        {
+          "year": 7912.388774811773,
+          "rAU": 2.4414790701903546,
+          "xAU": 0.5099081436729478,
+          "yAU": -2.387637689263923,
+          "zAU": 0
+        },
+        {
+          "year": 7915.126625598905,
+          "rAU": 2.444119491512635,
+          "xAU": -2.4440754434092025,
+          "yAU": -0.014673640178678372,
+          "zAU": 0
+        },
+        {
+          "year": 7917.864476386037,
+          "rAU": 2.443578083447835,
+          "xAU": 0.4878643070536058,
+          "yAU": 2.3943813956447495,
+          "zAU": 0
+        },
+        {
+          "year": 7920.602327173169,
+          "rAU": 2.44354350062677,
+          "xAU": 2.2377747257937908,
+          "yAU": -0.9814627430798646,
+          "zAU": 0
+        },
+        {
+          "year": 7923.340177960301,
+          "rAU": 2.446496362554928,
+          "xAU": -1.436250239165419,
+          "yAU": -1.9805377306407899,
+          "zAU": 0
+        },
+        {
+          "year": 7926.078028747434,
+          "rAU": 2.4476791802952835,
+          "xAU": -1.6299520103169833,
+          "yAU": 1.826031164497095,
+          "zAU": 0
+        },
+        {
+          "year": 7928.815879534565,
+          "rAU": 2.4466208791865856,
+          "xAU": 2.1359199835694036,
+          "yAU": 1.193230719626603,
+          "zAU": 0
+        },
+        {
+          "year": 7931.553730321698,
+          "rAU": 2.448311630442375,
+          "xAU": 0.6909120997938618,
+          "yAU": -2.3488018882225545,
+          "zAU": 0
+        },
+        {
+          "year": 7934.29158110883,
+          "rAU": 2.4510489325201674,
+          "xAU": -2.446265688100196,
+          "yAU": -0.15305245124442343,
+          "zAU": 0
+        },
+        {
+          "year": 7937.029431895961,
+          "rAU": 2.4505646110651678,
+          "xAU": 0.39904772495249236,
+          "yAU": 2.4178560391833126,
+          "zAU": 0
+        },
+        {
+          "year": 7939.767282683094,
+          "rAU": 2.4504750689782804,
+          "xAU": 2.261801599707528,
+          "yAU": -0.9429112297796524,
+          "zAU": 0
+        },
+        {
+          "year": 7942.505133470226,
+          "rAU": 2.4534443549204457,
+          "xAU": -1.441851014471471,
+          "yAU": -1.9850578970797284,
+          "zAU": 0
+        },
+        {
+          "year": 7945.242984257358,
+          "rAU": 2.454612001289004,
+          "xAU": -1.5979133252928002,
+          "yAU": 1.8632748272124848,
+          "zAU": 0
+        },
+        {
+          "year": 7947.98083504449,
+          "rAU": 2.4535479486641374,
+          "xAU": 2.1869654932007805,
+          "yAU": 1.1122407419003606,
+          "zAU": 0
+        },
+        {
+          "year": 7950.718685831622,
+          "rAU": 2.4553434956192626,
+          "xAU": 0.5551216114584935,
+          "yAU": -2.391767479913452,
+          "zAU": 0
+        },
+        {
+          "year": 7953.456536618754,
+          "rAU": 2.4580209893736713,
+          "xAU": -2.457762303128999,
+          "yAU": 0.03566013908500594,
+          "zAU": 0
+        },
+        {
+          "year": 7956.194387405886,
+          "rAU": 2.4574065693328793,
+          "xAU": 0.6310864064080224,
+          "yAU": 2.374989893588475,
+          "zAU": 0
+        },
+        {
+          "year": 7958.932238193019,
+          "rAU": 2.457506158210813,
+          "xAU": 2.1444455788243104,
+          "yAU": -1.2002873310607498,
+          "zAU": 0
+        },
+        {
+          "year": 7961.6700889801505,
+          "rAU": 2.4605630456397023,
+          "xAU": -1.699288727426476,
+          "yAU": -1.7795472239895842,
+          "zAU": 0
+        },
+        {
+          "year": 7964.407939767283,
+          "rAU": 2.4614353908157116,
+          "xAU": -1.2985422799565098,
+          "yAU": 2.091040920289568,
+          "zAU": 0
+        },
+        {
+          "year": 7967.145790554415,
+          "rAU": 2.4604367414624626,
+          "xAU": 2.35197578278805,
+          "yAU": 0.722467214423576,
+          "zAU": 0
+        },
+        {
+          "year": 7969.8836413415465,
+          "rAU": 2.4625819263078217,
+          "xAU": 0.09039088229786037,
+          "yAU": -2.460922435221264,
+          "zAU": 0
+        },
+        {
+          "year": 7972.621492128679,
+          "rAU": 2.4649951262079686,
+          "xAU": -2.4030792099283986,
+          "yAU": 0.5490093651650593,
+          "zAU": 0
+        },
+        {
+          "year": 7975.359342915811,
+          "rAU": 2.4641168669228355,
+          "xAU": 1.1577861755147814,
+          "yAU": 2.1751788675050303,
+          "zAU": 0
+        },
+        {
+          "year": 7978.0971937029435,
+          "rAU": 2.464690276189115,
+          "xAU": 1.7884956586399157,
+          "yAU": -1.6958718809412903,
+          "zAU": 0
+        },
+        {
+          "year": 7980.835044490075,
+          "rAU": 2.467803761326659,
+          "xAU": -2.1149225289544513,
+          "yAU": -1.271675312703252,
+          "zAU": 0
+        },
+        {
+          "year": 7983.572895277207,
+          "rAU": 2.468107000635282,
+          "xAU": -0.6572612998724646,
+          "yAU": 2.3789829234937447,
+          "zAU": 0
+        },
+        {
+          "year": 7986.31074606434,
+          "rAU": 2.467374753114515,
+          "xAU": 2.4673040409029627,
+          "yAU": -0.018679990653825626,
+          "zAU": 0
+        },
+        {
+          "year": 7989.048596851471,
+          "rAU": 2.470029091346904,
+          "xAU": -0.7003863435441742,
+          "yAU": -2.3686499703157566,
+          "zAU": 0
+        },
+        {
+          "year": 7991.786447638604,
+          "rAU": 2.4718639839866454,
+          "xAU": -2.084440858615427,
+          "yAU": 1.328615016573617,
+          "zAU": 0
+        },
+        {
+          "year": 7994.524298425736,
+          "rAU": 2.470756720536837,
+          "xAU": 1.858698484766876,
+          "yAU": 1.6278448067316684,
+          "zAU": 0
+        },
+        {
+          "year": 7997.262149212868,
+          "rAU": 2.4721183222551444,
+          "xAU": 1.0319563822163997,
+          "yAU": -2.2464271687353747,
+          "zAU": 0
+        },
+        {
+          "year": 8000,
+          "rAU": 2.475040731499803,
+          "xAU": -2.450225692581928,
+          "yAU": -0.3496007408380162,
+          "zAU": 0
+        },
+        {
+          "year": 8002.737850787132,
+          "rAU": 2.4745985872984844,
+          "xAU": 0.368255576735996,
+          "yAU": 2.447044339292301,
+          "zAU": 0
+        },
+        {
+          "year": 8005.475701574264,
+          "rAU": 2.47452440134876,
+          "xAU": 2.232550567904166,
+          "yAU": -1.067234264171286,
+          "zAU": 0
+        },
+        {
+          "year": 8008.213552361396,
+          "rAU": 2.477616456757095,
+          "xAU": -1.6780784876004926,
+          "yAU": -1.8228098903193461,
+          "zAU": 0
+        },
+        {
+          "year": 8010.951403148529,
+          "rAU": 2.478486993754635,
+          "xAU": -1.2486460743576082,
+          "yAU": 2.1409765900640347,
+          "zAU": 0
+        },
+        {
+          "year": 8013.68925393566,
+          "rAU": 2.4774933879311054,
+          "xAU": 2.4154819632813957,
+          "yAU": 0.5508360666338034,
+          "zAU": 0
+        },
+        {
+          "year": 8016.427104722793,
+          "rAU": 2.4798415030188647,
+          "xAU": -0.2055839314671725,
+          "yAU": -2.4713051465202276,
+          "zAU": 0
+        },
+        {
+          "year": 8019.164955509925,
+          "rAU": 2.4820535172661646,
+          "xAU": -2.2955768651043598,
+          "yAU": 0.9438837422961462,
+          "zAU": 0
+        },
+        {
+          "year": 8021.9028062970565,
+          "rAU": 2.480997541992081,
+          "xAU": 1.5999274137828248,
+          "yAU": 1.896201749286439,
+          "zAU": 0
+        },
+        {
+          "year": 8024.640657084189,
+          "rAU": 2.4820753540262395,
+          "xAU": 1.3063765000281773,
+          "yAU": -2.1104687875537538,
+          "zAU": 0
+        },
+        {
+          "year": 8027.378507871321,
+          "rAU": 2.4851198488379556,
+          "xAU": -2.4149276213904884,
+          "yAU": -0.5864684531444617,
+          "zAU": 0
+        },
+        {
+          "year": 8030.1163586584535,
+          "rAU": 2.4848036278450176,
+          "xAU": 0.19783499474693114,
+          "yAU": 2.4769154979137347,
+          "zAU": 0
+        },
+        {
+          "year": 8032.854209445585,
+          "rAU": 2.4846194806282305,
+          "xAU": 2.2854225530135155,
+          "yAU": -0.9747705974712636,
+          "zAU": 0
+        },
+        {
+          "year": 8035.592060232717,
+          "rAU": 2.487726981708083,
+          "xAU": -1.6558308050397064,
+          "yAU": -1.8566124745352675,
+          "zAU": 0
+        },
+        {
+          "year": 8038.3299110198495,
+          "rAU": 2.4886074490864645,
+          "xAU": -1.229756460372382,
+          "yAU": 2.1635309297121292,
+          "zAU": 0
+        },
+        {
+          "year": 8041.067761806981,
+          "rAU": 2.4876160768677624,
+          "xAU": 2.444647765527962,
+          "yAU": 0.4603596945759902,
+          "zAU": 0
+        },
+        {
+          "year": 8043.805612594114,
+          "rAU": 2.4900719238426787,
+          "xAU": -0.3670008987697169,
+          "yAU": -2.4628780981225598,
+          "zAU": 0
+        },
+        {
+          "year": 8046.543463381246,
+          "rAU": 2.492159528095122,
+          "xAU": -2.2084177736797765,
+          "yAU": 1.154880968052795,
+          "zAU": 0
+        },
+        {
+          "year": 8049.281314168378,
+          "rAU": 2.491033271000777,
+          "xAU": 1.8206976910584198,
+          "yAU": 1.7000901961388317,
+          "zAU": 0
+        },
+        {
+          "year": 8052.01916495551,
+          "rAU": 2.4924048288797263,
+          "xAU": 0.9903652636384547,
+          "yAU": -2.2871944551352237,
+          "zAU": 0
+        },
+        {
+          "year": 8054.757015742642,
+          "rAU": 2.495336361001146,
+          "xAU": -2.4899033907421546,
+          "yAU": -0.16457417569340546,
+          "zAU": 0
+        },
+        {
+          "year": 8057.494866529774,
+          "rAU": 2.4947159677525557,
+          "xAU": 0.6870266588376589,
+          "yAU": 2.3982498055469397,
+          "zAU": 0
+        },
+        {
+          "year": 8060.232717316906,
+          "rAU": 2.4949362836671005,
+          "xAU": 2.0167596902222726,
+          "yAU": -1.4688047560697652,
+          "zAU": 0
+        },
+        {
+          "year": 8062.970568104039,
+          "rAU": 2.4981490577523227,
+          "xAU": -2.0761269769374984,
+          "yAU": -1.389404725190318,
+          "zAU": 0
+        },
+        {
+          "year": 8065.70841889117,
+          "rAU": 2.498463346519513,
+          "xAU": -0.5872087656621747,
+          "yAU": 2.4284779100150344,
+          "zAU": 0
+        },
+        {
+          "year": 8068.446269678302,
+          "rAU": 2.497783535251866,
+          "xAU": 2.479602399647688,
+          "yAU": -0.3008230852789337,
+          "zAU": 0
+        },
+        {
+          "year": 8071.184120465435,
+          "rAU": 2.500707022121604,
+          "xAU": -1.157334780105392,
+          "yAU": -2.2167796050231754,
+          "zAU": 0
+        },
+        {
+          "year": 8073.921971252566,
+          "rAU": 2.502097998152514,
+          "xAU": -1.6670155613631035,
+          "yAU": 1.865892148687077,
+          "zAU": 0
+        },
+        {
+          "year": 8076.659822039699,
+          "rAU": 2.500960778198814,
+          "xAU": 2.337154196191043,
+          "yAU": 0.8902331589619757,
+          "zAU": 0
+        },
+        {
+          "year": 8079.397672826831,
+          "rAU": 2.503163276225807,
+          "xAU": -0.012791789117155715,
+          "yAU": -2.503130591394843,
+          "zAU": 0
+        },
+        {
+          "year": 8082.135523613963,
+          "rAU": 2.5055073658442426,
+          "xAU": -2.332383266090303,
+          "yAU": 0.9151805616170421,
+          "zAU": 0
+        },
+        {
+          "year": 8084.873374401095,
+          "rAU": 2.5044020125408353,
+          "xAU": 1.7003918585308528,
+          "yAU": 1.8386671715839644,
+          "zAU": 0
+        },
+        {
+          "year": 8087.611225188227,
+          "rAU": 2.505664144733891,
+          "xAU": 1.0833959817974304,
+          "yAU": -2.259337503081424,
+          "zAU": 0
+        },
+        {
+          "year": 8090.3490759753595,
+          "rAU": 2.508654534257352,
+          "xAU": -2.5025595518625208,
+          "yAU": -0.1747663057675341,
+          "zAU": 0
+        },
+        {
+          "year": 8093.086926762491,
+          "rAU": 2.5079986485368084,
+          "xAU": 0.7651399777791242,
+          "yAU": 2.3884342225538933,
+          "zAU": 0
+        },
+        {
+          "year": 8095.824777549624,
+          "rAU": 2.508316225039257,
+          "xAU": 1.9261034878134726,
+          "yAU": -1.6067904776379422,
+          "zAU": 0
+        },
+        {
+          "year": 8098.562628336756,
+          "rAU": 2.5115660753371145,
+          "xAU": -2.2167249412961065,
+          "yAU": -1.1807178686799196,
+          "zAU": 0
+        },
+        {
+          "year": 8101.300479123888,
+          "rAU": 2.5116361134261154,
+          "xAU": -0.25606981769232884,
+          "yAU": 2.4985484215306415,
+          "zAU": 0
+        },
+        {
+          "year": 8104.03832991102,
+          "rAU": 2.511173646507797,
+          "xAU": 2.4057889405441477,
+          "yAU": -0.7198421052360942,
+          "zAU": 0
+        },
+        {
+          "year": 8106.776180698152,
+          "rAU": 2.514308395680463,
+          "xAU": -1.591777635199841,
+          "yAU": -1.9462761028864493,
+          "zAU": 0
+        },
+        {
+          "year": 8109.514031485284,
+          "rAU": 2.5152200211915754,
+          "xAU": -1.1840985317883268,
+          "yAU": 2.2190634109956564,
+          "zAU": 0
+        },
+        {
+          "year": 8112.251882272416,
+          "rAU": 2.5142417661740177,
+          "xAU": 2.504096543344077,
+          "yAU": 0.22563723182597945,
+          "zAU": 0
+        },
+        {
+          "year": 8114.989733059549,
+          "rAU": 2.5169627296412918,
+          "xAU": -0.7761766391156009,
+          "yAU": -2.3942955555433323,
+          "zAU": 0
+        },
+        {
+          "year": 8117.72758384668,
+          "rAU": 2.5186890839750937,
+          "xAU": -1.8991448385549567,
+          "yAU": 1.6544012765726956,
+          "zAU": 0
+        },
+        {
+          "year": 8120.465434633812,
+          "rAU": 2.5174904743221105,
+          "xAU": 2.2706800584383324,
+          "yAU": 1.087092618185339,
+          "zAU": 0
+        },
+        {
+          "year": 8123.203285420945,
+          "rAU": 2.5196052724050815,
+          "xAU": 0.08764756499429449,
+          "yAU": -2.5180803468281256,
+          "zAU": 0
+        },
+        {
+          "year": 8125.941136208076,
+          "rAU": 2.52201659867708,
+          "xAU": -2.3452778313625005,
+          "yAU": 0.9274910337692296,
+          "zAU": 0
+        },
+        {
+          "year": 8128.678986995209,
+          "rAU": 2.5208704491493563,
+          "xAU": 1.7935758215750304,
+          "yAU": 1.7714044127911428,
+          "zAU": 0
+        },
+        {
+          "year": 8131.416837782341,
+          "rAU": 2.522295079427129,
+          "xAU": 0.8869224202971467,
+          "yAU": -2.361216018935277,
+          "zAU": 0
+        },
+        {
+          "year": 8134.154688569473,
+          "rAU": 2.52520447968176,
+          "xAU": -2.5205935177105143,
+          "yAU": 0.1525319070901712,
+          "zAU": 0
+        },
+        {
+          "year": 8136.892539356605,
+          "rAU": 2.5243276148289806,
+          "xAU": 1.17216423499481,
+          "yAU": 2.235679072046613,
+          "zAU": 0
+        },
+        {
+          "year": 8139.630390143737,
+          "rAU": 2.5250694490892434,
+          "xAU": 1.548311242218504,
+          "yAU": -1.994669902501075,
+          "zAU": 0
+        },
+        {
+          "year": 8142.368240930869,
+          "rAU": 2.528273962592935,
+          "xAU": -2.460595722805656,
+          "yAU": -0.5810661914411253,
+          "zAU": 0
+        },
+        {
+          "year": 8145.106091718001,
+          "rAU": 2.527813408875007,
+          "xAU": 0.4974928906001304,
+          "yAU": 2.478374760582146,
+          "zAU": 0
+        },
+        {
+          "year": 8147.843942505134,
+          "rAU": 2.527944898331672,
+          "xAU": 2.0370795964337423,
+          "yAU": -1.496934242642098,
+          "zAU": 0
+        },
+        {
+          "year": 8150.5817932922655,
+          "rAU": 2.5312561588022318,
+          "xAU": -2.220806115537685,
+          "yAU": -1.214610200296643,
+          "zAU": 0
+        },
+        {
+          "year": 8153.319644079397,
+          "rAU": 2.5312904055364114,
+          "xAU": -0.15889615332887877,
+          "yAU": 2.5262983057465664,
+          "zAU": 0
+        },
+        {
+          "year": 8156.05749486653,
+          "rAU": 2.5309213746467325,
+          "xAU": 2.3499002548022596,
+          "yAU": -0.9399637211743764,
+          "zAU": 0
+        },
+        {
+          "year": 8158.795345653662,
+          "rAU": 2.53418435700652,
+          "xAU": -1.8622774090913061,
+          "yAU": -1.7187242963560854,
+          "zAU": 0
+        },
+        {
+          "year": 8161.533196440794,
+          "rAU": 2.5347340310983744,
+          "xAU": -0.7488108885562423,
+          "yAU": 2.4216025399697254,
+          "zAU": 0
+        },
+        {
+          "year": 8164.271047227926,
+          "rAU": 2.5339876411841074,
+          "xAU": 2.50513469209198,
+          "yAU": -0.38130504868283,
+          "zAU": 0
+        },
+        {
+          "year": 8167.008898015059,
+          "rAU": 2.5370888164596264,
+          "xAU": -1.441545902466696,
+          "yAU": -2.087765569618866,
+          "zAU": 0
+        },
+        {
+          "year": 8169.74674880219,
+          "rAU": 2.5381315955962807,
+          "xAU": -1.2461206569756669,
+          "yAU": 2.2111750959213192,
+          "zAU": 0
+        },
+        {
+          "year": 8172.484599589322,
+          "rAU": 2.5371264066078885,
+          "xAU": 2.5333378849251575,
+          "yAU": 0.1385985710964882,
+          "zAU": 0
+        },
+        {
+          "year": 8175.222450376455,
+          "rAU": 2.53999398116265,
+          "xAU": -1.0050368227672275,
+          "yAU": -2.3326959530175473,
+          "zAU": 0
+        },
+        {
+          "year": 8177.960301163586,
+          "rAU": 2.54147987686102,
+          "xAU": -1.6426058948810363,
+          "yAU": 1.9393209735862642,
+          "zAU": 0
+        },
+        {
+          "year": 8180.698151950719,
+          "rAU": 2.540318428636545,
+          "xAU": 2.4695299775587163,
+          "yAU": 0.5955160861045582,
+          "zAU": 0
+        },
+        {
+          "year": 8183.436002737851,
+          "rAU": 2.5429176077499487,
+          "xAU": -0.5870907415349605,
+          "yAU": -2.47421794129148,
+          "zAU": 0
+        },
+        {
+          "year": 8186.173853524983,
+          "rAU": 2.5447822462477703,
+          "xAU": -1.9427783207299276,
+          "yAU": 1.6436328900699355,
+          "zAU": 0
+        },
+        {
+          "year": 8188.911704312115,
+          "rAU": 2.5435453272786224,
+          "xAU": 2.347789059314314,
+          "yAU": 0.978524074760004,
+          "zAU": 0
+        },
+        {
+          "year": 8191.649555099247,
+          "rAU": 2.545871179115173,
+          "xAU": -0.2104810368013908,
+          "yAU": -2.5371554532184843,
+          "zAU": 0
+        },
+        {
+          "year": 8194.387405886378,
+          "rAU": 2.5480459785214,
+          "xAU": -2.1588911166126348,
+          "yAU": 1.353413261081082,
+          "zAU": 0
+        },
+        {
+          "year": 8197.125256673511,
+          "rAU": 2.5467911814934783,
+          "xAU": 2.1980618952398845,
+          "yAU": 1.286339467958359,
+          "zAU": 0
+        },
+        {
+          "year": 8199.863107460644,
+          "rAU": 2.548861039383589,
+          "xAU": 0.11165275694872016,
+          "yAU": -2.546414392818525,
+          "zAU": 0
+        },
+        {
+          "year": 8202.600958247776,
+          "rAU": 2.5512800530660424,
+          "xAU": -2.3067874467520215,
+          "yAU": 1.0898447525588035,
+          "zAU": 0
+        },
+        {
+          "year": 8205.338809034907,
+          "rAU": 2.5500431773079746,
+          "xAU": 2.0447470035567896,
+          "yAU": 1.523722382056679,
+          "zAU": 0
+        },
+        {
+          "year": 8208.07665982204,
+          "rAU": 2.5518898056260624,
+          "xAU": 0.37330141038834763,
+          "yAU": -2.5244380834277345,
+          "zAU": 0
+        },
+        {
+          "year": 8210.814510609172,
+          "rAU": 2.5544935282016703,
+          "xAU": -2.402804028362749,
+          "yAU": 0.8671620303656989,
+          "zAU": 0
+        },
+        {
+          "year": 8213.552361396303,
+          "rAU": 2.553291635305532,
+          "xAU": 1.9064968047742437,
+          "yAU": 1.6984016333914653,
+          "zAU": 0
+        },
+        {
+          "year": 8216.290212183436,
+          "rAU": 2.554957737691583,
+          "xAU": 0.5730835751013827,
+          "yAU": -2.4898562724260027,
+          "zAU": 0
+        },
+        {
+          "year": 8219.028062970568,
+          "rAU": 2.5576944580709156,
+          "xAU": -2.461673664006306,
+          "yAU": 0.6942360641629348,
+          "zAU": 0
+        },
+        {
+          "year": 8221.7659137577,
+          "rAU": 2.5565296938514392,
+          "xAU": 1.7967206865287575,
+          "yAU": 1.818691521436157,
+          "zAU": 0
+        },
+        {
+          "year": 8224.503764544832,
+          "rAU": 2.558063892816732,
+          "xAU": 0.712072695003578,
+          "yAU": -2.4569581512030343,
+          "zAU": 0
+        },
+        {
+          "year": 8227.241615331965,
+          "rAU": 2.560889259478659,
+          "xAU": -2.495233623643327,
+          "yAU": 0.5761622711987888,
+          "zAU": 0
+        },
+        {
+          "year": 8229.979466119097,
+          "rAU": 2.5597528425582166,
+          "xAU": 1.724372567994072,
+          "yAU": 1.8917911781521761,
+          "zAU": 0
+        },
+        {
+          "year": 8232.717316906228,
+          "rAU": 2.5612070194912415,
+          "xAU": 0.7921028115183176,
+          "yAU": -2.435642529739532,
+          "zAU": 0
+        },
+        {
+          "year": 8235.45516769336,
+          "rAU": 2.5640823810479776,
+          "xAU": -2.511707680179235,
+          "yAU": 0.5155996374410218,
+          "zAU": 0
+        },
+        {
+          "year": 8238.193018480493,
+          "rAU": 2.5629584654629256,
+          "xAU": 1.6947238272617438,
+          "yAU": 1.922671902587486,
+          "zAU": 0
+        },
+        {
+          "year": 8240.930869267624,
+          "rAU": 2.5643861907734773,
+          "xAU": 0.8145931327001678,
+          "yAU": -2.431566277852083,
+          "zAU": 0
+        },
+        {
+          "year": 8243.668720054757,
+          "rAU": 2.567276134421653,
+          "xAU": -2.5153521273291046,
+          "yAU": 0.5137221290852985,
+          "zAU": 0
+        },
+        {
+          "year": 8246.40657084189,
+          "rAU": 2.5661455244346416,
+          "xAU": 1.7099279916298433,
+          "yAU": 1.9134390808219295,
+          "zAU": 0
+        },
+        {
+          "year": 8249.144421629022,
+          "rAU": 2.5676011588807897,
+          "xAU": 0.7798798048353084,
+          "yAU": -2.446295812263107,
+          "zAU": 0
+        },
+        {
+          "year": 8251.882272416153,
+          "rAU": 2.5704706227744336,
+          "xAU": -2.5063124516777577,
+          "yAU": 0.5707163192965597,
+          "zAU": 0
+        },
+        {
+          "year": 8254.620123203285,
+          "rAU": 2.569314435560574,
+          "xAU": 1.76926838383263,
+          "yAU": 1.8630797231332388,
+          "zAU": 0
+        },
+        {
+          "year": 8257.357973990418,
+          "rAU": 2.5708524312472596,
+          "xAU": 0.6870334376774034,
+          "yAU": -2.4773508590353357,
+          "zAU": 0
+        },
+        {
+          "year": 8260.095824777549,
+          "rAU": 2.5736637535521245,
+          "xAU": -2.4806094509395478,
+          "yAU": 0.6858001664168706,
+          "zAU": 0
+        },
+        {
+          "year": 8262.833675564681,
+          "rAU": 2.5724671206560337,
+          "xAU": 1.8690468924908081,
+          "yAU": 1.7675550346528952,
+          "zAU": 0
+        },
+        {
+          "year": 8265.571526351814,
+          "rAU": 2.5741411094162077,
+          "xAU": 0.5341547311762788,
+          "yAU": -2.518110635843569,
+          "zAU": 0
+        },
+        {
+          "year": 8268.309377138947,
+          "rAU": 2.576851307527702,
+          "xAU": -2.430251361786347,
+          "yAU": 0.8567619153783823,
+          "zAU": 0
+        },
+        {
+          "year": 8271.047227926078,
+          "rAU": 2.575607232121494,
+          "xAU": 2.002130560497153,
+          "yAU": 1.6202548666428687,
+          "zAU": 0
+        },
+        {
+          "year": 8273.78507871321,
+          "rAU": 2.5774684984971676,
+          "xAU": 0.31916066338733123,
+          "yAU": -2.557631781881708,
+          "zAU": 0
+        },
+        {
+          "year": 8276.522929500343,
+          "rAU": 2.5800270721685146,
+          "xAU": -2.343546339208869,
+          "yAU": 1.0790413565304837,
+          "zAU": 0
+        },
+        {
+          "year": 8279.260780287474,
+          "rAU": 2.5787405535794803,
+          "xAU": 2.1572343990878893,
+          "yAU": 1.4128844928256932,
+          "zAU": 0
+        },
+        {
+          "year": 8281.998631074606,
+          "rAU": 2.580835428755493,
+          "xAU": 0.04108321198094276,
+          "yAU": -2.5805084150246205,
+          "zAU": 0
+        },
+        {
+          "year": 8284.736481861739,
+          "rAU": 2.583183151794702,
+          "xAU": -2.2057618996389365,
+          "yAU": 1.3444142359471074,
+          "zAU": 0
+        },
+        {
+          "year": 8287.474332648871,
+          "rAU": 2.5818754805240163,
+          "xAU": 2.3180943669128413,
+          "yAU": 1.1368902774753904,
+          "zAU": 0
+        },
+        {
+          "year": 8290.212183436002,
+          "rAU": 2.5842412776206456,
+          "xAU": -0.29811559876506577,
+          "yAU": -2.5669885217373554,
+          "zAU": 0
+        },
+        {
+          "year": 8292.950034223135,
+          "rAU": 2.5863105938289976,
+          "xAU": -2.000335229626656,
+          "yAU": 1.6394088742185622,
+          "zAU": 0
+        },
+        {
+          "year": 8295.687885010268,
+          "rAU": 2.585023406126359,
+          "xAU": 2.4627798143141844,
+          "yAU": 0.7855326832333025,
+          "zAU": 0
+        },
+        {
+          "year": 8298.425735797398,
+          "rAU": 2.587682770968985,
+          "xAU": -0.6912716664383148,
+          "yAU": -2.4936410339800954,
+          "zAU": 0
+        },
+        {
+          "year": 8301.163586584531,
+          "rAU": 2.589400405698458,
+          "xAU": -1.710863964414525,
+          "yAU": 1.9436920940054148,
+          "zAU": 0
+        },
+        {
+          "year": 8303.901437371664,
+          "rAU": 2.5881988578678645,
+          "xAU": 2.563506552768195,
+          "yAU": 0.35666157878729293,
+          "zAU": 0
+        },
+        {
+          "year": 8306.639288158794,
+          "rAU": 2.5911526422351128,
+          "xAU": -1.1234722859227786,
+          "yAU": -2.334926559471508,
+          "zAU": 0
+        },
+        {
+          "year": 8309.377138945927,
+          "rAU": 2.592445057458701,
+          "xAU": -1.3240754610879661,
+          "yAU": 2.2288103439473574,
+          "zAU": 0
+        },
+        {
+          "year": 8312.11498973306,
+          "rAU": 2.5914191787249012,
+          "xAU": 2.587421657643397,
+          "yAU": -0.1438837218768531,
+          "zAU": 0
+        },
+        {
+          "year": 8314.852840520192,
+          "rAU": 2.594638279376587,
+          "xAU": -1.5696079203583142,
+          "yAU": -2.0660297135217447,
+          "zAU": 0
+        },
+        {
+          "year": 8317.590691307323,
+          "rAU": 2.5954405830828504,
+          "xAU": -0.8338495972470574,
+          "yAU": 2.457845940958132,
+          "zAU": 0
+        },
+        {
+          "year": 8320.328542094456,
+          "rAU": 2.594703408235087,
+          "xAU": 2.4989002212939257,
+          "yAU": -0.6985581298102155,
+          "zAU": 0
+        },
+        {
+          "year": 8323.066392881588,
+          "rAU": 2.598120714701548,
+          "xAU": -1.9926422045599346,
+          "yAU": -1.6672157307222741,
+          "zAU": 0
+        },
+        {
+          "year": 8325.80424366872,
+          "rAU": 2.5983891940560837,
+          "xAU": -0.24611973511748172,
+          "yAU": 2.586706686072683,
+          "zAU": 0
+        },
+        {
+          "year": 8328.542094455852,
+          "rAU": 2.5980700662295306,
+          "xAU": 2.2638600461522094,
+          "yAU": -1.2747179140788896,
+          "zAU": 0
+        },
+        {
+          "year": 8331.279945242984,
+          "rAU": 2.601574467473855,
+          "xAU": -2.343483504413505,
+          "yAU": -1.129723317610852,
+          "zAU": 0
+        },
+        {
+          "year": 8334.017796030117,
+          "rAU": 2.601302051940363,
+          "xAU": 0.4159243519607134,
+          "yAU": 2.5678355280031475,
+          "zAU": 0
+        },
+        {
+          "year": 8336.755646817248,
+          "rAU": 2.601533743994221,
+          "xAU": 1.8563803467705016,
+          "yAU": -1.8225887712988964,
+          "zAU": 0
+        },
+        {
+          "year": 8339.49349760438,
+          "rAU": 2.6049687430663857,
+          "xAU": -2.5635370683882215,
+          "yAU": -0.46275247309159667,
+          "zAU": 0
+        },
+        {
+          "year": 8342.231348391513,
+          "rAU": 2.604201678101715,
+          "xAU": 1.1074452494191929,
+          "yAU": 2.356996266387932,
+          "zAU": 0
+        },
+        {
+          "year": 8344.969199178644,
+          "rAU": 2.605100564979038,
+          "xAU": 1.2674207776470843,
+          "yAU": -2.2760038501818407,
+          "zAU": 0
+        },
+        {
+          "year": 8347.707049965777,
+          "rAU": 2.608270553735068,
+          "xAU": -2.5910112505181324,
+          "yAU": 0.29955964542958785,
+          "zAU": 0
+        },
+        {
+          "year": 8350.44490075291,
+          "rAU": 2.6071231651136153,
+          "xAU": 1.7600824398376218,
+          "yAU": 1.9233307055853084,
+          "zAU": 0
+        },
+        {
+          "year": 8353.182751540042,
+          "rAU": 2.6087629379693964,
+          "xAU": 0.51462983221289,
+          "yAU": -2.557498817657449,
+          "zAU": 0
+        },
+        {
+          "year": 8355.920602327173,
+          "rAU": 2.611450245613005,
+          "xAU": -2.37167085672066,
+          "yAU": 1.0930918226270447,
+          "zAU": 0
+        },
+        {
+          "year": 8358.658453114305,
+          "rAU": 2.6101129647197667,
+          "xAU": 2.2847526950047614,
+          "yAU": 1.2619805114448834,
+          "zAU": 0
+        },
+        {
+          "year": 8361.396303901438,
+          "rAU": 2.612494734255184,
+          "xAU": -0.3488467238271972,
+          "yAU": -2.5890992062464693,
+          "zAU": 0
+        },
+        {
+          "year": 8364.134154688569,
+          "rAU": 2.614489320711466,
+          "xAU": -1.8738013687018964,
+          "yAU": 1.8232999859499814,
+          "zAU": 0
+        },
+        {
+          "year": 8366.872005475701,
+          "rAU": 2.6132240817032115,
+          "xAU": 2.58130267156249,
+          "yAU": 0.4072058680544095,
+          "zAU": 0
+        },
+        {
+          "year": 8369.609856262834,
+          "rAU": 2.616248599910897,
+          "xAU": -1.2297877586573862,
+          "yAU": -2.3091944061062013,
+          "zAU": 0
+        },
+        {
+          "year": 8372.347707049967,
+          "rAU": 2.617389603105656,
+          "xAU": -1.1055772283042469,
+          "yAU": 2.3724306790084895,
+          "zAU": 0
+        },
+        {
+          "year": 8375.085557837097,
+          "rAU": 2.6165069828740584,
+          "xAU": 2.5563789398562444,
+          "yAU": -0.5577055740156928,
+          "zAU": 0
+        },
+        {
+          "year": 8377.82340862423,
+          "rAU": 2.6199574182087955,
+          "xAU": -1.9985615255922118,
+          "yAU": -1.6940863914363482,
+          "zAU": 0
+        },
+        {
+          "year": 8380.561259411363,
+          "rAU": 2.620181860693103,
+          "xAU": -0.1309294516796421,
+          "yAU": 2.616908569627155,
+          "zAU": 0
+        },
+        {
+          "year": 8383.299110198494,
+          "rAU": 2.619996367991173,
+          "xAU": 2.1488955098110947,
+          "yAU": -1.4988759308897637,
+          "zAU": 0
+        },
+        {
+          "year": 8386.036960985626,
+          "rAU": 2.623542029867867,
+          "xAU": -2.5048481243486105,
+          "yAU": -0.7801978315981482,
+          "zAU": 0
+        },
+        {
+          "year": 8388.774811772759,
+          "rAU": 2.622930736084273,
+          "xAU": 0.922148169879561,
+          "yAU": 2.4554853693482603,
+          "zAU": 0
+        },
+        {
+          "year": 8391.51266255989,
+          "rAU": 2.6236956615421807,
+          "xAU": 1.3592461889210048,
+          "yAU": -2.244154344580378,
+          "zAU": 0
+        },
+        {
+          "year": 8394.250513347022,
+          "rAU": 2.626926435890091,
+          "xAU": -2.6073655117588705,
+          "yAU": 0.31998060514446647,
+          "zAU": 0
+        },
+        {
+          "year": 8396.988364134155,
+          "rAU": 2.625732002093751,
+          "xAU": 1.868193736257122,
+          "yAU": 1.845080136641472,
+          "zAU": 0
+        },
+        {
+          "year": 8399.726214921287,
+          "rAU": 2.6275633444890367,
+          "xAU": 0.27442881311385553,
+          "yAU": -2.613193057513228,
+          "zAU": 0
+        },
+        {
+          "year": 8402.464065708418,
+          "rAU": 2.630059463455672,
+          "xAU": -2.215523301717254,
+          "yAU": 1.417275301718271,
+          "zAU": 0
+        },
+        {
+          "year": 8405.20191649555,
+          "rAU": 2.628698753080435,
+          "xAU": 2.4921668649668307,
+          "yAU": 0.836158747851167,
+          "zAU": 0
+        },
+        {
+          "year": 8407.939767282684,
+          "rAU": 2.6315069248832907,
+          "xAU": -0.922167335545206,
+          "yAU": -2.464637113443309,
+          "zAU": 0
+        },
+        {
+          "year": 8410.677618069814,
+          "rAU": 2.632938885279451,
+          "xAU": -1.3349152009092975,
+          "yAU": 2.269442350005368,
+          "zAU": 0
+        },
+        {
+          "year": 8413.415468856947,
+          "rAU": 2.6319353308972806,
+          "xAU": 2.6004859265812796,
+          "yAU": -0.40565568118550954,
+          "zAU": 0
+        },
+        {
+          "year": 8416.15331964408,
+          "rAU": 2.635390886380321,
+          "xAU": -1.968329280709324,
+          "yAU": -1.752416892956345,
+          "zAU": 0
+        },
+        {
+          "year": 8418.891170431212,
+          "rAU": 2.635630496884999,
+          "xAU": -0.10185421253893966,
+          "yAU": 2.6336616782529867,
+          "zAU": 0
+        },
+        {
+          "year": 8421.629021218343,
+          "rAU": 2.6355020999051537,
+          "xAU": 2.0883689623064625,
+          "yAU": -1.6076648891729581,
+          "zAU": 0
+        },
+        {
+          "year": 8424.366872005476,
+          "rAU": 2.639063153909538,
+          "xAU": -2.5757793218968383,
+          "yAU": -0.5744695076430268,
+          "zAU": 0
+        },
+        {
+          "year": 8427.104722792608,
+          "rAU": 2.6382718420923976,
+          "xAU": 1.2124562474697873,
+          "yAU": 2.3431662682680234,
+          "zAU": 0
+        },
+        {
+          "year": 8429.84257357974,
+          "rAU": 2.639380431834489,
+          "xAU": 1.0051925007723055,
+          "yAU": -2.4404747694540774,
+          "zAU": 0
+        },
+        {
+          "year": 8432.580424366872,
+          "rAU": 2.6423990438031755,
+          "xAU": -2.5153941869034884,
+          "yAU": 0.809360729949307,
+          "zAU": 0
+        },
+        {
+          "year": 8435.318275154004,
+          "rAU": 2.6410509800907187,
+          "xAU": 2.245958482533968,
+          "yAU": 1.3895397706333785,
+          "zAU": 0
+        },
+        {
+          "year": 8438.056125941137,
+          "rAU": 2.6434525753651306,
+          "xAU": -0.4103680641368129,
+          "yAU": -2.611405669393621,
+          "zAU": 0
+        },
+        {
+          "year": 8440.793976728268,
+          "rAU": 2.6453533159796327,
+          "xAU": -1.7160811976739796,
+          "yAU": 2.0131963365142207,
+          "zAU": 0
+        },
+        {
+          "year": 8443.5318275154,
+          "rAU": 2.644156608869419,
+          "xAU": 2.644068054175188,
+          "yAU": -0.021640173706750556,
+          "zAU": 0
+        },
+        {
+          "year": 8446.269678302533,
+          "rAU": 2.6475122590907922,
+          "xAU": -1.7554942110181802,
+          "yAU": -1.9818075681351321,
+          "zAU": 0
+        },
+        {
+          "year": 8449.007529089664,
+          "rAU": 2.648002084882517,
+          "xAU": -0.3414267556099758,
+          "yAU": 2.6258984771113685,
+          "zAU": 0
+        },
+        {
+          "year": 8451.745379876797,
+          "rAU": 2.647707415702029,
+          "xAU": 2.195348328502329,
+          "yAU": -1.4801352221015311,
+          "zAU": 0
+        },
+        {
+          "year": 8454.48323066393,
+          "rAU": 2.6513159831036988,
+          "xAU": -2.5660127336476637,
+          "yAU": -0.6671244958920154,
+          "zAU": 0
+        },
+        {
+          "year": 8457.221081451062,
+          "rAU": 2.6505506344880767,
+          "xAU": 1.2013129093466626,
+          "yAU": 2.362681942162805,
+          "zAU": 0
+        },
+        {
+          "year": 8459.958932238193,
+          "rAU": 2.6516838619287806,
+          "xAU": 0.958878341651705,
+          "yAU": -2.4722418226227,
+          "zAU": 0
+        },
+        {
+          "year": 8462.696783025325,
+          "rAU": 2.6546697906382506,
+          "xAU": -2.484709016615052,
+          "yAU": 0.9346083672208348,
+          "zAU": 0
+        },
+        {
+          "year": 8465.434633812458,
+          "rAU": 2.6532872460650974,
+          "xAU": 2.3563173358736407,
+          "yAU": 1.2197138282372042,
+          "zAU": 0
+        },
+        {
+          "year": 8468.172484599589,
+          "rAU": 2.6558968513325873,
+          "xAU": -0.6826752646520485,
+          "yAU": -2.5666598076002605,
+          "zAU": 0
+        },
+        {
+          "year": 8470.910335386721,
+          "rAU": 2.657525376690729,
+          "xAU": -1.4432299985960795,
+          "yAU": 2.2314856707824857,
+          "zAU": 0
+        },
+        {
+          "year": 8473.648186173854,
+          "rAU": 2.656481331857294,
+          "xAU": 2.6190797027221175,
+          "yAU": -0.44420105503625934,
+          "zAU": 0
+        },
+        {
+          "year": 8476.386036960987,
+          "rAU": 2.6600250171439552,
+          "xAU": -2.103666571606306,
+          "yAU": -1.6279803584005155,
+          "zAU": 0
+        },
+        {
+          "year": 8479.123887748117,
+          "rAU": 2.6600414831233463,
+          "xAU": 0.22806316451464811,
+          "yAU": 2.6502467592525445,
+          "zAU": 0
+        },
+        {
+          "year": 8481.86173853525,
+          "rAU": 2.660254276032375,
+          "xAU": 1.7829596793716356,
+          "yAU": -1.9743372545954576,
+          "zAU": 0
+        },
+        {
+          "year": 8484.599589322383,
+          "rAU": 2.663729849998985,
+          "xAU": -2.6633900111541964,
+          "yAU": 0.04254835202052397,
+          "zAU": 0
+        },
+        {
+          "year": 8487.337440109513,
+          "rAU": 2.6625631820537246,
+          "xAU": 1.8513427467601917,
+          "yAU": 1.9135759019298102,
+          "zAU": 0
+        },
+        {
+          "year": 8490.075290896646,
+          "rAU": 2.6644822724834536,
+          "xAU": 0.1169419480808497,
+          "yAU": -2.6619147922421647,
+          "zAU": 0
+        },
+        {
+          "year": 8492.813141683779,
+          "rAU": 2.6668174817543218,
+          "xAU": -2.016928107786121,
+          "yAU": 1.744682346162979,
+          "zAU": 0
+        },
+        {
+          "year": 8495.55099247091,
+          "rAU": 2.665495926714631,
+          "xAU": 2.653244961226609,
+          "yAU": 0.25526400266763444,
+          "zAU": 0
+        },
+        {
+          "year": 8498.288843258042,
+          "rAU": 2.66879961606577,
+          "xAU": -1.6548171095560562,
+          "yAU": -2.0938175003169066,
+          "zAU": 0
+        },
+        {
+          "year": 8501.026694045175,
+          "rAU": 2.669374053817906,
+          "xAU": -0.36609446440816346,
+          "yAU": 2.644150654241536,
+          "zAU": 0
+        },
+        {
+          "year": 8503.764544832307,
+          "rAU": 2.669105176797917,
+          "xAU": 2.1523384523388396,
+          "yAU": -1.578468128089094,
+          "zAU": 0
+        },
+        {
+          "year": 8506.502395619438,
+          "rAU": 2.6727386304372396,
+          "xAU": -2.635507281923982,
+          "yAU": -0.44455950508024855,
+          "zAU": 0
+        },
+        {
+          "year": 8509.24024640657,
+          "rAU": 2.6717848981460675,
+          "xAU": 1.520869281566519,
+          "yAU": 2.196677302279225,
+          "zAU": 0
+        },
+        {
+          "year": 8511.978097193703,
+          "rAU": 2.6733352830998363,
+          "xAU": 0.4971663257960704,
+          "yAU": -2.626698913153336,
+          "zAU": 0
+        },
+        {
+          "year": 8514.715947980834,
+          "rAU": 2.6759707094197696,
+          "xAU": -2.2233073688559255,
+          "yAU": 1.489202330532519,
+          "zAU": 0
+        },
+        {
+          "year": 8517.453798767967,
+          "rAU": 2.6745811011256393,
+          "xAU": 2.621773061917079,
+          "yAU": 0.5288573326563418,
+          "zAU": 0
+        },
+        {
+          "year": 8520.1916495551,
+          "rAU": 2.6777710332252393,
+          "xAU": -1.4806183111823454,
+          "yAU": -2.2311941024867616,
+          "zAU": 0
+        },
+        {
+          "year": 8522.929500342232,
+          "rAU": 2.6785315894805737,
+          "xAU": -0.5335146368157061,
+          "yAU": 2.62486068356946,
+          "zAU": 0
+        },
+        {
+          "year": 8525.667351129363,
+          "rAU": 2.678149025148822,
+          "xAU": 2.2256801785984917,
+          "yAU": -1.4895737455726625,
+          "zAU": 0
+        },
+        {
+          "year": 8528.405201916496,
+          "rAU": 2.681817418401599,
+          "xAU": -2.633552718827869,
+          "yAU": -0.5065024608000988,
+          "zAU": 0
+        },
+        {
+          "year": 8531.143052703628,
+          "rAU": 2.6808766217948117,
+          "xAU": 1.5196112865403923,
+          "yAU": 2.2085925380443117,
+          "zAU": 0
+        },
+        {
+          "year": 8533.880903490759,
+          "rAU": 2.682453000032703,
+          "xAU": 0.45376321410625475,
+          "yAU": -2.6437951968540245,
+          "zAU": 0
+        },
+        {
+          "year": 8536.618754277892,
+          "rAU": 2.6850465005100674,
+          "xAU": -2.17398318629523,
+          "yAU": 1.5758400349042407,
+          "zAU": 0
+        },
+        {
+          "year": 8539.356605065024,
+          "rAU": 2.6836689959926208,
+          "xAU": 2.656681957746266,
+          "yAU": 0.37963173660470934,
+          "zAU": 0
+        },
+        {
+          "year": 8542.094455852157,
+          "rAU": 2.6869743745537225,
+          "xAU": -1.6534851217896396,
+          "yAU": -2.11797503326377,
+          "zAU": 0
+        },
+        {
+          "year": 8544.832306639288,
+          "rAU": 2.6875192771780476,
+          "xAU": -0.2777986208683202,
+          "yAU": 2.6731232278829333,
+          "zAU": 0
+        },
+        {
+          "year": 8547.57015742642,
+          "rAU": 2.687363591150044,
+          "xAU": 2.043511502066342,
+          "yAU": -1.7452747095977252,
+          "zAU": 0
+        },
+        {
+          "year": 8550.308008213553,
+          "rAU": 2.6909817403829566,
+          "xAU": -2.687167052018247,
+          "yAU": -0.14323394018893856,
+          "zAU": 0
+        },
+        {
+          "year": 8553.045859000684,
+          "rAU": 2.6898371368634333,
+          "xAU": 1.8522824918982388,
+          "yAU": 1.9504546631636746,
+          "zAU": 0
+        },
+        {
+          "year": 8555.783709787816,
+          "rAU": 2.691837726472554,
+          "xAU": -0.01832633827933762,
+          "yAU": -2.691775341848982,
+          "zAU": 0
+        },
+        {
+          "year": 8558.521560574949,
+          "rAU": 2.694025413477013,
+          "xAU": -1.8305238233796848,
+          "yAU": 1.9766019985063785,
+          "zAU": 0
+        },
+        {
+          "year": 8561.259411362082,
+          "rAU": 2.692797328500065,
+          "xAU": 2.6852500340882366,
+          "yAU": -0.20146887304546868,
+          "zAU": 0
+        },
+        {
+          "year": 8563.997262149212,
+          "rAU": 2.696378589504503,
+          "xAU": -2.110802949292243,
+          "yAU": -1.6777867585594604,
+          "zAU": 0
+        },
+        {
+          "year": 8566.735112936345,
+          "rAU": 2.696330808786964,
+          "xAU": 0.4105330786999453,
+          "yAU": 2.6648944485114057,
+          "zAU": 0
+        },
+        {
+          "year": 8569.472963723478,
+          "rAU": 2.6968080072828426,
+          "xAU": 1.4947027946173526,
+          "yAU": -2.244690843726132,
+          "zAU": 0
+        }
+      ]
+    }
+  }
+}

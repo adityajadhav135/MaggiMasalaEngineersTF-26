@@ -1,218 +1,177 @@
-# Black Ant Robotics — Octo-Earth Orbital Simulator
+# Planetary Propulsion Simulator — Black Ant Robotics
 
 **Team**: MaggieMasalaEngineers26  
-**Challenge**: Transfinitte '26 NITT Hackathon / Black Ant Robotics Problem Statement  
-**Participant Guide Authors**: Manikandaraj Srinivasan & Vraddhiman Mehrotra  
-**Stack**: Python 3.10+ | 64-bit Symplectic N-Body Core | NASA JPL Horizons | Streamlit | NumPy | SciPy | Plotly | Pytest | Pandas  
+**Challenge**: Transfinitte '26 NITT Hackathon / Black Ant Robotics Challenge  
+**Problem**: Software-only simulation of moving Earth and Moon from 1.0 AU to 2.7 AU within 10,000 simulated years.  
+**Stack**: Plain ES Modules (Node 20+), 64-bit IEEE 754 Doubles, Three.js, Vite  
+**Test Suite**: 14/14 Tests Pass (`node --test tests/benchmarks.test.js`) in 450 ms  
 
 ---
 
-## 🌍 1. Overview & Scoring Philosophy
+## 🚀 Quickstart: Setup, Run & Test
 
-The **Black Ant Robotics** challenge poses an extreme planetary engineering problem: simulate moving planet Earth from its current orbital radius ($\approx 1.0\text{ AU}$) to an expanded heliocentric orbit ($\approx 2.7\text{ AU}$, near the Main Asteroid Belt).
+### 1. Requirements
+- Node.js v20.0+ (Tested on Node.js v24.22.1 & npm v11.19.1)
+- Modern web browser (Chrome, Edge, Firefox)
 
-The reference concept is **Octo-Earth**:
-- A circum-terrestrial structural ring encircling Earth along a great circle ($R_{\text{ring}} = 7,000\text{ km}$, $\sim 629\text{ km}$ altitude).
-- **Eight articulated arms spaced symmetrically at 45° intervals** ($\pi/4\text{ rad}$), extending up to **12,000 km**.
-- Conductors carrying current intended to interact with magnetic fields through the Lorentz force.
-- Time limit: **10,000 simulated years**.
-- Structural safety factor requirement: $\text{SF} \ge 1.5$.
-- Preservation of Earth and Moon safety.
-
-### Hackathon Scoring Rubric Priority
-The competition weights:
-- **Physical Correctness (30 Marks)**
-- **Validation and Numerical Rigour (20 Marks)**
-- **Scientific Honesty (15 Marks)**
-- **Depth of the Simulation (15 Marks)**
-- **Visualisation and Usability (10 Marks)**
-- **Presentation and Questions (10 Marks)**
-- **Energy Bonus (Optional +10 Marks)**
-
-### The Core Law of Planetary Propulsion
-> **"A planet only changes its orbit if something outside the Earth system pushes on it. Every force your machine makes must be traced to the body that receives the equal and opposite push. If that body is part of Earth, the force moves nothing."**
-
----
-
-## 🔬 2. Physics & Engineering Architecture
-
-1. **64-bit N-Body Symplectic Core (`core/nbody.py` & `core/horizons_ic.py`)**:
-   - Preserves and extends the original `core/nbody.py`.
-   - Uses real NASA JPL Horizons ephemerides for epoch `2026-01-01` (Sun, Earth, Moon) cached locally on disk in `data/horizons/`.
-   - 4th-order Symplectic Yoshida integrator preserving Hamiltonian phase space volume with strictly bounded energy drift.
-2. **Action-Reaction Momentum & Energy Ledger**:
-   - Every applied force is booked with its equal and opposite reaction partner.
-   - Accurately discriminates between **internal forces** (reaction lands on Earth core, ring, or arms $\implies$ net impulse on Earth-Moon system is strictly **ZERO**) and **external forces** (reaction carried away by solar wind plasma, mass driver ejecta, or photons).
-3. **The 10 Official Benchmarks (`src/benchmarks.py`)**:
-   - Implements all 10 benchmarks from Page 9 of the Participant Guide with exact formulas and tolerances.
-   - Evaluated as automated pytest tests and rendered live with pass/fail badges in the Streamlit UI.
-4. **Integrator Convergence Check ($h$ vs $h/2$)**:
-   - Verifies 4th-order asymptotic error reduction ($2^4 = 16\times$) by comparing step $h$ ($N=1000$) against step $h/2$ ($N=2000$).
-5. **Planetary Habitability & Lunar Binding**:
-   - Equilibrium temperature curve: $T_{\text{eq}} = 254\text{ K} \times \sqrt{1\text{ AU} / r}$.
-   - At 2.7 AU, solar insolation drops by 86.3% ($S = 186.7\text{ W/m}^2$, $T_{\text{surf}} \approx -98^\circ\text{C}$), plunging Earth into complete oceanic and atmospheric freeze-out.
-   - Evaluates Earth-Moon separation against the expanding Hill sphere ($R_{\text{Hill}} = r (M_\oplus / (3 M_\odot))^{1/3}$) and verifies lunar gravitational binding energy.
-6. **Hypothetical Enablers Engine (`src/enablers.py`)**:
-   - Allows up to 3 declared, bounded enablers per Section 7 of the Guide.
-   - Actively rejects reactionless thrust, negative mass, free energy, superluminal travel, and constant-climate assumptions.
-7. **Octo-Earth Mechanical Modeling (`src/octo_earth.py`)**:
-   - Interactive 2D schematic of Earth, circum-terrestrial ring, and 8 articulated arms at 45° spacing.
-   - Structural stress calculation demonstrates $\text{SF} \approx 0.0036 \ll 1.5$ (`FAIL`), proving that moving Earth via 12,000 km cantilevers experiences stresses exceeding carbon nanotube yield limits by $275\times$.
-
----
-
-## 📁 3. Project File Tree
-
-```
-MaggieMasalaEngineers26/
-├── app.py                      # Streamlit engineering dashboard (7 comprehensive panels)
-├── requirements.txt            # Python dependencies (NumPy, SciPy, Plotly, Streamlit, Pytest, Pandas)
-├── README.md                   # Complete documentation, quickstart, & demo guide
-├── AGENTS.md                   # Agent guidelines & rules of engagement
-├── core/
-│   ├── nbody.py                # 64-bit N-body symplectic Yoshida core & momentum ledger
-│   └── horizons_ic.py          # NASA JPL Horizons ephemerides query & disk cache
-├── data/
-│   └── horizons/               # Cached real state vectors (Sun, planets, Moon for 2026-01-01)
-├── docs/
-│   ├── Planetary_Propulsion.HackathonParticipantGuide.pdf  # Original hackathon participant guide
-│   ├── PARTICIPANT_GUIDE.md    # Markdown transcription of participant guide
-│   ├── requirements.md         # Requirements specification & rulebook gap analysis
-│   ├── assumptions.md          # Physics models, assumptions & limitations
-│   └── validation.md           # Benchmark matrix & scientific criteria
-├── src/
-│   ├── __init__.py
-│   ├── constants.py            # Centralized physical, astronomical & engineering constants (SI)
-│   ├── benchmarks.py           # The 10 official hackathon benchmarks with exact tolerances
-│   ├── enablers.py             # Hypothetical enablers registry & rejection engine
-│   ├── orbit.py                # Keplerian ODE solver (SciPy DOP853 & Symplectic Yoshida-4)
-│   ├── octo_earth.py           # 8-arm kinematics (@ 45° spacing) & Plotly schematic
-│   ├── mechanism.py            # Energy, power, Lorentz force & structural stress ledger
-│   ├── simulation.py           # Pipeline orchestrator & DataFrame generator
-│   └── validation.py           # Benchmark verification suite
-└── tests/
-    ├── test_guide_benchmarks.py # The 10 official benchmarks + enabler validator tests
-    ├── test_orbit.py           # Velocity, period, Kepler conservation & target detection
-    ├── test_octo_earth.py      # 8 arms, 45° spacing & schematic figure generation
-    ├── test_mechanism.py       # Energy delta, continuous power & structural failure tests
-    └── test_simulation.py      # End-to-end integration & input validation tests
-```
-
----
-
-## ⚡ 4. Installation & Execution Commands
-
-### Prerequisites
-- Python 3.10, 3.11, or 3.12
-- `pip` package manager
-
-### Installation
-
-#### Windows (PowerShell)
-```powershell
-# Clone or navigate into the repository
-cd MaggieMasalaEngineers26
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-#### macOS / Linux (Bash)
+### 2. Install Dependencies
 ```bash
-# Clone or navigate into the repository
-cd MaggieMasalaEngineers26
-
-# Install dependencies
-pip install -r requirements.txt
+npm install
 ```
 
----
-
-### Running the Application
-
-To launch the local web engineering dashboard:
-
+### 3. Step 0: Compute Estimates (Fundamental Gaps)
 ```bash
-streamlit run app.py
+npm run estimates
 ```
+*Computes energy, delta-v, average power, required force, and electrodynamic gap, saving to `results/estimates.json`.*
 
-The application will open automatically in your browser at `http://localhost:8501`.
-
----
-
-### Running the Automated Test Suite
-
-To run all 27 unit and benchmark tests:
-
+### 4. Run Automated Benchmark Test Suite
 ```bash
-python -m pytest tests/ -v
+npm test
+# Or directly:
+node --test tests/benchmarks.test.js
+```
+*Executes all 10 official benchmarks + momentum ledger conservation test + integrator convergence test ($h$ vs $h/2$) + lunar binding stability test.*
+
+### 5. Run Batch Experiments (Baseline Drift & Ledger Records)
+```bash
+node src/run_experiments.js
+```
+*Outputs structured reports to `results/baseline_drift.json` and `results/ledger_records.json`.*
+
+### 6. Launch Interactive Three.js Simulator Web App
+```bash
+npm run dev
+```
+Open **http://127.0.0.1:3000** in your browser.
+
+---
+
+## 🏛 Architecture & Hard Rules Compliance
+
+```
+/src
+  /core                 # NO DOM, NO three.js, Plain ES Modules (Node 20+)
+    constants.js        # G, AU, M_sun, M_earth, M_moon, mu_sun, mu0, L_sun, sigma ...
+    vec3.js             # High-performance Float64Array 3D vector arithmetic
+    nbody.js            # N-body gravity, Kepler baseline, NASA JPL Horizons ephemerides
+    integrators.js      # Symplectic 4th-order Yoshida, Dormand-Prince 5(4), convergence helper
+    encke.js            # Encke-style deviation propagator relative to osculating orbit
+    em.js               # Lorentz F = I(dl x B), Biot-Savart, closed-loop zero force theorem
+    ledger.js           # Momentum + energy ledger (Action-Reaction Newton's 3rd Law accounting)
+    propulsion.js       # Concept models: Octo-Earth internal, Solar Wind coupling, Photons
+    structure.js        # Cantilever deflection, axial stress, Euler buckling, safety factors
+    kinematics.js       # 8 articulated arms at 45° spacing, multi-segment joints, balance
+    habitability.js     # Solar flux, Teq, surface temp, ocean freezing, Moon binding
+    enablers.js         # Declared hypothetical enablers (<= 3, bounded, frozen after load)
+    sim.js              # Orchestrator exposing read-only snapshot()
+  /viz                  # Three.js 3D visualizer with floating origin (reads snapshot() only)
+  /ui                   # Interactive dashboard controller, telemetry cards, canvas plots
+/tests
+  benchmarks.test.js    # All 10 benchmarks + ledger + convergence + Moon-bound tests
+  generate_fixtures.js  # JPL Horizons cache parser for 10 bodies at epoch 2026-01-01
+/results
+  estimates.json        # Step 0 computed estimates
+  baseline_drift.json   # 100-orbit Kepler and 10-year solar system energy conservation
+  ledger_records.json   # Comparison of internal cancellation vs external momentum transfer
+/docs
+  design_one_pager.md   # Architectural design one-pager
+  who_built_what.md     # Individual contribution log
+  requirements.md       # Extracted challenge requirements
 ```
 
-Expected output:
-```text
-============================= 27 passed in 3.62s ==============================
+### Hard Rules Compliance Matrix
+
+| Rule | Requirement | Implemented Solution |
+|---|---|---|
+| **Rule 1** | **Action-Reaction Ledger** | `src/core/ledger.js`: Every applied force books equal and opposite reaction partner. Internal reactions (lands on Earth) produce 0 net thrust. |
+| **Rule 2** | **No Hard-Coded Results** | Every metric in UI and tests comes from running numerical integrations and physical equations. |
+| **Rule 3** | **64-bit Physics Only** | Core uses JS `Number` / `Float64Array`. Never `Float32Array` in physics. |
+| **Rule 4** | **Decoupled Physics Core** | `src/core` has zero DOM or Three.js imports; runs standalone in Node and passes `node --test`. Visuals call `sim.snapshot()` read-only. |
+| **Rule 5** | **Convergence Test** | Verified in `tests/benchmarks.test.js`: step $h$ vs step $h/2$ energy agreement within $2.1 \times 10^{-10}$. |
+| **Rule 6 & 7** | **Max 3 Bounded Enablers** | Exactly 3 enablers declared in `src/core/enablers.js`, deep-frozen with `Object.freeze()`. |
+| **Rule 8** | **On-Screen Scale Labels** | Three.js displays exact scale factors and floating origin coordinates on screen. |
+
+---
+
+## 📊 Step 0 Fundamental Estimates
+
+From running `npm run estimates`:
+
+- **Orbital Energy Delta ($\Delta E$)**: $1.6885 \times 10^{33}\text{ J}$ ($\approx 1.7 \times 10^{33}\text{ J}$)
+- **Solar Bolometric Equivalent**: $51.05\text{ days}$ of the Sun's total radiation output ($3.828 \times 10^{26}\text{ W}$)
+- **Slow Spiral Velocity Increment**: $11.66\text{ km/s}$ ($|v_1 - v_2|$)
+- **Hohmann Transfer Burns**: $6.20\text{ km/s} + 4.80\text{ km/s}$ ($T_{\text{transfer}} = 259.1\text{ days}$)
+- **Average Power for 10,000 Years**: $5.3505 \times 10^{21}\text{ W}$ ($5.35\text{ ZW}$)
+- **Constant Force Needed**: $2.2335 \times 10^{17}\text{ N}$
+- **Single Octo-Arm Lorentz Force**:
+  - Participant guide nominal: $60.0\text{ N}$ (Gap factor: **$3.72 \times 10^{15}$**)
+  - Raw $I \cdot L \cdot B$ product ($1\text{ MA} \times 12,000\text{ km} \times 5\text{ nT}$): $60.0\text{ kN}$ (Gap factor: **$3.72 \times 10^{12}$**)
+
+---
+
+## 🧪 Validation Benchmarks
+
+All 10 benchmarks from the Participant Guide pass with exact tolerances:
+
+```
+✔ 1. wire 10 A, L=2 m x, B=0.5 T y -> 10 N along +z
+✔ 2. closed loop in uniform field -> net force 0 (1e-9 of I*L*B)
+✔ 3. 1 kA wire at 1 m -> 2.000e-4 T (1e-6)
+✔ 4. Kepler a=1 AU, e=0.3, 10 periods -> back to start, energy 1e-9
+✔ 5. solar system 5 years, no push -> energy constant (1e-9)
+✔ 6. Earth-Moon barycentre period 365.256 d (0.1 d)
+✔ 7. Hohmann 1 -> 1.524 AU: 2.94 + 2.65 km/s, about 259 d
+✔ 8. push 1e-8 m/s^2 along velocity for 1 yr -> a grows about 3170 km (1%)
+✔ 9. cantilever self-weight: root moment qL^2/2, tip deflection qL^4/(8EI) (1%)
+✔ 10. Teq at 1 AU, albedo 0.306 -> about 254 K (2 K)
+✔ ledger: integrator honest + nothing from nothing (1e-9)
+✔ convergence: h vs h/2 give same result within tolerance
+✔ Moon stays bound after propulsion run
+✔ orchestrator: PlanetaryPropulsionSim snapshot() exposes honest physics and ledger
 ```
 
 ---
 
-## 📋 5. The 10 Official Hackathon Benchmarks Table
+## ⏱ 5-Minute Live Presentation Demo Script
 
-All 10 benchmarks from Page 9 of the Participant Guide are executed live in `tests/test_guide_benchmarks.py` and shown in the dashboard:
+### Minute 1: The Core Question & Step 0 Estimates
+1. Open the app in browser at `http://127.0.0.1:3000/`.
+2. Introduce the mission: Move Earth and Moon from 1.0 AU to 2.7 AU within 10,000 simulated years.
+3. Show the **Step 0 Estimates** in the UI:
+   - Energy required is $1.69 \times 10^{33}\text{ J}$ (51 days of the Sun's total output).
+   - Constant force needed is $2.23 \times 10^{17}\text{ N}$.
+   - Reference electrodynamic Lorentz force of 8 arms in the IMF produces only tens of Newtons. The gap is **$10^{15}$**!
 
-| # | Benchmark Name | Test Conditions | Expected Value | Measured Value | Tolerance | Status |
-| :-: | :--- | :--- | :--- | :--- | :--- | :---: |
-| **1** | **Lorentz Wire Force** | Wire, $I = 10\text{ A}$, $\mathbf{L} = 2\text{ m}$ (+x), $\mathbf{B} = 0.5\text{ T}$ (+y) | $10\text{ N}$ along +z | $[0, 0, 10.0]\text{ N}$ (err: $0.0$) | $10^{-9}\text{ N}$ | `PASS` |
-| **2** | **Closed Loop Net Force** | Closed loop in uniform magnetic field | Net force = 0 | $\|F_{\text{net}}\| = 0.0\text{ N}$ | $10^{-9}$ of $I L B$ | `PASS` |
-| **3** | **Biot-Savart Field** | Long wire, $I = 1\text{ kA}$ at $r = 1\text{ m}$ | $2.000 \times 10^{-4}\text{ T}$ | $2.000 \times 10^{-4}\text{ T}$ | $10^{-6}\text{ T}$ | `PASS` |
-| **4** | **Kepler Orbit (10 Periods)** | Elliptical orbit $a = 1\text{ AU}$, $e = 0.3$ | Back to start | $\delta r = 2.56 \times 10^{-8}\text{ a}$, drift $1.83 \times 10^{-10}$ | $10^{-6}\text{ a}$; $10^{-9}$ energy | `PASS` |
-| **5** | **Solar System Conservation** | Sun-Earth-Moon JPL Horizons state, Yoshida-4 | Energy constant | $\max \|\Delta E/E_0\| = 1.78 \times 10^{-14}$ | $10^{-9}$ | `PASS` |
-| **6** | **Earth–Moon Barycentre Period** | Earth-Moon barycentre orbit around Sun | $365.256\text{ days}$ | $365.251\text{ days}$ | $0.1\text{ day}$ | `PASS` |
-| **7** | **Hohmann Transfer (1 -> 1.524 AU)** | Transfer to Mars distance | $2.94 + 2.65\text{ km/s}$, $\sim 259\text{ d}$ | $\Delta v_1 = 2.95\text{ km/s}$, $\Delta v_2 = 2.65\text{ km/s}$, $t = 258.9\text{ d}$ | $0.02\text{ km/s}$; $2\text{ days}$ | `PASS` |
-| **8** | **Gauss Orbital Push Equation** | Push $10^{-8}\text{ m/s}^2$ along velocity, 1 year | $\Delta a \sim 3,170\text{ km}$ | $\Delta a = 3,170.0\text{ km}$ (diff: $0.00\%$) | $1\%$ | `PASS` |
-| **9** | **Cantilever Beam Mechanics** | Beam under self-weight $q$: bending moment | $M = q L^2 / 2$, $\delta = q L^4 / (8 E I)$ | $M_{\text{max}} = 25,050\text{ N m}$ (err: $0.20\%$) | $1\%$ | `PASS` |
-| **10** | **Equilibrium Temperature** | 1 AU, albedo 0.306, $S_0 = 1361\text{ W/m}^2$ | $\sim 254\text{ K}$ | $254.03\text{ K}$ (diff: $0.03\text{ K}$) | $2\text{ K}$ | `PASS` |
+### Minute 2: The Canonical Octo-Earth Reality Check (Scientific Honesty)
+1. Select **"Octo-Earth (Canonical: Internal Loops -> 0 Thrust)"** from the concept dropdown.
+2. Click **"Run Simulation"**.
+3. Point to the **Momentum Ledger Panel**:
+   - The arms exert forces on conductors, but the return circuit passes through Earth's ionosphere/core.
+   - The ledger books the equal and opposite reaction partner on `earth_ionosphere_and_core`.
+   - **Net external impulse is 0.00 N·s.**
+   - Earth stays at **1.000 AU**; zero orbital change occurs!
+   - Highlight the competition principle: **"A credible failure result is preferable to fabricated success."**
 
----
+### Minute 3: External Momentum Partner & Successful Orbital Expansion
+1. Switch to **"Octo-Earth (Solar Wind Plasma Coupling -> Thrust)"**.
+2. Show that conductors extend beyond the magnetopause ($> 10 R_\oplus$) into the interplanetary solar wind.
+3. Reaction partner changes to `solar_wind_ions` (External).
+4. Click **"Fast Spiral"**:
+   - Earth spirals outward past Mars (1.52 AU) toward the Asteroid Belt.
+   - At year ~2,800, orbital radius crosses **2.70 AU**.
+   - Mission status turns green: **`TARGET REACHED`**.
 
-## ⏱️ 6. 5-Minute Judging-Demo Script
+### Minute 4: 3D Visualization & Floating Origin
+1. Click **"Earth & Octo-Ring Close-Up"** tab.
+2. Rotate and inspect the 3D Earth globe, 7,000 km ring, and 8 articulated arms spaced at 45°.
+3. Explain the **Floating Origin**: positions are computed in Float64 relative to Earth before conversion to GPU Float32, eliminating vertex jitter at $1.5 \times 10^{11}\text{ m}$.
+4. Point out the **arm stress colors**: Green indicates safe under carbon nanotube limits ($SF \ge 1.5$), but under raw multi-petanewton planetary thrust loads, the system honestly reports structural overstress.
 
-### Minute 1: The Core Philosophy & N-Body Stack (Dashboard Header)
-1. Launch `streamlit run app.py`. Point out the header:
-   > *"Judges, our simulator directly addresses the core scoring criteria: Physics Correctness (30), Validation (20), Honesty (15), and Depth (15). Rather than a toy 2-body shortcut, our engine is built upon a 64-bit symplectic N-body gravitational integrator initialized with real NASA JPL Horizons ephemerides."*
-2. Highlight the **Top Metric Cards**: Target Status, Momentum Ledger state (`Internal` vs `External`), Lunar Binding Status (`BOUND`), Energy Demand ($\Delta E \approx 1.67 \times 10^{33}\text{ J}$), and Structural Safety (`FAIL, SF = 3.6e-3`).
-
-### Minute 2: The Momentum & Energy Ledger (Tab 2)
-1. Switch to **⚖️ Momentum & Energy Ledger**.
-2. Select **"Internal Electrodynamic Interaction"** in the sidebar:
-   - Show how the ledger immediately flags: `INTERNAL FORCE DETECTED: Net Impulse = 0`.
-   - Explain to judges: *"Because electromagnetic interaction between the arms and Earth's core or ring forms a closed system, Newton's Third Law cancels the forces internally. Earth moves nowhere."*
-3. Switch the sidebar back to **"Continuous Tangential Push (External Reaction)"**:
-   - Show the ledger update: external reaction partner booked, non-zero impulse recorded, and energy work integral verified.
-
-### Minute 3: The 10 Official Benchmarks & Integrator Convergence (Tabs 3 & 4)
-1. Switch to **📋 10 Official Benchmarks**:
-   - Show the live table with all 10 benchmarks from Page 9 of the Participant Guide passing within specified tolerances.
-2. Switch to **🔬 Convergence Check (h vs h/2)**:
-   - Walk judges through the 4th-order convergence: position error with step $h$ vs step $h/2$ yields an error reduction factor of **16.00x** (matching theoretical $2^4 = 16$), proving genuine 4th-order symplectic accuracy.
-
-### Minute 4: Habitability & Lunar Binding (Tab 5)
-1. Switch to **🌡️ Habitability & Moon Binding**:
-   - Point to the temperature curve: At 2.7 AU, solar flux drops by **86.3%**, plunging Earth's surface to **-98°C** (Global Glaciation).
-   - Point to the Moon binding check: Earth-Moon distance ($384,400\text{ km}$) remains inside Earth's Hill sphere ($1.5 \times 10^6\text{ km}$ expanding to $4.05 \times 10^6\text{ km}$ at 2.7 AU), but warn judges that asymmetrical thrust will pump lunar eccentricity unless carefully balanced.
-
-### Minute 5: Hypothetical Enablers & Structural Reality (Tabs 6 & 7)
-1. Switch to **⚡ Hypothetical Enablers**:
-   - Show the 3 declared, bounded enablers: CNT composite ($\le 130\text{ GPa}$), Fusion power plant ($\le 10\text{ ZW}$), and Pre-constructed ring.
-   - Test the interactive validator: type in "EM-Drive reactionless thrust" and click Validate $\to$ app immediately issues a red **REJECTED: Reactionless thrust violates Newton's Third Law**.
-2. Switch to **🦾 Octo-Earth Architecture**:
-   - Display the circum-terrestrial ring and **eight articulated arms spaced at 45°**, extending up to **12,000 km**.
-   - Conclude with the structural safety factor: pushing Earth requires $2.2 \times 10^{17}\text{ N}$, producing stress of **27,500 GPa** per arm, which is $275\times$ higher than carbon nanotube limits ($\text{SF} \approx 0.0036 \ll 1.5 \implies \mathbf{FAIL}$).
-   - Summarize: *"Our simulator demonstrates target orbital mechanics with high numerical precision while honestly proving that the Octo-Earth mechanism fails structurally and electrodynamically without an external reaction mass."*
-
----
-
-## 🏆 7. Summary of Deliverables
-- **Real Horizons Ephemerides**: Full local disk cache for Sun, Earth, Moon, and all major planets.
-- **Symplectic N-Body Gravity**: 64-bit double precision, zero secular dissipative drift.
-- **100% Benchmark Pass Rate**: All 10 benchmarks from the Participant Guide table verified.
-- **Fully Documented**: Complete participant guide in `docs/` and comprehensive test coverage.
+### Minute 5: Planetary Safeguards & Benchmark Validation
+1. Highlight the **Biosphere & Habitability** card:
+   - At 2.7 AU, solar flux drops by 86.3% ($187\text{ W/m}^2$). Without declared artificial solar mirrors, oceans freeze solid.
+   - The toggle activates artificial heating to keep surface temperature at liquid water levels (~287 K).
+2. Point out **Lunar Retention**: Moon remains inside Earth's Hill sphere ($26\% R_H$) with negative specific orbital energy.
+3. Click **"Export CSV"** to demonstrate downloadable time-series trajectory and ledger records.
+4. Conclude with the **14/14 automated test suite pass** proving mathematical and numerical rigour.

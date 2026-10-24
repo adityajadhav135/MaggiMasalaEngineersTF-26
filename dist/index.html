@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Black Ant Robotics — Planetary Propulsion Simulation</title>
+  <meta name="description" content="Physics simulation of moving Earth from 1 AU to 2.7 AU within 10,000 years with Three.js, honest momentum ledger, and structural safety validation." />
+  <script type="module" crossorigin src="/assets/index-u3wym3ja.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-BOw_wbwz.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="app-header">
+    <div class="brand-section">
+      <div class="brand-icon">⚙</div>
+      <div>
+        <h1 class="brand-title">Black Ant Robotics — Octo-Earth Planetary Propulsion Simulator</h1>
+        <div class="brand-subtitle">Transfinitte '26 NITT Hackathon • 64-bit Numerical Physics Core</div>
+      </div>
+    </div>
+    <div class="header-badges">
+      <div id="mission-status-badge" class="badge badge-pass">MISSION: INITIAL ORBIT (1.00 AU)</div>
+      <div id="benchmark-badge" class="badge badge-pass">10/10 BENCHMARKS PASS (100%)</div>
+      <button id="btn-export-csv" class="btn btn-secondary" style="padding: 5px 12px; font-size: 0.75rem;">
+        📥 Export CSV
+      </button>
+    </div>
+  </header>
+
+  <!-- Container -->
+  <main class="app-container">
+    <!-- Sidebar Controls -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="section-title">Propulsion Concept</div>
+        <div class="form-group">
+          <label class="form-label" for="concept-select">Mechanism Architecture</label>
+          <select id="concept-select">
+            <option value="octo_earth_internal">Octo-Earth (Canonical: Internal Loops -> 0 Thrust)</option>
+            <option value="octo_earth_solar_wind" selected>Octo-Earth (Solar Wind Plasma Coupling -> Thrust)</option>
+            <option value="continuous_tangential">Continuous Low-Thrust (Benchmark Canonical)</option>
+            <option value="solar_sail_mirrors">Solar Radiation Pressure (Photon Momentum)</option>
+          </select>
+        </div>
+        <div id="concept-notice" class="alert-box alert-warn" style="font-size: 0.75rem;">
+          Conductors couple to external solar wind ions beyond magnetopause (>10 R⊕). External partner carries reaction momentum.
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="section-title">Mission Parameters</div>
+        <div class="form-group">
+          <label class="form-label" for="target-radius-input">
+            Target Orbital Radius <span class="unit" id="target-radius-label">2.70 AU</span>
+          </label>
+          <input type="range" id="target-radius-input" min="1.5" max="3.5" step="0.1" value="2.7" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="thrust-accel-input">
+            Thrust Rate <span class="unit" id="thrust-accel-label">3.6e-8 m/s²</span>
+          </label>
+          <input type="range" id="thrust-accel-input" min="0.5" max="10.0" step="0.1" value="3.6" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="step-size-select">Time Step (Slow Orbit Clock)</label>
+          <select id="step-size-select">
+            <option value="1">1 Day per Step</option>
+            <option value="10" selected>10 Days per Step</option>
+            <option value="50">50 Days per Step (Fast-Forward)</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="flex-direction: row; justify-content: space-between; align-items: center; margin-top: 4px;">
+          <label class="form-label" for="heating-toggle" style="margin: 0; cursor: pointer;">
+            Artificial Solar Mirror Array
+          </label>
+          <input type="checkbox" id="heating-toggle" checked style="cursor: pointer; width: 18px; height: 18px;" />
+        </div>
+        <div style="font-size: 0.72rem; color: var(--text-muted);">
+          Injected solar irradiance prevents ocean freeze-out at &gt;1.2 AU.
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="section-title">Simulation Actions</div>
+        <div class="btn-group">
+          <button id="btn-play-pause" class="btn btn-primary">▶ Run Simulation</button>
+          <button id="btn-step" class="btn btn-secondary">⏭ Step +50d</button>
+        </div>
+        <div class="btn-group">
+          <button id="btn-fast-spiral" class="btn btn-secondary">⚡ Spiral to 2.7 AU (Meet Target)</button>
+          <button id="btn-reset" class="btn btn-secondary">↺ Reset</button>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="section-title">Declared Hypothetical Enablers (≤3)</div>
+        <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.75rem;">
+          <div style="background: rgba(255,255,255,0.04); padding: 6px 10px; border-radius: 4px; border-left: 2px solid var(--accent-cyan);">
+            <strong>1. Fusion/Antimatter Power</strong>: P ≤ 1.0e22 W (10 ZW). Waste heat radiated.
+          </div>
+          <div style="background: rgba(255,255,255,0.04); padding: 6px 10px; border-radius: 4px; border-left: 2px solid var(--accent-blue);">
+            <strong>2. Carbon Nanotube Spars</strong>: σ_yield ≤ 100 GPa, ρ ≥ 1300 kg/m³.
+          </div>
+          <div style="background: rgba(255,255,255,0.04); padding: 6px 10px; border-radius: 4px; border-left: 2px solid var(--status-pass);">
+            <strong>3. Solar Wind Circuit</strong>: η ≤ 0.85, closure outside magnetosphere (&gt;10 R⊕).
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <section class="main-stage">
+      <!-- 3D Visualization Canvas -->
+      <div class="canvas-wrapper">
+        <div id="canvas-container"></div>
+
+        <div class="viewport-overlay">
+          <div class="view-selector-tabs">
+            <button id="tab-solar" class="tab-btn active">Heliocentric Solar View</button>
+            <button id="tab-earth" class="tab-btn">Earth & Octo-Ring Close-Up</button>
+          </div>
+          <div id="scale-indicator" class="scale-badge">
+            SCALE: 1 unit = 0.05 AU (7.48e9 m) | Floating Origin Active
+          </div>
+        </div>
+
+        <div class="canvas-controls-bottom">
+          <div class="playback-bar">
+            <span id="active-clock-label" style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-cyan);">
+              Slow Clock: dt = 10d (Yoshida 4th-order)
+            </span>
+          </div>
+          <div class="scale-badge" id="arm-stress-badge" style="color: var(--status-pass); border-color: var(--status-pass);">
+            ARM SF: 2.13 (SAFE ≥ 1.5)
+          </div>
+        </div>
+      </div>
+
+      <!-- Telemetry Metric Cards -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-header">
+            <span>Orbital Radius</span>
+            <span id="target-radius-tag" style="color: var(--accent-gold);">TARGET 2.70 AU</span>
+          </div>
+          <div class="metric-val" id="metric-radius">1.000 <span style="font-size: 0.9rem; font-weight: normal;">AU</span></div>
+          <div class="metric-sub" id="metric-semi-major">Semi-major axis: 1.000 AU</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span>Elapsed Time</span>
+            <span style="color: var(--accent-cyan);">MAX 10,000 YR</span>
+          </div>
+          <div class="metric-val" id="metric-time">0.0 <span style="font-size: 0.9rem; font-weight: normal;">yr</span></div>
+          <div class="metric-sub" id="metric-time-days">0 days elapsed</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span>Structural Safety Factor</span>
+            <span id="metric-sf-badge" class="badge badge-pass" style="padding: 2px 6px;">PASS</span>
+          </div>
+          <div class="metric-val" id="metric-sf">2.13 <span style="font-size: 0.9rem; font-weight: normal;">SF</span></div>
+          <div class="metric-sub" id="metric-failing-part">Nominal Safe (≥ 1.5 Required)</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span>Planetary Biosphere</span>
+            <span id="metric-hab-badge" class="badge badge-pass" style="padding: 2px 6px;">LIQUID</span>
+          </div>
+          <div class="metric-val" id="metric-temp">287 <span style="font-size: 0.9rem; font-weight: normal;">K (14°C)</span></div>
+          <div class="metric-sub" id="metric-flux">Solar Flux: 1,361 W/m² (100%)</div>
+        </div>
+      </div>
+
+      <!-- Scientific Panels: Ledger and Structural Analysis -->
+      <div class="panels-grid">
+        <!-- Momentum & Energy Ledger -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <span>Momentum & Energy Ledger (Hard Rule 1)</span>
+            <span id="ledger-honesty-tag" class="badge badge-pass">HONESTY PASS</span>
+          </div>
+          <table class="info-table">
+            <tbody>
+              <tr>
+                <td>Thrust Applied on Earth:</td>
+                <td id="tbl-thrust-newtons">2.18e+17 N</td>
+              </tr>
+              <tr>
+                <td>Reaction Partner:</td>
+                <td id="tbl-reaction-partner" style="color: var(--accent-cyan);">solar_wind_ions</td>
+              </tr>
+              <tr>
+                <td>Partner In Earth System?</td>
+                <td id="tbl-partner-internal" style="color: var(--status-pass);">NO (Carried into space)</td>
+              </tr>
+              <tr>
+                <td>Net External Impulse:</td>
+                <td id="tbl-external-impulse">0.00e+00 N·s</td>
+              </tr>
+              <tr>
+                <td>Energy Drawn from Source:</td>
+                <td id="tbl-energy-drawn">0.00e+00 J</td>
+              </tr>
+              <tr>
+                <td>Orbital ΔE Accumulated:</td>
+                <td id="tbl-delta-energy">0.00e+00 J</td>
+              </tr>
+              <tr>
+                <td>Conservation Residual (|ΣJ|):</td>
+                <td id="tbl-conservation-res" style="color: var(--status-pass);">&lt; 1e-12 (Honest)</td>
+              </tr>
+            </tbody>
+          </table>
+          <div id="ledger-warning-box" class="alert-box alert-success" style="font-size: 0.75rem;">
+            Newton's Third Law strictly verified: Every applied force booked with partner. Only external reaction momentum changes Earth's orbit.
+          </div>
+        </div>
+
+        <!-- Structural & Habitability Evaluation -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <span>Structural & Planetary Safeguards</span>
+            <span id="moon-status-tag" class="badge badge-pass">MOON BOUND</span>
+          </div>
+          <table class="info-table">
+            <tbody>
+              <tr>
+                <td>Octo-Arm Length:</td>
+                <td>12,000 km (Articulated, 3 segments)</td>
+              </tr>
+              <tr>
+                <td>Ring Mounting Radius:</td>
+                <td>7,000 km (~629 km Altitude)</td>
+              </tr>
+              <tr>
+                <td>Moon's Gravitational Pull on Earth:</td>
+                <td id="tbl-moon-pull-earth" style="color: var(--accent-cyan);">3.32 × 10⁻⁵ m/s²</td>
+              </tr>
+              <tr>
+                <td>Earth-Moon Separation:</td>
+                <td id="tbl-moon-dist">384,400 km</td>
+              </tr>
+              <tr>
+                <td>Earth-Moon Barycentre Offset:</td>
+                <td id="tbl-bary-offset">4,671 km from Earth Center</td>
+              </tr>
+              <tr>
+                <td>Tensile Stress (Gravity Gradient):</td>
+                <td id="tbl-axial-stress">46.75 GPa</td>
+              </tr>
+              <tr>
+                <td>Material Yield Limit:</td>
+                <td>100.00 GPa (Enabler 2 CNT Composite)</td>
+              </tr>
+              <tr>
+                <td>Critical Euler Buckling Load:</td>
+                <td id="tbl-buckling-load">1.82e+11 N</td>
+              </tr>
+              <tr>
+                <td>Lunar Orbital Energy:</td>
+                <td id="tbl-moon-energy" style="color: var(--status-pass);">-3.84e+06 J/kg (Bound)</td>
+              </tr>
+              <tr>
+                <td>Earth Hill Sphere Radius:</td>
+                <td id="tbl-hill-radius">1.50e+09 m (Moon at 26% RH)</td>
+              </tr>
+            </tbody>
+          </table>
+          <div id="struct-warning-box" class="alert-box alert-success" style="font-size: 0.75rem;">
+            Earth-Moon 3-body gravitational coupling active: Moon pulls Earth toward barycentre (3.32×10⁻⁵ m/s²). Mutual gravity retains Moon inside expanding Hill sphere as orbit reaches 2.7 AU.
+          </div>
+        </div>
+      </div>
+
+      <!-- Real-time Trajectory Chart -->
+      <div class="panel-card" style="padding: 12px 16px;">
+        <div class="panel-header">
+          <span>Orbital Expansion Trajectory (Radius vs Time)</span>
+          <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">AU vs Years</span>
+        </div>
+        <canvas id="orbit-chart" class="plot-canvas" width="800" height="130"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <!-- Load Visualizer & UI Script -->
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "initialOrbitAU": 1,
+  "targetOrbitAU": 2.7,
+  "earthMoonMassKg": 6.04562e+24,
+  "deltaEnergyJoules": 1.6884778285846033e+33,
+  "sunOutputDaysEquivalent": 51.051639133934025,
+  "velocityInitialMps": 29785.142169221024,
+  "velocityFinalMps": 18126.660271756344,
+  "slowSpiralDeltaVMps": 11658.48189746468,
+  "hohmann": {
+    "dv1Mps": 6197.71917088886,
+    "dv2Mps": 4799.674590234161,
+    "totalDvMps": 10997.393761123021,
+    "transferDays": 459.5359130562336
+  },
+  "missionDurationYears": 10000,
+  "missionDurationSeconds": 315576000000,
+  "averagePowerWatts": 5.350463370422983e+21,
+  "constantForceNewtons": 223346361348614660,
+  "lorentzReference": {
+    "currentAmps": 1000000,
+    "armLengthMeters": 12000000,
+    "magneticFieldTesla": 5e-9,
+    "guideStatedForceNewtons": 60,
+    "literalILBForceNewtons": 60000,
+    "eightArmsPeakTheoreticalNewtons": 480000
+  },
+  "forceGapFactorNominal": 3722439355810244.5,
+  "forceGapFactorLiteral": 3722439355810.244,
+  "conclusion": "Octo-Earth magnetic arm interaction with interplanetary magnetic field produces ~60 N (guide nominal) or 60 kN (literal I*L*B). Raising Earth to 2.7 AU in 10,000 years requires ~2.2e17 N. The gap is a factor of ~3.7e15 (or ~3.7e12). Furthermore, internal magnetic loops cancel out via Newton's 3rd Law. Therefore, external momentum partners (solar wind plasma stream, photon reflection arrays, or mass ejecta) and declared enablers are strictly required to produce any non-zero orbital change."
+}

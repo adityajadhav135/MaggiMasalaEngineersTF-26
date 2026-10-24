@@ -1,0 +1,19 @@
+{
+  "name": "planetary-propulsion-simulation",
+  "version": "1.0.0",
+  "description": "Simulation of planetary propulsion moving Earth to 2.7 AU with Three.js visualization, honest momentum/energy ledger, and 64-bit numerical integration",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/benchmarks.test.js",
+    "estimates": "node src/estimates.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}
