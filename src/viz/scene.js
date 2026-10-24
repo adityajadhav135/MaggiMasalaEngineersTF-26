@@ -1,454 +1,1389 @@
-/**
- * Three.js 3D Visualizer (src/viz/scene.js)
- * Clean, high-performance procedural Three.js rendering with floating origin:
- * - Heliocentric Solar System View (Sun, Earth, Moon with lunar orbit, 1.0 AU & 2.7 AU target rings)
- * - Earth & Octo-Ring Close-Up View (Earth globe, atmosphere halo, 7,000 km ring, 8 articulated arms with stress colors, orbiting Moon)
- * - ONLY Sun, Earth, Moon - no other planets or stars
- * - Procedural materials (no glb loading or scaling artifacts)
- * - Starfield background with 1,200 stars
- * - Floating origin: positions calculated in Float64 prior to passing Float32 to GPU
- */
-
 import * as THREE from 'three';
 import { AU } from '../core/constants.js';
 
+const TEXTURE_BASE =
+  'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/';
+
+const EARTH_TEXTURE_URL = `${TEXTURE_BASE}earth_atmos_2048.jpg`;
+const MOON_TEXTURE_URL = `${TEXTURE_BASE}moon_1024.jpg`;
+const CLOUD_TEXTURE_URL = `${TEXTURE_BASE}earth_clouds_1024.png`;
+
+const clamp = (value, min, max) =>
+  Math.max(min, Math.min(max, value));
+
+function vectorFromPoint(point) {
+  if (Array.isArray(point) && point.length >= 3) {
+    const values = point.slice(0, 3).map(Number);
+    return values.every(Number.isFinite)
+      ? new THREE.Vector3(...values)
+      : null;
+  }
+
+  if (point && typeof point === 'object') {
+    const x = Number(point.x ?? point[0]);
+    const y = Number(point.y ?? point[1]);
+    const z = Number(point.z ?? point[2]);
+
+    if ([x, y, z].every(Number.isFinite)) {
+      return new THREE.Vector3(x, y, z);
+    }
+  }
+
+  return null;
+}
+
 export class SimulationVisualizer {
-  constructor(canvasContainer) {
-    this.container = canvasContainer;
-    this.viewMode = 'solar'; // 'solar' | 'earth'
-    this.AU_UNIT = 20.0; // 1 AU = 20 units in solar view
+  constructor(container) {
+    this.container =
+      typeof container === 'string'
+        ? document.querySelector(container)
+        : container;
+
+    if (!this.container) {
+      throw new Error('SimulationVisualizer: container element not found.');
+    }
+
+    this.clock = new THREE.Clock();
+    this.disposed = false;
+    this.viewMode = 'solar';
+    this.snapshot = null;
+
+    // Match the reference-orbit scale: 1 AU is 18 Three.js units.
+    // Physics remains in metres; only the renderer converts units.
+    this.AU_UNIT = 18;
+    this.hasSnapshotEarthPosition = false;
+    this.hasSnapshotMoonPosition = false;
+
+    this.objects = [];
+    this.animationObjects = [];
+    this.armObjects = [];
+    this.textureMaterials = new Map();
+
+    this.scene = new THREE.Scene();
+    this.scene.background = new THREE.Color(0x02040d);
+
+    this.camera = new THREE.PerspectiveCamera(45, 1, 0.01, 5000);
+    this.camera.position.set(0, 35, 65);
 
     this.initThree();
+    this.createLighting();
+    this.createStarfield();
+    this.createSun();
     this.buildSolarSystemScene();
     this.buildEarthOctoScene();
+    this.createTrajectoryLine();
+    this.initControls();
 
-    this.onResize = this.onResize.bind(this);
-    window.addEventListener('resize', this.onResize);
+    this.setViewMode('solar');
+    this.onResize();
+
+    this._resizeHandler = () => this.onResize();
+    window.addEventListener('resize', this._resizeHandler);
+
+    if (typeof ResizeObserver !== 'undefined') {
+      this.resizeObserver = new ResizeObserver(() => this.onResize());
+      this.resizeObserver.observe(this.container);
+    }
+
+    this._animate = () => {
+      if (this.disposed) return;
+      this.animationFrame = requestAnimationFrame(this._animate);
+      this.updateFromSnapshot(this.snapshot);
+    };
+
+    this.animationFrame = requestAnimationFrame(this._animate);
   }
 
   initThree() {
-    this.width = this.container.clientWidth || 800;
-    this.height = this.container.clientHeight || 550;
-
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x060913);
-
-    this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 5000);
-    this.camera.position.set(0, -65, 45);
-    this.camera.lookAt(0, 0, 0);
-
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
-      alpha: true,
+      alpha: false,
       powerPreference: 'high-performance',
     });
-    this.renderer.setSize(this.width, this.height);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1.35;
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
     this.container.appendChild(this.renderer.domElement);
+  }
 
-    // Procedural starfield background
-    this.createStarfield();
+  createLighting() {
+    this.ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+    this.scene.add(this.ambientLight);
 
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0x334466, 1.3);
-    this.scene.add(ambientLight);
+    this.sunLight = new THREE.PointLight(0xfff0d0, 5.0, 0, 1.3);
+    this.sunLight.position.set(0, 0, 0);
+    this.sunLight.castShadow = true;
+    this.scene.add(this.sunLight);
 
-    const sunPointLight = new THREE.PointLight(0xfffaed, 2.5, 3000);
-    sunPointLight.position.set(0, 0, 0);
-    this.scene.add(sunPointLight);
-
-    // Mouse drag controls for interactive camera rotation & zoom
-    this.isDragging = false;
-    this.previousMousePosition = { x: 0, y: 0 };
-    this.cameraSpherical = { radius: 75, theta: Math.PI / 4, phi: Math.PI / 3 };
-
-    this.initControls();
+    this.fillLight = new THREE.DirectionalLight(0x8dbbff, 0.7);
+    this.fillLight.position.set(-15, 10, 20);
+    this.scene.add(this.fillLight);
   }
 
   createStarfield() {
-    const starCount = 1200;
-    const geometry = new THREE.BufferGeometry();
+    const starCount = 6500;
     const positions = new Float32Array(starCount * 3);
+    const colors = new Float32Array(starCount * 3);
 
-    for (let i = 0; i < starCount * 3; i += 3) {
-      const u = Math.random();
-      const v = Math.random();
-      const theta = u * 2.0 * Math.PI;
-      const phi = Math.acos(2.0 * v - 1.0);
-      const r = 900 + Math.random() * 400;
+    const colorChoices = [
+      new THREE.Color(0xffffff),
+      new THREE.Color(0xaacbff),
+      new THREE.Color(0xffe3bd),
+      new THREE.Color(0xc5d8ff),
+    ];
 
-      positions[i] = r * Math.sin(phi) * Math.cos(theta);
-      positions[i + 1] = r * Math.sin(phi) * Math.sin(theta);
-      positions[i + 2] = r * Math.cos(phi);
+    for (let i = 0; i < starCount; i++) {
+      const radius = 700 + Math.random() * 900;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+
+      positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+      positions[i * 3 + 1] = radius * Math.cos(phi);
+      positions[i * 3 + 2] = radius * Math.sin(phi) * Math.sin(theta);
+
+      const color = colorChoices[Math.floor(Math.random() * colorChoices.length)];
+
+      colors[i * 3] = color.r;
+      colors[i * 3 + 1] = color.g;
+      colors[i * 3 + 2] = color.b;
     }
 
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    const material = new THREE.PointsMaterial({
-      color: 0x88aacc,
+    const geometry = new THREE.BufferGeometry();
+
+    geometry.setAttribute(
+      'position',
+      new THREE.BufferAttribute(positions, 3)
+    );
+
+    geometry.setAttribute(
+      'color',
+      new THREE.BufferAttribute(colors, 3)
+    );
+
+    this.starMaterial = new THREE.PointsMaterial({
       size: 1.5,
+      sizeAttenuation: true,
+      vertexColors: true,
       transparent: true,
-      opacity: 0.8,
+      opacity: 0.95,
+      depthWrite: false,
     });
-    const stars = new THREE.Points(geometry, material);
-    this.scene.add(stars);
+
+    this.starfield = new THREE.Points(geometry, this.starMaterial);
+    this.scene.add(this.starfield);
+  }
+
+  createEarthFallbackTexture() {
+    const width = 1024;
+    const height = 512;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx = canvas.getContext('2d');
+    const image = ctx.createImageData(width, height);
+
+    const landPatches = [
+      { x: 0.18, y: 0.28, rx: 0.09, ry: 0.15 },
+      { x: 0.24, y: 0.52, rx: 0.06, ry: 0.17 },
+      { x: 0.40, y: 0.28, rx: 0.12, ry: 0.11 },
+      { x: 0.47, y: 0.58, rx: 0.09, ry: 0.22 },
+      { x: 0.70, y: 0.30, rx: 0.16, ry: 0.13 },
+      { x: 0.77, y: 0.52, rx: 0.08, ry: 0.18 },
+      { x: 0.89, y: 0.36, rx: 0.08, ry: 0.11 },
+    ];
+
+    for (let y = 0; y < height; y++) {
+      const v = y / height;
+      const latitudeBrightness = 0.78 + 0.22 * Math.sin(v * Math.PI);
+
+      for (let x = 0; x < width; x++) {
+        const u = x / width;
+        const index = (y * width + x) * 4;
+
+        const noise =
+          Math.sin(x * 0.07) * 5 +
+          Math.cos(y * 0.09) * 5 +
+          Math.sin((x + y) * 0.035) * 7;
+
+        let r = 12 + noise;
+        let g = 70 + noise;
+        let b = 145 + noise * 1.5;
+
+        const isLand = landPatches.some((patch) => {
+          const dx = (u - patch.x) / patch.rx;
+          const dy = (v - patch.y) / patch.ry;
+
+          const wobble =
+            0.13 * Math.sin(u * 95 + v * 48) * Math.cos(v * 120);
+
+          return dx * dx + dy * dy < 1 + wobble;
+        });
+
+        if (isLand) {
+          r = 65 + noise * 1.8;
+          g = 135 + noise * 1.6;
+          b = 55 + noise;
+        }
+
+        if (v < 0.075 || v > 0.925) {
+          r = 215 + noise;
+          g = 230 + noise;
+          b = 255;
+        }
+
+        image.data[index] = clamp(r * latitudeBrightness, 0, 255);
+        image.data[index + 1] = clamp(g * latitudeBrightness, 0, 255);
+        image.data[index + 2] = clamp(b * latitudeBrightness, 0, 255);
+        image.data[index + 3] = 255;
+      }
+    }
+
+    ctx.putImageData(image, 0, 0);
+    ctx.globalAlpha = 0.22;
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 3;
+
+    for (let i = 0; i < 90; i++) {
+      const x = Math.random() * width;
+      const y = Math.random() * height;
+
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.bezierCurveTo(x + 20, y - 10, x + 40, y + 12, x + 80, y - 4);
+      ctx.stroke();
+    }
+
+    ctx.globalAlpha = 1;
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = Math.min(
+      this.renderer.capabilities.getMaxAnisotropy(),
+      8
+    );
+
+    return texture;
+  }
+
+  createMoonFallbackTexture() {
+    const size = 1024;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#aaaaaa';
+    ctx.fillRect(0, 0, size, size);
+
+    const image = ctx.getImageData(0, 0, size, size);
+
+    for (let i = 0; i < image.data.length; i += 4) {
+      const value = clamp(165 + (Math.random() - 0.5) * 55, 65, 225);
+
+      image.data[i] = value;
+      image.data[i + 1] = value;
+      image.data[i + 2] = value;
+      image.data[i + 3] = 255;
+    }
+
+    ctx.putImageData(image, 0, 0);
+
+    for (let i = 0; i < 350; i++) {
+      const x = Math.random() * size;
+      const y = Math.random() * size;
+      const radius = 3 + Math.random() * 32;
+
+      const gradient = ctx.createRadialGradient(
+        x - radius * 0.2,
+        y - radius * 0.2,
+        radius * 0.05,
+        x,
+        y,
+        radius
+      );
+
+      gradient.addColorStop(0, 'rgba(45,45,45,0.75)');
+      gradient.addColorStop(0.65, 'rgba(95,95,95,0.35)');
+      gradient.addColorStop(1, 'rgba(225,225,225,0.2)');
+
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = Math.min(
+      this.renderer.capabilities.getMaxAnisotropy(),
+      8
+    );
+
+    return texture;
+  }
+
+  createSunFallbackTexture() {
+    const size = 1024;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+
+    const ctx = canvas.getContext('2d');
+
+    const gradient = ctx.createRadialGradient(
+      size / 2,
+      size / 2,
+      30,
+      size / 2,
+      size / 2,
+      size / 2
+    );
+
+    gradient.addColorStop(0, '#fffde0');
+    gradient.addColorStop(0.2, '#fff0a0');
+    gradient.addColorStop(0.48, '#ffbd37');
+    gradient.addColorStop(0.75, '#ff7920');
+    gradient.addColorStop(1, '#d8320b');
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, size, size);
+
+    for (let i = 0; i < 18000; i++) {
+      const x = Math.random() * size;
+      const y = Math.random() * size;
+      const radius = 1 + Math.random() * 7;
+      const brightness = Math.random();
+
+      ctx.fillStyle = brightness > 0.5
+        ? `rgba(255,255,180,${Math.random() * 0.18})`
+        : `rgba(180,45,0,${Math.random() * 0.12})`;
+
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+
+    return texture;
+  }
+
+  createCloudFallbackTexture() {
+    const size = 1024;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, size, size);
+
+    for (let i = 0; i < 1300; i++) {
+      const x = Math.random() * size;
+      const y = Math.random() * size;
+      const radius = 4 + Math.random() * 30;
+
+      const gradient = ctx.createRadialGradient(x, y, 1, x, y, radius);
+
+      gradient.addColorStop(0, 'rgba(255,255,255,0.55)');
+      gradient.addColorStop(1, 'rgba(255,255,255,0)');
+
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    return new THREE.CanvasTexture(canvas);
+  }
+
+  loadTextureWithFallback(url, fallbackTexture) {
+    const loader = new THREE.TextureLoader();
+
+    loader.load(
+      url,
+      (texture) => {
+        if (this.disposed) {
+          texture.dispose();
+          return;
+        }
+
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.anisotropy = Math.min(
+          this.renderer.capabilities.getMaxAnisotropy(),
+          8
+        );
+
+        const material = this.textureMaterials.get(url);
+
+        if (material) {
+          const previousTexture = material.map;
+
+          material.map = texture;
+          material.needsUpdate = true;
+
+          if (previousTexture && previousTexture !== fallbackTexture) {
+            previousTexture.dispose();
+          }
+        }
+      },
+      undefined,
+      (error) => console.warn(
+        `Could not load texture: ${url}. Using procedural fallback.`,
+        error
+      )
+    );
+
+    return fallbackTexture;
+  }
+
+  createEarthMaterial() {
+    const fallbackTexture = this.createEarthFallbackTexture();
+
+    const material = new THREE.MeshStandardMaterial({
+      map: fallbackTexture,
+      color: 0xffffff,
+      roughness: 0.88,
+      metalness: 0,
+      emissive: new THREE.Color(0x183858),
+      emissiveIntensity: 0.35,
+    });
+
+    material.userData.fallbackTexture = fallbackTexture;
+    this.textureMaterials.set(EARTH_TEXTURE_URL, material);
+    this.loadTextureWithFallback(EARTH_TEXTURE_URL, fallbackTexture);
+
+    return material;
+  }
+
+  createMoonMaterial() {
+    const fallbackTexture = this.createMoonFallbackTexture();
+
+    const material = new THREE.MeshStandardMaterial({
+      map: fallbackTexture,
+      color: 0xffffff,
+      roughness: 1,
+      metalness: 0,
+      emissive: new THREE.Color(0x555555),
+      emissiveIntensity: 0.3,
+    });
+
+    material.userData.fallbackTexture = fallbackTexture;
+    this.textureMaterials.set(MOON_TEXTURE_URL, material);
+    this.loadTextureWithFallback(MOON_TEXTURE_URL, fallbackTexture);
+
+    return material;
+  }
+
+  createSun() {
+    this.sunGroup = new THREE.Group();
+    this.scene.add(this.sunGroup);
+
+    const sunGeometry = new THREE.SphereGeometry(2.5, 96, 96);
+    const sunTexture = this.createSunFallbackTexture();
+
+    const sunMaterial = new THREE.MeshBasicMaterial({
+      map: sunTexture,
+      color: 0xffffff,
+      toneMapped: false,
+    });
+
+    this.sunSurface = new THREE.Mesh(sunGeometry, sunMaterial);
+    this.sunGroup.add(this.sunSurface);
+
+    // Animate the Sun without relying on an undeclared vUv shader varying.
+    sunMaterial.onBeforeCompile = (shader) => {
+      shader.uniforms.uTime = { value: 0 };
+
+      shader.vertexShader = shader.vertexShader.replace(
+        '#include <common>',
+        '#include <common>\nvarying vec2 vSolarUv;'
+      );
+
+      shader.vertexShader = shader.vertexShader.replace(
+        '#include <uv_vertex>',
+        '#include <uv_vertex>\nvSolarUv = uv;'
+      );
+
+      shader.fragmentShader = shader.fragmentShader.replace(
+        '#include <common>',
+        '#include <common>\nuniform float uTime;\nvarying vec2 vSolarUv;'
+      );
+
+      shader.fragmentShader = shader.fragmentShader.replace(
+        '#include <color_fragment>',
+        `#include <color_fragment>
+          float wave1 = sin(vSolarUv.x * 55.0 + uTime * 0.8);
+          float wave2 = sin(vSolarUv.y * 48.0 - uTime * 0.55);
+          float wave3 = sin((vSolarUv.x + vSolarUv.y) * 32.0 + uTime);
+          float solarPattern = 0.92 + 0.035 * wave1 + 0.025 * wave2 + 0.02 * wave3;
+          diffuseColor.rgb *= solarPattern;`
+      );
+
+      sunMaterial.userData.shader = shader;
+    };
+
+    sunMaterial.customProgramCacheKey = () => 'animated-solar-surface-v2';
+
+    const innerCorona = new THREE.Mesh(
+      new THREE.SphereGeometry(2.85, 64, 64),
+      new THREE.MeshBasicMaterial({
+        color: 0xffa52e,
+        transparent: true,
+        opacity: 0.22,
+        side: THREE.BackSide,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        toneMapped: false,
+      })
+    );
+
+    this.sunGroup.add(innerCorona);
+
+    const outerCorona = new THREE.Mesh(
+      new THREE.SphereGeometry(3.3, 64, 64),
+      new THREE.MeshBasicMaterial({
+        color: 0xff681c,
+        transparent: true,
+        opacity: 0.09,
+        side: THREE.BackSide,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        toneMapped: false,
+      })
+    );
+
+    this.sunGroup.add(outerCorona);
+
+    const glowCanvas = document.createElement('canvas');
+    glowCanvas.width = 256;
+    glowCanvas.height = 256;
+
+    const ctx = glowCanvas.getContext('2d');
+
+    const gradient = ctx.createRadialGradient(
+      128,
+      128,
+      4,
+      128,
+      128,
+      128
+    );
+
+    gradient.addColorStop(0, 'rgba(255,255,220,1)');
+    gradient.addColorStop(0.15, 'rgba(255,225,100,0.8)');
+    gradient.addColorStop(0.38, 'rgba(255,145,30,0.35)');
+    gradient.addColorStop(0.7, 'rgba(255,90,15,0.1)');
+    gradient.addColorStop(1, 'rgba(255,60,0,0)');
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 256, 256);
+
+    const glowTexture = new THREE.CanvasTexture(glowCanvas);
+
+    this.sunGlow = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map: glowTexture,
+        color: 0xffbd59,
+        transparent: true,
+        opacity: 0.95,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+        toneMapped: false,
+      })
+    );
+
+    this.sunGlow.scale.set(13, 13, 1);
+    this.sunGroup.add(this.sunGlow);
+
+    this.animationObjects.push(innerCorona, outerCorona);
+  }
+
+  createOrbitRing(radius, color = 0x35e86f, opacity = 0.8) {
+    const points = [];
+    const segments = 256;
+
+    for (let i = 0; i < segments; i++) {
+      const angle = (i / segments) * Math.PI * 2;
+
+      points.push(
+        new THREE.Vector3(
+          Math.cos(angle) * radius,
+          0,
+          Math.sin(angle) * radius
+        )
+      );
+    }
+
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+
+    const material = new THREE.LineBasicMaterial({
+      color,
+      transparent: true,
+      opacity,
+      depthWrite: false,
+    });
+
+    const ring = new THREE.LineLoop(geometry, material);
+    ring.renderOrder = 2;
+
+    this.scene.add(ring);
+    this.objects.push(ring);
+
+    return ring;
+  }
+
+  createTrajectoryLine() {
+    const geometry = new THREE.BufferGeometry();
+
+    const material = new THREE.LineBasicMaterial({
+      color: 0x39ff74,
+      transparent: true,
+      opacity: 0.95,
+      depthWrite: false,
+    });
+
+    this.trajectoryLine = new THREE.Line(geometry, material);
+    this.trajectoryLine.visible = false;
+    this.trajectoryLine.renderOrder = 3;
+
+    this.scene.add(this.trajectoryLine);
   }
 
   buildSolarSystemScene() {
     this.solarGroup = new THREE.Group();
     this.scene.add(this.solarGroup);
 
-    // 1. Sun Mesh & Glow Halo (ONLY Sun)
-    const sunGeom = new THREE.SphereGeometry(2.5, 32, 32);
-    const sunMat = new THREE.MeshBasicMaterial({ color: 0xffcc33 });
-    this.sunMesh = new THREE.Mesh(sunGeom, sunMat);
-    this.solarGroup.add(this.sunMesh);
+    this.earthOrbitRadius = this.AU_UNIT;
+    this.earthRadius = 0.95;
+    this.moonOrbitRadius = 2.4;
+    this.moonRadius = 0.28;
 
-    const glowGeom = new THREE.SphereGeometry(3.2, 16, 16);
-    const glowMat = new THREE.MeshBasicMaterial({
-      color: 0xffaa00,
+    // The two green reference orbits: 1 AU and 2.7 AU.
+    this.innerOrbitRing = this.createOrbitRing(18, 0x35ff75, 0.85);
+    this.outerOrbitRing = this.createOrbitRing(18 * 2.7, 0x35ff75, 0.62);
+
+    this.moonOrbitRing = this.createOrbitRing(
+      this.moonOrbitRadius,
+      0x65738c,
+      0.55
+    );
+
+    this.moonOrbitRing.position.set(this.earthOrbitRadius, 0, 0);
+
+    const earthGeometry = new THREE.SphereGeometry(
+      this.earthRadius,
+      96,
+      96
+    );
+
+    this.earthMaterial = this.createEarthMaterial();
+    this.earth = new THREE.Mesh(earthGeometry, this.earthMaterial);
+
+    this.earth.position.set(this.earthOrbitRadius, 0, 0);
+    this.earth.rotation.z = THREE.MathUtils.degToRad(23.5);
+    this.earth.castShadow = true;
+    this.earth.receiveShadow = true;
+
+    this.solarGroup.add(this.earth);
+
+    this.earthAtmosphere = new THREE.Mesh(
+      new THREE.SphereGeometry(this.earthRadius * 1.075, 64, 64),
+      new THREE.MeshBasicMaterial({
+        color: 0x43aaff,
+        transparent: true,
+        opacity: 0.14,
+        side: THREE.BackSide,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      })
+    );
+
+    this.earth.add(this.earthAtmosphere);
+
+    this.cloudMaterial = new THREE.MeshStandardMaterial({
+      map: this.createCloudFallbackTexture(),
+      color: 0xffffff,
       transparent: true,
-      opacity: 0.25,
-      side: THREE.BackSide,
+      opacity: 0.28,
+      depthWrite: false,
+      roughness: 1,
     });
-    this.sunMesh.add(new THREE.Mesh(glowGeom, glowMat));
 
-    // 2. Reference Orbit Rings
-    // Initial 1.0 AU orbit ring (blue cyan)
-    const ring1Geom = new THREE.RingGeometry(this.AU_UNIT - 0.06, this.AU_UNIT + 0.06, 128);
-    const ring1Mat = new THREE.MeshBasicMaterial({
-      color: 0x2288ff,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.45,
-    });
-    const ring1 = new THREE.Mesh(ring1Geom, ring1Mat);
-    this.solarGroup.add(ring1);
+    this.clouds = new THREE.Mesh(
+      new THREE.SphereGeometry(this.earthRadius * 1.018, 64, 64),
+      this.cloudMaterial
+    );
 
-    // Target 2.7 AU orbit ring (golden dashed / glowing)
-    const ring2Geom = new THREE.RingGeometry(this.AU_UNIT * 2.7 - 0.08, this.AU_UNIT * 2.7 + 0.08, 128);
-    const ring2Mat = new THREE.MeshBasicMaterial({
-      color: 0xffcc00,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.75,
-    });
-    const ring2 = new THREE.Mesh(ring2Geom, ring2Mat);
-    this.solarGroup.add(ring2);
+    this.earth.add(this.clouds);
+    this.loadCloudTexture();
 
-    // 3. Earth Group in Solar View (ONLY Earth)
-    this.solarEarthGroup = new THREE.Group();
-    this.solarGroup.add(this.solarEarthGroup);
+    this.moonMaterial = this.createMoonMaterial();
 
-    const earthGeom = new THREE.SphereGeometry(0.85, 32, 32);
-    const earthMat = new THREE.MeshStandardMaterial({
-      color: 0x2277cc,
-      roughness: 0.5,
-      metalness: 0.1,
-    });
-    this.solarEarthMesh = new THREE.Mesh(earthGeom, earthMat);
-    this.solarEarthGroup.add(this.solarEarthMesh);
+    this.moon = new THREE.Mesh(
+      new THREE.SphereGeometry(this.moonRadius, 64, 64),
+      this.moonMaterial
+    );
 
-    // 4. Moon in Solar View (ONLY Moon)
-    const moonGeom = new THREE.SphereGeometry(0.3, 16, 16);
-    const moonMat = new THREE.MeshStandardMaterial({
-      color: 0xaaaaaa,
-      roughness: 0.8,
-    });
-    this.solarMoonMesh = new THREE.Mesh(moonGeom, moonMat);
-    this.solarGroup.add(this.solarMoonMesh);
+    this.moon.position.set(
+      this.earthOrbitRadius + this.moonOrbitRadius,
+      0,
+      0
+    );
 
-    // Lunar orbit line around Earth in solar view
-    const lunarOrbitGeom = new THREE.RingGeometry(1.5 - 0.02, 1.5 + 0.02, 64);
-    const lunarOrbitMat = new THREE.MeshBasicMaterial({
-      color: 0x8899aa,
-      transparent: true,
-      opacity: 0.3,
-      side: THREE.DoubleSide,
-    });
-    this.solarLunarOrbitRing = new THREE.Mesh(lunarOrbitGeom, lunarOrbitMat);
-    this.solarEarthGroup.add(this.solarLunarOrbitRing);
+    this.solarGroup.add(this.moon);
 
-    // 5. Orbit Trail Line for Trajectory Expansion
-    const maxTrailPoints = 600;
-    this.trailGeometry = new THREE.BufferGeometry();
-    this.trailPositions = new Float32Array(maxTrailPoints * 3);
-    this.trailGeometry.setAttribute('position', new THREE.BufferAttribute(this.trailPositions, 3));
-    const trailMaterial = new THREE.LineBasicMaterial({
-      color: 0x00ffcc,
-      transparent: true,
-      opacity: 0.85,
-    });
-    this.trailLine = new THREE.Line(this.trailGeometry, trailMaterial);
-    this.solarGroup.add(this.trailLine);
+    this.objects.push(this.earth, this.moon, this.clouds);
+    this.animationObjects.push(this.earth, this.moon, this.clouds);
+  }
+
+  loadCloudTexture() {
+    const loader = new THREE.TextureLoader();
+
+    loader.load(
+      CLOUD_TEXTURE_URL,
+      (texture) => {
+        if (this.disposed) {
+          texture.dispose();
+          return;
+        }
+
+        texture.colorSpace = THREE.SRGBColorSpace;
+
+        const previousTexture = this.cloudMaterial.map;
+
+        this.cloudMaterial.map = texture;
+        this.cloudMaterial.needsUpdate = true;
+
+        if (previousTexture) previousTexture.dispose();
+      },
+      undefined,
+      (error) => console.warn(
+        'Could not load Earth cloud texture. Keeping procedural clouds.',
+        error
+      )
+    );
   }
 
   buildEarthOctoScene() {
-    this.earthGroup = new THREE.Group();
-    this.scene.add(this.earthGroup);
-    this.earthGroup.visible = false;
+    this.octoGroup = new THREE.Group();
+    this.scene.add(this.octoGroup);
 
-    // Close-up scale: 1 unit = 1,000 km (1e6 m)
-    // Earth radius: 6.371 units
-    const rEarthUnits = 6.371;
+    const closeEarthGeometry = new THREE.SphereGeometry(4.5, 96, 96);
 
-    // Detailed Earth globe
-    const earthGeom = new THREE.SphereGeometry(rEarthUnits, 48, 48);
-    const earthMat = new THREE.MeshStandardMaterial({
-      color: 0x1a66b8,
-      roughness: 0.6,
-      metalness: 0.1,
-    });
-    this.closeEarthMesh = new THREE.Mesh(earthGeom, earthMat);
-    this.earthGroup.add(this.closeEarthMesh);
+    this.closeEarthMaterial = this.createEarthMaterial();
+    this.closeEarth = new THREE.Mesh(
+      closeEarthGeometry,
+      this.closeEarthMaterial
+    );
 
-    // Atmosphere halo
-    const atmoGeom = new THREE.SphereGeometry(rEarthUnits * 1.04, 32, 32);
-    const atmoMat = new THREE.MeshBasicMaterial({
-      color: 0x44aaff,
-      transparent: true,
-      opacity: 0.2,
-      side: THREE.BackSide,
-    });
-    this.closeEarthMesh.add(new THREE.Mesh(atmoGeom, atmoMat));
+    this.closeEarth.rotation.z = THREE.MathUtils.degToRad(23.5);
+    this.closeEarth.castShadow = true;
+    this.closeEarth.receiveShadow = true;
 
-    // Circum-terrestrial Ring: Radius = 7,000 km = 7.0 units
-    const ringGeom = new THREE.TorusGeometry(7.0, 0.12, 16, 64);
-    const ringMat = new THREE.MeshStandardMaterial({
-      color: 0xcccccc,
-      metalness: 0.8,
-      roughness: 0.2,
-    });
-    this.ringMesh = new THREE.Mesh(ringGeom, ringMat);
-    this.earthGroup.add(this.ringMesh);
+    this.octoGroup.add(this.closeEarth);
 
-    // 8 Articulated Arms at 45° intervals
-    this.armMeshes = [];
-    for (let i = 0; i < 8; i++) {
+    this.closeEarthAtmosphere = new THREE.Mesh(
+      new THREE.SphereGeometry(4.78, 64, 64),
+      new THREE.MeshBasicMaterial({
+        color: 0x38a8ff,
+        transparent: true,
+        opacity: 0.17,
+        side: THREE.BackSide,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      })
+    );
+
+    this.closeEarth.add(this.closeEarthAtmosphere);
+
+    this.closeClouds = new THREE.Mesh(
+      new THREE.SphereGeometry(4.58, 64, 64),
+      new THREE.MeshStandardMaterial({
+        map: this.createCloudFallbackTexture(),
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.22,
+        depthWrite: false,
+      })
+    );
+
+    this.closeEarth.add(this.closeClouds);
+
+    this.octoRing = new THREE.Mesh(
+      new THREE.TorusGeometry(6.25, 0.065, 12, 180),
+      new THREE.MeshStandardMaterial({
+        color: 0x39d9ff,
+        emissive: 0x087fa8,
+        emissiveIntensity: 1.7,
+        metalness: 0.55,
+        roughness: 0.28,
+      })
+    );
+
+    this.octoRing.rotation.x = Math.PI / 2.5;
+    this.octoGroup.add(this.octoRing);
+
+    const secondRing = new THREE.Mesh(
+      new THREE.TorusGeometry(6.55, 0.025, 8, 180),
+      new THREE.MeshBasicMaterial({
+        color: 0x8b8aff,
+        transparent: true,
+        opacity: 0.8,
+      })
+    );
+
+    secondRing.rotation.x = Math.PI / 2.5;
+    secondRing.rotation.z = Math.PI / 8;
+
+    this.octoGroup.add(secondRing);
+
+    this.armObjects = [];
+
+    const armCount = 8;
+
+    for (let i = 0; i < armCount; i++) {
+      const angle = (i / armCount) * Math.PI * 2;
+
       const armGroup = new THREE.Group();
-      const segments = [];
+      armGroup.rotation.y = angle;
 
-      for (let s = 0; s < 3; s++) {
-        const segGeom = new THREE.CylinderGeometry(0.12 - s * 0.02, 0.14 - s * 0.02, 1.0, 12);
-        const segMat = new THREE.MeshStandardMaterial({
-          color: 0x00cc66,
-          metalness: 0.5,
-          roughness: 0.3,
-        });
-        const segMesh = new THREE.Mesh(segGeom, segMat);
-        segments.push(segMesh);
-        armGroup.add(segMesh);
-      }
+      const length = 4.7;
 
-      // Tip Gripper sphere
-      const gripGeom = new THREE.SphereGeometry(0.2, 12, 12);
-      const gripMat = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
-      const gripMesh = new THREE.Mesh(gripGeom, gripMat);
-      armGroup.add(gripMesh);
+      const arm = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.075, 0.13, length, 12),
+        new THREE.MeshStandardMaterial({
+          color: 0xb9c7df,
+          metalness: 0.85,
+          roughness: 0.24,
+          emissive: 0x152c54,
+          emissiveIntensity: 0.5,
+        })
+      );
 
-      this.armMeshes.push({ group: armGroup, segments, tip: gripMesh });
-      this.earthGroup.add(armGroup);
+      arm.rotation.z = Math.PI / 2;
+      arm.position.x = 6.4;
+      arm.castShadow = true;
+      arm.receiveShadow = true;
+
+      armGroup.add(arm);
+
+      const endpoint = new THREE.Mesh(
+        new THREE.SphereGeometry(0.22, 24, 24),
+        new THREE.MeshStandardMaterial({
+          color: 0x7beaff,
+          emissive: 0x1bbfff,
+          emissiveIntensity: 2,
+          metalness: 0.25,
+          roughness: 0.2,
+        })
+      );
+
+      endpoint.position.x = 8.75;
+      armGroup.add(endpoint);
+
+      const indicator = new THREE.Mesh(
+        new THREE.SphereGeometry(0.105, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xffd36a })
+      );
+
+      indicator.position.x = 5;
+      armGroup.add(indicator);
+
+      this.octoGroup.add(armGroup);
+
+      this.armObjects.push({
+        group: armGroup,
+        arm,
+        endpoint,
+        indicator,
+        angle,
+      });
     }
 
-    // Moon in close-up scene (Radius: 1.737 units)
-    const moonGeom = new THREE.SphereGeometry(1.737, 24, 24);
-    const moonMat = new THREE.MeshStandardMaterial({
-      color: 0xaaaaaa,
-      roughness: 0.8,
-    });
-    this.closeMoonMesh = new THREE.Mesh(moonGeom, moonMat);
-    this.earthGroup.add(this.closeMoonMesh);
-
-    // Lunar orbit ring in close-up
-    const closeMoonOrbitGeom = new THREE.RingGeometry(24.0 - 0.04, 24.0 + 0.04, 64);
-    const closeMoonOrbitMat = new THREE.MeshBasicMaterial({
-      color: 0x667788,
-      transparent: true,
-      opacity: 0.25,
-      side: THREE.DoubleSide,
-    });
-    this.closeMoonOrbitRing = new THREE.Mesh(closeMoonOrbitGeom, closeMoonOrbitMat);
-    this.earthGroup.add(this.closeMoonOrbitRing);
+    this.animationObjects.push(
+      this.closeEarth,
+      this.closeClouds,
+      this.octoRing
+    );
   }
 
   initControls() {
-    const el = this.renderer.domElement;
+    this.isDragging = false;
+    this.previousPointer = { x: 0, y: 0 };
 
-    el.addEventListener('mousedown', (e) => {
+    this.cameraTarget = new THREE.Vector3(0, 0, 0);
+
+    this.orbit = {
+      theta: 0,
+      phi: Math.PI / 3,
+      radius: 65,
+    };
+
+    this._onPointerDown = (event) => {
       this.isDragging = true;
-      this.previousMousePosition = { x: e.clientX, y: e.clientY };
-    });
 
-    window.addEventListener('mousemove', (e) => {
+      this.previousPointer.x = event.clientX;
+      this.previousPointer.y = event.clientY;
+
+      this.renderer.domElement.setPointerCapture?.(event.pointerId);
+    };
+
+    this._onPointerMove = (event) => {
       if (!this.isDragging) return;
-      const deltaX = e.clientX - this.previousMousePosition.x;
-      const deltaY = e.clientY - this.previousMousePosition.y;
 
-      this.cameraSpherical.theta -= deltaX * 0.008;
-      this.cameraSpherical.phi = Math.max(
-        0.1,
-        Math.min(Math.PI - 0.1, this.cameraSpherical.phi - deltaY * 0.008)
+      const dx = event.clientX - this.previousPointer.x;
+      const dy = event.clientY - this.previousPointer.y;
+
+      this.previousPointer.x = event.clientX;
+      this.previousPointer.y = event.clientY;
+
+      this.orbit.theta -= dx * 0.005;
+
+      this.orbit.phi = clamp(
+        this.orbit.phi + dy * 0.005,
+        0.08,
+        Math.PI - 0.08
       );
 
       this.updateCameraPosition();
-      this.previousMousePosition = { x: e.clientX, y: e.clientY };
-    });
+    };
 
-    window.addEventListener('mouseup', () => {
+    this._onPointerUp = () => {
       this.isDragging = false;
-    });
+    };
 
-    el.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      const zoomFactor = e.deltaY > 0 ? 1.08 : 0.92;
-      this.cameraSpherical.radius = Math.max(
-        5.0,
-        Math.min(350.0, this.cameraSpherical.radius * zoomFactor)
-      );
+    this._onWheel = (event) => {
+      event.preventDefault();
+
+      this.orbit.radius *= Math.exp(event.deltaY * 0.0025);
+      this.orbit.radius = clamp(this.orbit.radius, 5, 300);
+
       this.updateCameraPosition();
-    });
+    };
+
+    const canvas = this.renderer.domElement;
+
+    canvas.addEventListener('pointerdown', this._onPointerDown);
+    canvas.addEventListener('pointermove', this._onPointerMove);
+    canvas.addEventListener('pointerup', this._onPointerUp);
+    canvas.addEventListener('pointercancel', this._onPointerUp);
+    canvas.addEventListener('wheel', this._onWheel, { passive: false });
   }
 
   updateCameraPosition() {
-    const r = this.cameraSpherical.radius;
-    const theta = this.cameraSpherical.theta;
-    const phi = this.cameraSpherical.phi;
+    const sinPhi = Math.sin(this.orbit.phi);
 
-    this.camera.position.x = r * Math.sin(phi) * Math.sin(theta);
-    this.camera.position.y = -r * Math.cos(phi);
-    this.camera.position.z = r * Math.sin(phi) * Math.cos(theta);
-    this.camera.lookAt(0, 0, 0);
+    this.camera.position.set(
+      this.cameraTarget.x +
+      this.orbit.radius * sinPhi * Math.sin(this.orbit.theta),
+
+      this.cameraTarget.y +
+      this.orbit.radius * Math.cos(this.orbit.phi),
+
+      this.cameraTarget.z +
+      this.orbit.radius * sinPhi * Math.cos(this.orbit.theta)
+    );
+
+    this.camera.lookAt(this.cameraTarget);
   }
 
   setViewMode(mode) {
     this.viewMode = mode;
-    if (mode === 'solar') {
-      this.solarGroup.visible = true;
-      this.earthGroup.visible = false;
-      this.cameraSpherical.radius = 75;
-      this.cameraSpherical.phi = Math.PI / 3.2;
-    } else {
+
+    if (mode === 'earth' || mode === 'octo') {
       this.solarGroup.visible = false;
-      this.earthGroup.visible = true;
-      this.cameraSpherical.radius = 32;
-      this.cameraSpherical.phi = Math.PI / 2.5;
+      this.octoGroup.visible = true;
+      this.sunGroup.visible = false;
+      this.starfield.visible = true;
+
+      this.innerOrbitRing.visible = false;
+      this.outerOrbitRing.visible = false;
+      this.moonOrbitRing.visible = false;
+      this.trajectoryLine.visible = false;
+
+      this.cameraTarget.set(0, 0, 0);
+
+      this.orbit.radius = 20;
+      this.orbit.theta = 0;
+      this.orbit.phi = Math.PI / 2.3;
+    } else {
+      this.solarGroup.visible = true;
+      this.octoGroup.visible = false;
+      this.sunGroup.visible = true;
+      this.starfield.visible = true;
+
+      this.innerOrbitRing.visible = true;
+      this.outerOrbitRing.visible = true;
+      this.moonOrbitRing.visible = true;
+
+      this.cameraTarget.set(9, 0, 0);
+
+      this.orbit.radius = 65;
+      this.orbit.theta = 0;
+      this.orbit.phi = Math.PI / 3;
     }
+
+    this.camera.fov = 45;
+    this.camera.updateProjectionMatrix();
+
     this.updateCameraPosition();
   }
 
-  /**
-   * Update visual scene from a simulation snapshot.
-   * Floating origin is strictly enforced: relative vectors are converted from Float64.
-   *
-   * @param {Object} snapshot - Simulation snapshot from sim.snapshot()
-   */
   updateFromSnapshot(snapshot) {
-    if (!snapshot) return;
+    if (this.disposed) return;
 
-    // 1. Solar System View
-    const earthPos = snapshot.positions.earth;
-    const earthX = (earthPos[0] / AU) * this.AU_UNIT;
-    const earthY = (earthPos[1] / AU) * this.AU_UNIT;
-    const earthZ = (earthPos[2] / AU) * this.AU_UNIT;
-
-    this.solarEarthGroup.position.set(earthX, earthY, earthZ);
-
-    // Moon position in Solar View (relative to Earth)
-    const moonPos = snapshot.positions.moon;
-    const relMoonX = (moonPos[0] - earthPos[0]) / 3.844e8;
-    const relMoonY = (moonPos[1] - earthPos[1]) / 3.844e8;
-    const relMoonZ = (moonPos[2] - earthPos[2]) / 3.844e8;
-
-    // Scaled lunar orbit separation in solar view: 1.5 units
-    this.solarMoonMesh.position.set(
-      earthX + relMoonX * 1.5,
-      earthY + relMoonY * 1.5,
-      earthZ + relMoonZ * 1.5
-    );
-
-    // Update trajectory history trail
-    const history = snapshot.trajectoryHistory || [];
-    const count = Math.min(history.length, 600);
-    const positions = this.trailPositions;
-
-    for (let i = 0; i < count; i++) {
-      positions[i * 3] = history[i].xAU * this.AU_UNIT;
-      positions[i * 3 + 1] = history[i].yAU * this.AU_UNIT;
-      positions[i * 3 + 2] = history[i].zAU * this.AU_UNIT;
-    }
-    this.trailGeometry.setDrawRange(0, count);
-    this.trailGeometry.attributes.position.needsUpdate = true;
-
-    // 2. Earth-Octo Close-up View (Centered on Earth floating origin)
-    if (this.viewMode === 'earth') {
-      this.closeEarthMesh.rotation.z += 0.005;
-
-      // Color code arms based on actual structural safety factor:
-      // SF >= 1.5: Green (0x00cc66)
-      // 1.0 <= SF < 1.5: Amber (0xffbb00)
-      // SF < 1.0: Overstress/Rupture Red (0xff1744)
-      const sf = snapshot.structure.safetyFactor;
-      let armColor = 0x00cc66;
-      if (sf < 1.0) {
-        armColor = 0xff1744;
-      } else if (sf < 1.5) {
-        armColor = 0xffbb00;
-      }
-
-      // Update 8 arms geometry from kinematics
-      const armData = snapshot.kinematics?.arms || [];
-      for (let i = 0; i < Math.min(8, armData.length); i++) {
-        const arm = armData[i];
-        const nodes = arm.nodes;
-        const meshObj = this.armMeshes[i];
-
-        // 3 link cylinders between nodes (unit = 1e6 m)
-        for (let s = 0; s < 3; s++) {
-          const p1 = nodes[s];
-          const p2 = nodes[s + 1];
-
-          const v1 = new THREE.Vector3(p1[0] / 1e6, p1[1] / 1e6, p1[2] / 1e6);
-          const v2 = new THREE.Vector3(p2[0] / 1e6, p2[1] / 1e6, p2[2] / 1e6);
-
-          const mid = new THREE.Vector3().addVectors(v1, v2).multiplyScalar(0.5);
-          const len = v1.distanceTo(v2);
-
-          const segMesh = meshObj.segments[s];
-          segMesh.position.copy(mid);
-          segMesh.scale.set(1, len, 1);
-          segMesh.quaternion.setFromUnitVectors(
-            new THREE.Vector3(0, 1, 0),
-            new THREE.Vector3().subVectors(v2, v1).normalize()
-          );
-          segMesh.material.color.setHex(armColor);
-        }
-
-        const tipPos = nodes[3];
-        meshObj.tip.position.set(tipPos[0] / 1e6, tipPos[1] / 1e6, tipPos[2] / 1e6);
-      }
-
-      // Moon relative position in close-up
-      const visualScale = 24.0 / 3.844e8; // scaled to 24 units radius
-      this.closeMoonMesh.position.set(
-        (moonPos[0] - earthPos[0]) * visualScale,
-        (moonPos[1] - earthPos[1]) * visualScale,
-        (moonPos[2] - earthPos[2]) * visualScale
-      );
+    if (snapshot !== undefined && snapshot !== null) {
+      this.snapshot = snapshot;
     }
 
-    // Render frame
+    const currentSnapshot = this.snapshot;
+
+    const dt = Math.min(this.clock.getDelta(), 0.05);
+
+    this.animateBodies(dt);
+
+    if (currentSnapshot) {
+      this.updatePositionsFromSnapshot(currentSnapshot);
+      this.updateArmsFromSnapshot(currentSnapshot);
+      this.updateTrajectoryFromSnapshot(currentSnapshot);
+    }
+
     this.renderer.render(this.scene, this.camera);
   }
 
+  updatePositionsFromSnapshot(snapshot) {
+    const positions = snapshot?.positions;
+
+    if (!positions) return;
+
+    const earthPosition = positions.earth || positions.Earth;
+    const moonPosition = positions.moon || positions.Moon;
+
+    // The simulation's orbital plane is physics XY. Three.js uses Y as
+    // vertical, so map physics (x, y, z) -> visual (x, z, y). This makes
+    // the orbit horizontal without changing the underlying simulation.
+    const toVisualPosition = (rawPosition) => {
+      const vector = vectorFromPoint(rawPosition);
+
+      if (!vector) return null;
+
+      // Snapshot position arrays are in metres. Accept AU-sized vectors too
+      // for compatibility with external snapshots.
+      const magnitude = vector.length();
+
+      const scale = magnitude > 10000
+        ? this.AU_UNIT / AU
+        : this.AU_UNIT;
+
+      vector.multiplyScalar(scale);
+
+      return new THREE.Vector3(
+        vector.x,
+        vector.z,
+        vector.y
+      );
+    };
+
+    if (earthPosition && this.earth) {
+      const point = toVisualPosition(earthPosition);
+
+      if (point) {
+        this.earth.position.copy(point);
+        this.hasSnapshotEarthPosition = true;
+      }
+    }
+
+    if (moonPosition && this.moon) {
+      const point = toVisualPosition(moonPosition);
+
+      if (point) {
+        this.moon.position.copy(point);
+        this.hasSnapshotMoonPosition = true;
+      }
+    }
+
+    // This ring is a scene-level object, so keep its centre synchronized
+    // with Earth's current simulated position rather than its initial 1 AU.
+    if (
+      this.moonOrbitRing &&
+      this.earth &&
+      this.hasSnapshotEarthPosition
+    ) {
+      this.moonOrbitRing.position.copy(this.earth.position);
+    }
+  }
+
+  updateTrajectoryFromSnapshot(snapshot) {
+    const candidates = [
+      snapshot?.trajectoryHistory,
+      snapshot?.trajectory_history,
+      snapshot?.trajectory,
+      snapshot?.positions?.trajectoryHistory,
+      snapshot?.positions?.trajectory,
+    ];
+
+    const history = candidates.find(Array.isArray);
+
+    if (!history || history.length < 2) {
+      this.trajectoryLine.visible = false;
+      return;
+    }
+
+    const points = [];
+
+    for (const item of history) {
+      // PlanetaryPropulsionSim.snapshot() stores barycentre history as
+      // { year, rAU, xAU, yAU, zAU }. Other snapshots may store metre vectors.
+      let point = null;
+
+      if (
+        item &&
+        [item.xAU, item.yAU, item.zAU].every(
+          (value) => Number.isFinite(Number(value))
+        )
+      ) {
+        point = new THREE.Vector3(
+          Number(item.xAU) * this.AU_UNIT,
+          Number(item.zAU) * this.AU_UNIT,
+          Number(item.yAU) * this.AU_UNIT
+        );
+      } else {
+        const raw = item?.position ?? item?.earth ?? item;
+        const vector = vectorFromPoint(raw);
+
+        if (vector) {
+          const magnitude = vector.length();
+
+          const scale = magnitude > 10000
+            ? this.AU_UNIT / AU
+            : this.AU_UNIT;
+
+          vector.multiplyScalar(scale);
+
+          point = new THREE.Vector3(
+            vector.x,
+            vector.z,
+            vector.y
+          );
+        }
+      }
+
+      if (
+        point &&
+        [point.x, point.y, point.z].every(Number.isFinite)
+      ) {
+        points.push(point);
+      }
+    }
+
+    if (points.length < 2) {
+      this.trajectoryLine.visible = false;
+      return;
+    }
+
+    this.trajectoryLine.geometry.dispose();
+
+    this.trajectoryLine.geometry =
+      new THREE.BufferGeometry().setFromPoints(points);
+
+    this.trajectoryLine.visible =
+      this.viewMode !== 'earth' &&
+      this.viewMode !== 'octo';
+  }
+
+  updateArmsFromSnapshot(snapshot) {
+    const arms = snapshot.kinematics?.arms;
+
+    if (!Array.isArray(arms)) return;
+
+    for (
+      let i = 0;
+      i < Math.min(arms.length, this.armObjects.length);
+      i++
+    ) {
+      const armData = arms[i];
+      const armObject = this.armObjects[i];
+
+      if (!armData || !armObject) continue;
+
+      const angle = Number(armData.angle ?? armData.theta);
+
+      if (Number.isFinite(angle)) {
+        armObject.angle = angle;
+        armObject.group.rotation.y = angle;
+      }
+
+      const extension = Number(
+        armData.extension ??
+        armData.length ??
+        armData.position
+      );
+
+      if (Number.isFinite(extension)) {
+        const normalizedExtension = clamp(extension, 0.5, 12);
+
+        armObject.arm.scale.y = normalizedExtension / 4.7;
+      }
+    }
+  }
+
+  animateBodies(dt) {
+    if (this.earth) {
+      this.earth.rotation.y += dt * 0.12;
+    }
+
+    if (this.clouds) {
+      this.clouds.rotation.y += dt * 0.16;
+    }
+
+    if (this.closeEarth) {
+      this.closeEarth.rotation.y += dt * 0.1;
+    }
+
+    if (this.closeClouds) {
+      this.closeClouds.rotation.y += dt * 0.14;
+    }
+
+    // Fallback movement is used only before the first real Moon snapshot arrives.
+    if (this.moon && !this.hasSnapshotMoonPosition) {
+      const time = this.clock.elapsedTime;
+      const angle = time * 0.35;
+
+      this.moon.position.set(
+        this.earthOrbitRadius + Math.cos(angle) * this.moonOrbitRadius,
+        Math.sin(angle * 0.35) * 0.25,
+        Math.sin(angle) * this.moonOrbitRadius
+      );
+    }
+
+    if (this.moon) {
+      this.moon.rotation.y += dt * 0.06;
+    }
+
+    const shader = this.sunSurface?.material?.userData?.shader;
+
+    if (shader?.uniforms?.uTime) {
+      shader.uniforms.uTime.value = this.clock.elapsedTime;
+    }
+
+    if (this.sunSurface) {
+      this.sunSurface.rotation.y += dt * 0.035;
+    }
+
+    if (this.sunGlow) {
+      this.sunGlow.material.opacity =
+        0.83 + Math.sin(this.clock.elapsedTime * 1.8) * 0.08;
+
+      const pulse =
+        13 + Math.sin(this.clock.elapsedTime * 1.3) * 0.35;
+
+      this.sunGlow.scale.set(pulse, pulse, 1);
+    }
+
+    if (this.octoRing) {
+      this.octoRing.rotation.z += dt * 0.035;
+    }
+
+    if (this.starfield) {
+      this.starfield.rotation.y += dt * 0.0015;
+    }
+
+    for (const armObject of this.armObjects) {
+      if (!armObject) continue;
+
+      if (
+        this.snapshot?.kinematics?.arms?.[
+        this.armObjects.indexOf(armObject)
+        ]
+      ) {
+        continue;
+      }
+
+      const angle = armObject.angle;
+
+      armObject.group.rotation.y =
+        angle +
+        Math.sin(this.clock.elapsedTime * 0.25 + angle) * 0.012;
+    }
+  }
+
   onResize() {
-    this.width = this.container.clientWidth;
-    this.height = this.container.clientHeight;
-    this.camera.aspect = this.width / this.height;
+    if (!this.renderer || !this.camera) return;
+
+    const width = Math.max(1, this.container.clientWidth);
+    const height = Math.max(1, this.container.clientHeight);
+
+    this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize(this.width, this.height);
+
+    this.renderer.setSize(width, height, false);
   }
 
   destroy() {
-    window.removeEventListener('resize', this.onResize);
-    this.renderer.dispose();
+    if (this.disposed) return;
+
+    this.disposed = true;
+
+    if (this.animationFrame) {
+      cancelAnimationFrame(this.animationFrame);
+    }
+
+    window.removeEventListener('resize', this._resizeHandler);
+    this.resizeObserver?.disconnect();
+
+    const canvas = this.renderer?.domElement;
+
+    if (canvas) {
+      canvas.removeEventListener('pointerdown', this._onPointerDown);
+      canvas.removeEventListener('pointermove', this._onPointerMove);
+      canvas.removeEventListener('pointerup', this._onPointerUp);
+      canvas.removeEventListener('pointercancel', this._onPointerUp);
+      canvas.removeEventListener('wheel', this._onWheel);
+    }
+
+    const disposedTextures = new Set();
+
+    this.scene.traverse((object) => {
+      if (object.geometry) {
+        object.geometry.dispose();
+      }
+
+      if (!object.material) return;
+
+      const materials = Array.isArray(object.material)
+        ? object.material
+        : [object.material];
+
+      for (const material of materials) {
+        for (const key of ['map', 'alphaMap', 'emissiveMap']) {
+          const texture = material[key];
+
+          if (texture && !disposedTextures.has(texture)) {
+            disposedTextures.add(texture);
+            texture.dispose();
+          }
+        }
+
+        material.dispose();
+      }
+    });
+
+    this.renderer?.dispose();
+
+    if (canvas?.parentElement === this.container) {
+      this.container.removeChild(canvas);
+    }
   }
 }
